@@ -25,5 +25,5 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- The table name `pg-drizzle_post` is quoted in DBML and left bare in Mermaid, where the hyphen is not a valid identifier ([#23](https://github.com/nakita628/drizzler/issues/23)).
+None.
 

@@ -202,19 +202,19 @@ Invitations table for Better Auth organization plugin. Manages pending invites t
 
 ![invitation and the tables it relates to](tables/invitation.svg)
 
-| Column           | Type        | Constraints                                       | Default                        | Description |
-| ---------------- | ----------- | ------------------------------------------------- | ------------------------------ | ----------- |
-| `id`             | `text`      | PK NOT NULL                                       | `.$defaultFn()`                |             |
-| `email`          | `text`      | NOT NULL                                          |                                |             |
-| `inviterId`      | `text`      | NOT NULL → [user.id](#table-user)                 |                                |             |
-| `organizationId` | `text`      | NOT NULL → [organization.id](#table-organization) |                                |             |
-| `role`           | `text`      | NOT NULL                                          |                                |             |
-| `status`         | `text`      | NOT NULL                                          | `.default("pending")`          |             |
-| `expiresAt`      | `timestamp` | NOT NULL                                          |                                |             |
-| `acceptedAt`     | `timestamp` | NULL                                              |                                |             |
-| `rejectedAt`     | `timestamp` | NULL                                              |                                |             |
-| `createdAt`      | `timestamp` | NOT NULL                                          | `.defaultNow()`                |             |
-| `updatedAt`      | `timestamp` | NOT NULL                                          | `.defaultNow()` `.$onUpdate()` |             |
+| Column                               | Type        | Constraints                                       | Default                        | Description |
+| ------------------------------------ | ----------- | ------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`      | PK NOT NULL                                       | `.$defaultFn()`                |             |
+| `email`                              | `text`      | NOT NULL                                          |                                |             |
+| `inviterId` (`inviter_id`)           | `text`      | NOT NULL → [user.id](#table-user)                 |                                |             |
+| `organizationId` (`organization_id`) | `text`      | NOT NULL → [organization.id](#table-organization) |                                |             |
+| `role`                               | `text`      | NOT NULL                                          |                                |             |
+| `status`                             | `text`      | NOT NULL                                          | `.default("pending")`          |             |
+| `expiresAt` (`expires_at`)           | `timestamp` | NOT NULL                                          |                                |             |
+| `acceptedAt` (`accepted_at`)         | `timestamp` | NULL                                              |                                |             |
+| `rejectedAt` (`rejected_at`)         | `timestamp` | NULL                                              |                                |             |
+| `createdAt` (`created_at`)           | `timestamp` | NOT NULL                                          | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`)           | `timestamp` | NOT NULL                                          | `.defaultNow()` `.$onUpdate()` |             |
 
 #### Definition
 
@@ -360,16 +360,16 @@ Organizations table for Better Auth organization plugin. Each organization repre
 
 ![organization and the tables it relates to](tables/organization.svg)
 
-| Column             | Type        | Constraints     | Default                        | Description |
-| ------------------ | ----------- | --------------- | ------------------------------ | ----------- |
-| `id`               | `text`      | PK NOT NULL     | `.$defaultFn()`                |             |
-| `name`             | `text`      | NOT NULL        |                                |             |
-| `slug`             | `text`      | UNIQUE NOT NULL |                                |             |
-| `logo`             | `text`      | NULL            |                                |             |
-| `metadata`         | `text`      | NULL            |                                |             |
-| `stripeCustomerId` | `text`      | NULL            |                                |             |
-| `createdAt`        | `timestamp` | NOT NULL        | `.defaultNow()`                |             |
-| `updatedAt`        | `timestamp` | NOT NULL        | `.defaultNow()` `.$onUpdate()` |             |
+| Column                                    | Type        | Constraints     | Default                        | Description |
+| ----------------------------------------- | ----------- | --------------- | ------------------------------ | ----------- |
+| `id`                                      | `text`      | PK NOT NULL     | `.$defaultFn()`                |             |
+| `name`                                    | `text`      | NOT NULL        |                                |             |
+| `slug`                                    | `text`      | UNIQUE NOT NULL |                                |             |
+| `logo`                                    | `text`      | NULL            |                                |             |
+| `metadata`                                | `text`      | NULL            |                                |             |
+| `stripeCustomerId` (`stripe_customer_id`) | `text`      | NULL            |                                |             |
+| `createdAt` (`created_at`)                | `timestamp` | NOT NULL        | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`)                | `timestamp` | NOT NULL        | `.defaultNow()` `.$onUpdate()` |             |
 
 #### Definition
 
@@ -488,14 +488,14 @@ Organization membership table for Better Auth organization plugin. Links users t
 
 ![member and the tables it relates to](tables/member.svg)
 
-| Column           | Type        | Constraints                                       | Default                        | Description |
-| ---------------- | ----------- | ------------------------------------------------- | ------------------------------ | ----------- |
-| `id`             | `text`      | PK NOT NULL                                       | `.$defaultFn()`                |             |
-| `userId`         | `text`      | NOT NULL → [user.id](#table-user)                 |                                |             |
-| `organizationId` | `text`      | NOT NULL → [organization.id](#table-organization) |                                |             |
-| `role`           | `text`      | NOT NULL                                          |                                |             |
-| `createdAt`      | `timestamp` | NOT NULL                                          | `.defaultNow()`                |             |
-| `updatedAt`      | `timestamp` | NOT NULL                                          | `.defaultNow()` `.$onUpdate()` |             |
+| Column                               | Type        | Constraints                                       | Default                        | Description |
+| ------------------------------------ | ----------- | ------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`      | PK NOT NULL                                       | `.$defaultFn()`                |             |
+| `userId` (`user_id`)                 | `text`      | NOT NULL → [user.id](#table-user)                 |                                |             |
+| `organizationId` (`organization_id`) | `text`      | NOT NULL → [organization.id](#table-organization) |                                |             |
+| `role`                               | `text`      | NOT NULL                                          |                                |             |
+| `createdAt` (`created_at`)           | `timestamp` | NOT NULL                                          | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`)           | `timestamp` | NOT NULL                                          | `.defaultNow()` `.$onUpdate()` |             |
 
 #### Definition
 
@@ -627,23 +627,23 @@ Passkey credential store. Extended fields beyond Better Auth defaults: - lastUse
 
 ![passkey and the tables it relates to](tables/passkey.svg)
 
-| Column         | Type        | Constraints                       | Default                        | Description                 |
-| -------------- | ----------- | --------------------------------- | ------------------------------ | --------------------------- |
-| `id`           | `text`      | PK NOT NULL                       | `.$defaultFn()`                |                             |
-| `name`         | `text`      | NULL                              |                                |                             |
-| `publicKey`    | `text`      | NOT NULL                          |                                |                             |
-| `userId`       | `text`      | NOT NULL → [user.id](#table-user) |                                |                             |
-| `credentialID` | `text`      | UNIQUE NOT NULL                   |                                |                             |
-| `counter`      | `integer`   | NOT NULL                          | `.default(0)`                  |                             |
-| `deviceType`   | `text`      | NOT NULL                          |                                |                             |
-| `backedUp`     | `boolean`   | NOT NULL                          |                                |                             |
-| `transports`   | `text`      | NULL                              |                                |                             |
-| `aaguid`       | `text`      | NULL                              |                                |                             |
-| `lastUsedAt`   | `timestamp` | NULL                              |                                | Extended operational fields |
-| `deviceName`   | `text`      | NULL                              |                                |                             |
-| `platform`     | `text`      | NULL                              |                                |                             |
-| `createdAt`    | `timestamp` | NOT NULL                          | `.defaultNow()`                |                             |
-| `updatedAt`    | `timestamp` | NOT NULL                          | `.defaultNow()` `.$onUpdate()` |                             |
+| Column                           | Type        | Constraints                       | Default                        | Description                 |
+| -------------------------------- | ----------- | --------------------------------- | ------------------------------ | --------------------------- |
+| `id`                             | `text`      | PK NOT NULL                       | `.$defaultFn()`                |                             |
+| `name`                           | `text`      | NULL                              |                                |                             |
+| `publicKey` (`public_key`)       | `text`      | NOT NULL                          |                                |                             |
+| `userId` (`user_id`)             | `text`      | NOT NULL → [user.id](#table-user) |                                |                             |
+| `credentialID` (`credential_id`) | `text`      | UNIQUE NOT NULL                   |                                |                             |
+| `counter`                        | `integer`   | NOT NULL                          | `.default(0)`                  |                             |
+| `deviceType` (`device_type`)     | `text`      | NOT NULL                          |                                |                             |
+| `backedUp` (`backed_up`)         | `boolean`   | NOT NULL                          |                                |                             |
+| `transports`                     | `text`      | NULL                              |                                |                             |
+| `aaguid`                         | `text`      | NULL                              |                                |                             |
+| `lastUsedAt` (`last_used_at`)    | `timestamp` | NULL                              |                                | Extended operational fields |
+| `deviceName` (`device_name`)     | `text`      | NULL                              |                                |                             |
+| `platform`                       | `text`      | NULL                              |                                |                             |
+| `createdAt` (`created_at`)       | `timestamp` | NOT NULL                          | `.defaultNow()`                |                             |
+| `updatedAt` (`updated_at`)       | `timestamp` | NOT NULL                          | `.defaultNow()` `.$onUpdate()` |                             |
 
 #### Definition
 
@@ -780,27 +780,27 @@ where "passkey"."id" = $1
 
 ![subscription](tables/subscription.svg)
 
-| Column                 | Type        | Constraints | Default                        | Description                                                                                                  |
-| ---------------------- | ----------- | ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `id`                   | `text`      | PK NOT NULL | `.$defaultFn()`                |                                                                                                              |
-| `plan`                 | `text`      | NOT NULL    |                                |                                                                                                              |
-| `referenceId`          | `text`      | NOT NULL    |                                |                                                                                                              |
-| `stripeCustomerId`     | `text`      | NULL        |                                |                                                                                                              |
-| `stripeSubscriptionId` | `text`      | UNIQUE NULL |                                |                                                                                                              |
-| `status`               | `text`      | NOT NULL    | `.default("incomplete")`       |                                                                                                              |
-| `periodStart`          | `timestamp` | NULL        |                                |                                                                                                              |
-| `periodEnd`            | `timestamp` | NULL        |                                |                                                                                                              |
-| `trialStart`           | `timestamp` | NULL        |                                |                                                                                                              |
-| `trialEnd`             | `timestamp` | NULL        |                                |                                                                                                              |
-| `cancelAtPeriodEnd`    | `boolean`   | NULL        | `.default(false)`              |                                                                                                              |
-| `cancelAt`             | `timestamp` | NULL        |                                |                                                                                                              |
-| `canceledAt`           | `timestamp` | NULL        |                                |                                                                                                              |
-| `endedAt`              | `timestamp` | NULL        |                                |                                                                                                              |
-| `seats`                | `integer`   | NULL        |                                |                                                                                                              |
-| `billingInterval`      | `text`      | NULL        |                                |                                                                                                              |
-| `stripeScheduleId`     | `text`      | NULL        |                                | Stripe schedule ID for a plan change deferred to period end; cleared when the change is applied or canceled. |
-| `createdAt`            | `timestamp` | NOT NULL    | `.defaultNow()`                |                                                                                                              |
-| `updatedAt`            | `timestamp` | NOT NULL    | `.defaultNow()` `.$onUpdate()` |                                                                                                              |
+| Column                                            | Type        | Constraints | Default                        | Description                                                                                                  |
+| ------------------------------------------------- | ----------- | ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `id`                                              | `text`      | PK NOT NULL | `.$defaultFn()`                |                                                                                                              |
+| `plan`                                            | `text`      | NOT NULL    |                                |                                                                                                              |
+| `referenceId` (`reference_id`)                    | `text`      | NOT NULL    |                                |                                                                                                              |
+| `stripeCustomerId` (`stripe_customer_id`)         | `text`      | NULL        |                                |                                                                                                              |
+| `stripeSubscriptionId` (`stripe_subscription_id`) | `text`      | UNIQUE NULL |                                |                                                                                                              |
+| `status`                                          | `text`      | NOT NULL    | `.default("incomplete")`       |                                                                                                              |
+| `periodStart` (`period_start`)                    | `timestamp` | NULL        |                                |                                                                                                              |
+| `periodEnd` (`period_end`)                        | `timestamp` | NULL        |                                |                                                                                                              |
+| `trialStart` (`trial_start`)                      | `timestamp` | NULL        |                                |                                                                                                              |
+| `trialEnd` (`trial_end`)                          | `timestamp` | NULL        |                                |                                                                                                              |
+| `cancelAtPeriodEnd` (`cancel_at_period_end`)      | `boolean`   | NULL        | `.default(false)`              |                                                                                                              |
+| `cancelAt` (`cancel_at`)                          | `timestamp` | NULL        |                                |                                                                                                              |
+| `canceledAt` (`canceled_at`)                      | `timestamp` | NULL        |                                |                                                                                                              |
+| `endedAt` (`ended_at`)                            | `timestamp` | NULL        |                                |                                                                                                              |
+| `seats`                                           | `integer`   | NULL        |                                |                                                                                                              |
+| `billingInterval` (`billing_interval`)            | `text`      | NULL        |                                |                                                                                                              |
+| `stripeScheduleId` (`stripe_schedule_id`)         | `text`      | NULL        |                                | Stripe schedule ID for a plan change deferred to period end; cleared when the change is applied or canceled. |
+| `createdAt` (`created_at`)                        | `timestamp` | NOT NULL    | `.defaultNow()`                |                                                                                                              |
+| `updatedAt` (`updated_at`)                        | `timestamp` | NOT NULL    | `.defaultNow()` `.$onUpdate()` |                                                                                                              |
 
 #### Definition
 
@@ -934,17 +934,17 @@ User accounts table. Matches to the `user` table in Better Auth.
 
 ![user and the tables it relates to](tables/user.svg)
 
-| Column             | Type        | Constraints     | Default                        | Description |
-| ------------------ | ----------- | --------------- | ------------------------------ | ----------- |
-| `id`               | `text`      | PK NOT NULL     | `.$defaultFn()`                |             |
-| `name`             | `text`      | NOT NULL        |                                |             |
-| `email`            | `text`      | UNIQUE NOT NULL |                                |             |
-| `emailVerified`    | `boolean`   | NOT NULL        | `.default(false)`              |             |
-| `image`            | `text`      | NULL            |                                |             |
-| `isAnonymous`      | `boolean`   | NOT NULL        | `.default(false)`              |             |
-| `stripeCustomerId` | `text`      | NULL            |                                |             |
-| `createdAt`        | `timestamp` | NOT NULL        | `.defaultNow()`                |             |
-| `updatedAt`        | `timestamp` | NOT NULL        | `.defaultNow()` `.$onUpdate()` |             |
+| Column                                    | Type        | Constraints     | Default                        | Description |
+| ----------------------------------------- | ----------- | --------------- | ------------------------------ | ----------- |
+| `id`                                      | `text`      | PK NOT NULL     | `.$defaultFn()`                |             |
+| `name`                                    | `text`      | NOT NULL        |                                |             |
+| `email`                                   | `text`      | UNIQUE NOT NULL |                                |             |
+| `emailVerified` (`email_verified`)        | `boolean`   | NOT NULL        | `.default(false)`              |             |
+| `image`                                   | `text`      | NULL            |                                |             |
+| `isAnonymous` (`is_anonymous`)            | `boolean`   | NOT NULL        | `.default(false)`              |             |
+| `stripeCustomerId` (`stripe_customer_id`) | `text`      | NULL            |                                |             |
+| `createdAt` (`created_at`)                | `timestamp` | NOT NULL        | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`)                | `timestamp` | NOT NULL        | `.defaultNow()` `.$onUpdate()` |             |
 
 #### Definition
 
@@ -1067,17 +1067,17 @@ Stores user session data for authentication. Matches to the `session` table in B
 
 ![session and the tables it relates to](tables/session.svg)
 
-| Column                 | Type        | Constraints                       | Default                        | Description |
-| ---------------------- | ----------- | --------------------------------- | ------------------------------ | ----------- |
-| `id`                   | `text`      | PK NOT NULL                       | `.$defaultFn()`                |             |
-| `expiresAt`            | `timestamp` | NOT NULL                          |                                |             |
-| `token`                | `text`      | UNIQUE NOT NULL                   |                                |             |
-| `createdAt`            | `timestamp` | NOT NULL                          | `.defaultNow()`                |             |
-| `updatedAt`            | `timestamp` | NOT NULL                          | `.defaultNow()` `.$onUpdate()` |             |
-| `ipAddress`            | `text`      | NULL                              |                                |             |
-| `userAgent`            | `text`      | NULL                              |                                |             |
-| `userId`               | `text`      | NOT NULL → [user.id](#table-user) |                                |             |
-| `activeOrganizationId` | `text`      | NULL                              |                                |             |
+| Column                                            | Type        | Constraints                       | Default                        | Description |
+| ------------------------------------------------- | ----------- | --------------------------------- | ------------------------------ | ----------- |
+| `id`                                              | `text`      | PK NOT NULL                       | `.$defaultFn()`                |             |
+| `expiresAt` (`expires_at`)                        | `timestamp` | NOT NULL                          |                                |             |
+| `token`                                           | `text`      | UNIQUE NOT NULL                   |                                |             |
+| `createdAt` (`created_at`)                        | `timestamp` | NOT NULL                          | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`)                        | `timestamp` | NOT NULL                          | `.defaultNow()` `.$onUpdate()` |             |
+| `ipAddress` (`ip_address`)                        | `text`      | NULL                              |                                |             |
+| `userAgent` (`user_agent`)                        | `text`      | NULL                              |                                |             |
+| `userId` (`user_id`)                              | `text`      | NOT NULL → [user.id](#table-user) |                                |             |
+| `activeOrganizationId` (`active_organization_id`) | `text`      | NULL                              |                                |             |
 
 #### Definition
 
@@ -1213,21 +1213,21 @@ Authentication identities: OAuth provider accounts and password credentials. Mat
 
 ![identity and the tables it relates to](tables/identity.svg)
 
-| Column                  | Type        | Constraints                       | Default                        | Description |
-| ----------------------- | ----------- | --------------------------------- | ------------------------------ | ----------- |
-| `id`                    | `text`      | PK NOT NULL                       | `.$defaultFn()`                |             |
-| `accountId`             | `text`      | NOT NULL                          |                                |             |
-| `providerId`            | `text`      | NOT NULL                          |                                |             |
-| `userId`                | `text`      | NOT NULL → [user.id](#table-user) |                                |             |
-| `accessToken`           | `text`      | NULL                              |                                |             |
-| `refreshToken`          | `text`      | NULL                              |                                |             |
-| `idToken`               | `text`      | NULL                              |                                |             |
-| `accessTokenExpiresAt`  | `timestamp` | NULL                              |                                |             |
-| `refreshTokenExpiresAt` | `timestamp` | NULL                              |                                |             |
-| `scope`                 | `text`      | NULL                              |                                |             |
-| `password`              | `text`      | NULL                              |                                |             |
-| `createdAt`             | `timestamp` | NOT NULL                          | `.defaultNow()`                |             |
-| `updatedAt`             | `timestamp` | NOT NULL                          | `.defaultNow()` `.$onUpdate()` |             |
+| Column                                               | Type        | Constraints                       | Default                        | Description |
+| ---------------------------------------------------- | ----------- | --------------------------------- | ------------------------------ | ----------- |
+| `id`                                                 | `text`      | PK NOT NULL                       | `.$defaultFn()`                |             |
+| `accountId` (`account_id`)                           | `text`      | NOT NULL                          |                                |             |
+| `providerId` (`provider_id`)                         | `text`      | NOT NULL                          |                                |             |
+| `userId` (`user_id`)                                 | `text`      | NOT NULL → [user.id](#table-user) |                                |             |
+| `accessToken` (`access_token`)                       | `text`      | NULL                              |                                |             |
+| `refreshToken` (`refresh_token`)                     | `text`      | NULL                              |                                |             |
+| `idToken` (`id_token`)                               | `text`      | NULL                              |                                |             |
+| `accessTokenExpiresAt` (`access_token_expires_at`)   | `timestamp` | NULL                              |                                |             |
+| `refreshTokenExpiresAt` (`refresh_token_expires_at`) | `timestamp` | NULL                              |                                |             |
+| `scope`                                              | `text`      | NULL                              |                                |             |
+| `password`                                           | `text`      | NULL                              |                                |             |
+| `createdAt` (`created_at`)                           | `timestamp` | NOT NULL                          | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`)                           | `timestamp` | NOT NULL                          | `.defaultNow()` `.$onUpdate()` |             |
 
 #### Definition
 
@@ -1360,14 +1360,14 @@ Stores verification tokens (email verification, password reset, etc.) Matches to
 
 ![verification](tables/verification.svg)
 
-| Column       | Type        | Constraints | Default                        | Description |
-| ------------ | ----------- | ----------- | ------------------------------ | ----------- |
-| `id`         | `text`      | PK NOT NULL | `.$defaultFn()`                |             |
-| `identifier` | `text`      | NOT NULL    |                                |             |
-| `value`      | `text`      | NOT NULL    |                                |             |
-| `expiresAt`  | `timestamp` | NOT NULL    |                                |             |
-| `createdAt`  | `timestamp` | NOT NULL    | `.defaultNow()`                |             |
-| `updatedAt`  | `timestamp` | NOT NULL    | `.defaultNow()` `.$onUpdate()` |             |
+| Column                     | Type        | Constraints | Default                        | Description |
+| -------------------------- | ----------- | ----------- | ------------------------------ | ----------- |
+| `id`                       | `text`      | PK NOT NULL | `.$defaultFn()`                |             |
+| `identifier`               | `text`      | NOT NULL    |                                |             |
+| `value`                    | `text`      | NOT NULL    |                                |             |
+| `expiresAt` (`expires_at`) | `timestamp` | NOT NULL    |                                |             |
+| `createdAt` (`created_at`) | `timestamp` | NOT NULL    | `.defaultNow()`                |             |
+| `updatedAt` (`updated_at`) | `timestamp` | NOT NULL    | `.defaultNow()` `.$onUpdate()` |             |
 
 #### Definition
 

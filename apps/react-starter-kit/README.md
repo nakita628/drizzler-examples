@@ -28,4 +28,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- Columns declared on `snakeCase.table` without a SQL name stay as their TypeScript keys in DBML, Mermaid and the index lists (`emailVerified`, `userId`). The SQL uses the snake_case names (`email_verified`, `user_id`) ([#24](https://github.com/nakita628/drizzler/issues/24)).
+None.

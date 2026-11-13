@@ -1,24 +1,24 @@
 ```mermaid
 erDiagram
-    user ||--o{ invitation : "(id) - (inviterId)"
-    organization ||--o{ invitation : "(id) - (organizationId)"
-    user ||--o{ member : "(id) - (userId)"
-    organization ||--o{ member : "(id) - (organizationId)"
-    user ||--o{ passkey : "(id) - (userId)"
-    user ||--o{ session : "(id) - (userId)"
-    user ||--o{ identity : "(id) - (userId)"
+    user ||--o{ invitation : "(id) - (inviter_id)"
+    organization ||--o{ invitation : "(id) - (organization_id)"
+    user ||--o{ member : "(id) - (user_id)"
+    organization ||--o{ member : "(id) - (organization_id)"
+    user ||--o{ passkey : "(id) - (user_id)"
+    user ||--o{ session : "(id) - (user_id)"
+    user ||--o{ identity : "(id) - (user_id)"
     invitation {
         text id PK
         text email
-        text inviterId FK
-        text organizationId FK
+        text inviter_id FK
+        text organization_id FK
         text role
         text status
-        timestamptz expiresAt
-        timestamptz acceptedAt
-        timestamptz rejectedAt
-        timestamptz createdAt
-        timestamptz updatedAt
+        timestamptz expires_at
+        timestamptz accepted_at
+        timestamptz rejected_at
+        timestamptz created_at
+        timestamptz updated_at
     }
     organization {
         text id PK
@@ -26,99 +26,99 @@ erDiagram
         text slug
         text logo
         text metadata
-        text stripeCustomerId
-        timestamptz createdAt
-        timestamptz updatedAt
+        text stripe_customer_id
+        timestamptz created_at
+        timestamptz updated_at
     }
     member {
         text id PK
-        text userId FK
-        text organizationId FK
+        text user_id FK
+        text organization_id FK
         text role
-        timestamptz createdAt
-        timestamptz updatedAt
+        timestamptz created_at
+        timestamptz updated_at
     }
     passkey {
         text id PK
         text name
-        text publicKey
-        text userId FK
-        text credentialID
+        text public_key
+        text user_id FK
+        text credential_id
         integer counter
-        text deviceType
-        boolean backedUp
+        text device_type
+        boolean backed_up
         text transports
         text aaguid
-        timestamptz lastUsedAt "Extended operational fields"
-        text deviceName
+        timestamptz last_used_at "Extended operational fields"
+        text device_name
         text platform
-        timestamptz createdAt
-        timestamptz updatedAt
+        timestamptz created_at
+        timestamptz updated_at
     }
     subscription {
         text id PK
         text plan
-        text referenceId
-        text stripeCustomerId
-        text stripeSubscriptionId
+        text reference_id
+        text stripe_customer_id
+        text stripe_subscription_id
         text status
-        timestamptz periodStart
-        timestamptz periodEnd
-        timestamptz trialStart
-        timestamptz trialEnd
-        boolean cancelAtPeriodEnd
-        timestamptz cancelAt
-        timestamptz canceledAt
-        timestamptz endedAt
+        timestamptz period_start
+        timestamptz period_end
+        timestamptz trial_start
+        timestamptz trial_end
+        boolean cancel_at_period_end
+        timestamptz cancel_at
+        timestamptz canceled_at
+        timestamptz ended_at
         integer seats
-        text billingInterval
-        text stripeScheduleId "Stripe schedule ID for a plan change deferred to period end; cleared when the change is applied or canceled."
-        timestamptz createdAt
-        timestamptz updatedAt
+        text billing_interval
+        text stripe_schedule_id "Stripe schedule ID for a plan change deferred to period end; cleared when the change is applied or canceled."
+        timestamptz created_at
+        timestamptz updated_at
     }
     user {
         text id PK
         text name
         text email
-        boolean emailVerified
+        boolean email_verified
         text image
-        boolean isAnonymous
-        text stripeCustomerId
-        timestamptz createdAt
-        timestamptz updatedAt
+        boolean is_anonymous
+        text stripe_customer_id
+        timestamptz created_at
+        timestamptz updated_at
     }
     session {
         text id PK
-        timestamptz expiresAt
+        timestamptz expires_at
         text token
-        timestamptz createdAt
-        timestamptz updatedAt
-        text ipAddress
-        text userAgent
-        text userId FK
-        text activeOrganizationId
+        timestamptz created_at
+        timestamptz updated_at
+        text ip_address
+        text user_agent
+        text user_id FK
+        text active_organization_id
     }
     identity {
         text id PK
-        text accountId
-        text providerId
-        text userId FK
-        text accessToken
-        text refreshToken
-        text idToken
-        timestamptz accessTokenExpiresAt
-        timestamptz refreshTokenExpiresAt
+        text account_id
+        text provider_id
+        text user_id FK
+        text access_token
+        text refresh_token
+        text id_token
+        timestamptz access_token_expires_at
+        timestamptz refresh_token_expires_at
         text scope
         text password
-        timestamptz createdAt
-        timestamptz updatedAt
+        timestamptz created_at
+        timestamptz updated_at
     }
     verification {
         text id PK
         text identifier
         text value
-        timestamptz expiresAt
-        timestamptz createdAt
-        timestamptz updatedAt
+        timestamptz expires_at
+        timestamptz created_at
+        timestamptz updated_at
     }
 ```

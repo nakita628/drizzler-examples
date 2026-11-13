@@ -1,9 +1,9 @@
 ```mermaid
 erDiagram
-    user ||--o{ pg-drizzle_post : "(id) - (createdById)"
+    user ||--o{ "pg-drizzle_post" : "(id) - (createdById)"
     user ||--o{ session : "(id) - (user_id)"
     user ||--o{ account : "(id) - (user_id)"
-    pg-drizzle_post {
+    "pg-drizzle_post" {
         integer id PK
         varchar name
         varchar createdById FK
