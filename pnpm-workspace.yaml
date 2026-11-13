@@ -1,0 +1,18 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Versions shared by every example; bump them here to re-check drizzler against a new release.
+catalog:
+  "@types/node": ^24.10.0
+  drizzle-kit: 1.0.0-rc.5
+  drizzle-orm: 1.0.0-rc.5
+  drizzler: ^0.2.0
+  next-auth: 5.0.0-beta.25
+  typescript: ^6.0.3
+
+allowBuilds:
+  esbuild: true
+
+minimumReleaseAgeExclude:
+  - drizzler@0.2.0

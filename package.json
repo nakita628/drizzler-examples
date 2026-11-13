@@ -1,0 +1,11 @@
+{
+  "name": "drizzler-examples",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "generate": "pnpm -r --filter './apps/*' generate",
+    "typecheck": "pnpm -r --filter './apps/*' typecheck"
+  },
+  "packageManager": "pnpm@11.7.0"
+}
