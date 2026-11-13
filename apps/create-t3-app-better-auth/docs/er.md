@@ -1,55 +1,55 @@
 ```mermaid
 erDiagram
-    user ||--|{ posts : "(id) - (createdById)"
-    user ||--|{ session : "(id) - (userId)"
-    user ||--|{ account : "(id) - (userId)"
-    posts {
+    user ||--o{ pg-drizzle_post : "(id) - (createdById)"
+    user ||--o{ session : "(id) - (user_id)"
+    user ||--o{ account : "(id) - (user_id)"
+    pg-drizzle_post {
         integer id PK
         varchar name
         varchar createdById FK
-        timestamp createdAt
-        timestamp updatedAt
+        timestamptz createdAt
+        timestamptz updatedAt
     }
     user {
         text id PK
         text name
         text email
-        boolean emailVerified
+        boolean email_verified
         text image
-        timestamp createdAt
-        timestamp updatedAt
+        timestamp created_at
+        timestamp updated_at
     }
     session {
         text id PK
-        timestamp expiresAt
+        timestamp expires_at
         text token
-        timestamp createdAt
-        timestamp updatedAt
-        text ipAddress
-        text userAgent
-        text userId FK
+        timestamp created_at
+        timestamp updated_at
+        text ip_address
+        text user_agent
+        text user_id FK
     }
     account {
         text id PK
-        text accountId
-        text providerId
-        text userId FK
-        text accessToken
-        text refreshToken
-        text idToken
-        timestamp accessTokenExpiresAt
-        timestamp refreshTokenExpiresAt
+        text account_id
+        text provider_id
+        text user_id FK
+        text access_token
+        text refresh_token
+        text id_token
+        timestamp access_token_expires_at
+        timestamp refresh_token_expires_at
         text scope
         text password
-        timestamp createdAt
-        timestamp updatedAt
+        timestamp created_at
+        timestamp updated_at
     }
     verification {
         text id PK
         text identifier
         text value
-        timestamp expiresAt
-        timestamp createdAt
-        timestamp updatedAt
+        timestamp expires_at
+        timestamp created_at
+        timestamp updated_at
     }
 ```

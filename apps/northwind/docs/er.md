@@ -1,19 +1,19 @@
 ```mermaid
 erDiagram
-    table ||--|{ employees : "(id) - (recipientId)"
-    customers ||--|{ orders : "(id) - (customerId)"
-    employees ||--|{ orders : "(id) - (employeeId)"
-    suppliers ||--|{ products : "(id) - (supplierId)"
-    orders ||--|{ details : "(id) - (orderId)"
-    products ||--|{ details : "(id) - (productId)"
+    employees |o--o{ employees : "(id) - (recipient_id)"
+    customers ||--o{ orders : "(id) - (customer_id)"
+    employees ||--o{ orders : "(id) - (employee_id)"
+    suppliers ||--o{ products : "(id) - (supplier_id)"
+    orders ||--o{ order_details : "(id) - (order_id)"
+    products ||--o{ order_details : "(id) - (product_id)"
     customers {
         varchar id PK
-        varchar companyName
-        varchar contactName
-        varchar contactTitle
+        varchar company_name
+        varchar contact_name
+        varchar contact_title
         varchar address
         varchar city
-        varchar postalCode
+        varchar postal_code
         varchar region
         varchar country
         varchar phone
@@ -21,64 +21,64 @@ erDiagram
     }
     employees {
         varchar id PK
-        varchar lastName
-        varchar firstName
+        varchar last_name
+        varchar first_name
         varchar title
-        varchar titleOfCourtesy
-        date birthDate
-        date hireDate
+        varchar title_of_courtesy
+        date birth_date
+        date hire_date
         varchar address
         varchar city
-        varchar postalCode
+        varchar postal_code
         varchar country
-        varchar homePhone
+        varchar home_phone
         integer extension
         text notes
-        varchar recipientId
+        varchar recipient_id FK
     }
     orders {
         varchar id PK
-        date orderDate
-        date requiredDate
-        date shippedDate
-        integer shipVia
-        doublePrecision freight
-        varchar shipName
-        varchar shipCity
-        varchar shipRegion
-        varchar shipPostalCode
-        varchar shipCountry
-        varchar customerId FK
-        varchar employeeId FK
+        date order_date
+        date required_date
+        date shipped_date
+        integer ship_via
+        double_precision freight
+        varchar ship_name
+        varchar ship_city
+        varchar ship_region
+        varchar ship_postal_code
+        varchar ship_country
+        varchar customer_id FK
+        varchar employee_id FK
     }
     suppliers {
         varchar id PK
-        varchar companyName
-        varchar contactName
-        varchar contactTitle
+        varchar company_name
+        varchar contact_name
+        varchar contact_title
         varchar address
         varchar city
         varchar region
-        varchar postalCode
+        varchar postal_code
         varchar country
         varchar phone
     }
     products {
         varchar id PK
         varchar name
-        varchar quantityPerUnit
-        doublePrecision unitPrice
-        integer unitsInStock
-        integer unitsOnOrder
-        integer reorderLevel
+        varchar qt_per_unit
+        double_precision unit_price
+        integer units_in_stock
+        integer units_on_order
+        integer reorder_level
         integer discontinued
-        varchar supplierId FK
+        varchar supplier_id FK
     }
-    details {
-        doublePrecision unitPrice
+    order_details {
+        double_precision unit_price
         integer quantity
-        doublePrecision discount
-        varchar orderId FK
-        varchar productId FK
+        double_precision discount
+        varchar order_id FK
+        varchar product_id FK
     }
 ```

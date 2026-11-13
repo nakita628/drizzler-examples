@@ -1,66 +1,80 @@
 Table invitation {
-  id text [pk]
-  email text
-  inviterId text
-  organizationId text
-  role text
-  status text
-  expiresAt timestamptz
+  id text [pk, not null]
+  email text [not null]
+  inviterId text [not null]
+  organizationId text [not null]
+  role text [not null]
+  status text [not null]
+  expiresAt timestamptz [not null]
   acceptedAt timestamptz
   rejectedAt timestamptz
-  createdAt timestamptz
-  updatedAt timestamptz
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
+  indexes {
+    (organizationId, email) [unique, name: 'invitation_org_email_unique']
+    (email) [name: 'invitation_email_idx']
+    (inviterId) [name: 'invitation_inviter_id_idx']
+    (organizationId) [name: 'invitation_organization_id_idx']
+  }
   Note: 'Invitations table for Better Auth organization plugin. Manages pending invites to organizations. `acceptedAt` and `rejectedAt` are available for application hooks. Better Auth updates `status` but does not populate these extra fields.'
 }
 
 Table organization {
-  id text [pk]
-  name text
-  slug text
+  id text [pk, not null]
+  name text [not null]
+  slug text [not null, unique]
   logo text
   metadata text
   stripeCustomerId text
-  createdAt timestamptz
-  updatedAt timestamptz
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
   Note: 'Organizations table for Better Auth organization plugin. Each organization represents a separate tenant with isolated data.'
 }
 
 Table member {
-  id text [pk]
-  userId text
-  organizationId text
-  role text
-  createdAt timestamptz
-  updatedAt timestamptz
+  id text [pk, not null]
+  userId text [not null]
+  organizationId text [not null]
+  role text [not null]
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
+  indexes {
+    (userId, organizationId) [unique, name: 'member_user_org_unique']
+    (userId) [name: 'member_user_id_idx']
+    (organizationId) [name: 'member_organization_id_idx']
+  }
   Note: 'Organization membership table for Better Auth organization plugin. Links users to organizations with specific roles. Role values (Better Auth defaults): - "owner": Full control, can delete organization - "admin": Can manage members and settings - "member": Standard access'
 }
 
 Table passkey {
-  id text [pk]
+  id text [pk, not null]
   name text
-  publicKey text
-  userId text
-  credentialID text
-  counter integer
-  deviceType text
-  backedUp boolean
+  publicKey text [not null]
+  userId text [not null]
+  credentialID text [not null, unique]
+  counter integer [not null]
+  deviceType text [not null]
+  backedUp boolean [not null]
   transports text
   aaguid text
   lastUsedAt timestamptz [note: 'Extended operational fields']
   deviceName text
   platform text
-  createdAt timestamptz
-  updatedAt timestamptz
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
+  indexes {
+    (userId) [name: 'passkey_user_id_idx']
+  }
   Note: 'Passkey credential store. Extended fields beyond Better Auth defaults: - lastUsedAt: Tracks last authentication for security audits - deviceName: User-friendly name (e.g., "MacBook Pro", "iPhone 15") - platform: Authenticator platform ("platform" | "cross-platform")'
 }
 
 Table subscription {
-  id text [pk]
-  plan text
-  referenceId text
+  id text [pk, not null]
+  plan text [not null]
+  referenceId text [not null]
   stripeCustomerId text
-  stripeSubscriptionId text
-  status text
+  stripeSubscriptionId text [unique]
+  status text [not null]
   periodStart timestamptz
   periodEnd timestamptz
   trialStart timestamptz
@@ -72,41 +86,49 @@ Table subscription {
   seats integer
   billingInterval text
   stripeScheduleId text [note: 'Stripe schedule ID for a plan change deferred to period end; cleared when the change is applied or canceled.']
-  createdAt timestamptz
-  updatedAt timestamptz
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
+  indexes {
+    (referenceId) [name: 'subscription_reference_id_idx']
+    (stripeCustomerId) [name: 'subscription_stripe_customer_id_idx']
+  }
 }
 
 Table user {
-  id text [pk]
-  name text
-  email text
-  emailVerified boolean
+  id text [pk, not null]
+  name text [not null]
+  email text [not null, unique]
+  emailVerified boolean [not null]
   image text
-  isAnonymous boolean
+  isAnonymous boolean [not null]
   stripeCustomerId text
-  createdAt timestamptz
-  updatedAt timestamptz
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
   Note: 'User accounts table. Matches to the `user` table in Better Auth.'
 }
 
 Table session {
-  id text [pk]
-  expiresAt timestamptz
-  token text
-  createdAt timestamptz
-  updatedAt timestamptz
+  id text [pk, not null]
+  expiresAt timestamptz [not null]
+  token text [not null, unique]
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
   ipAddress text
   userAgent text
-  userId text
+  userId text [not null]
   activeOrganizationId text
+  indexes {
+    (userId) [name: 'session_user_id_idx']
+    (activeOrganizationId) [name: 'session_active_org_id_idx']
+  }
   Note: 'Stores user session data for authentication. Matches to the `session` table in Better Auth.'
 }
 
 Table identity {
-  id text [pk]
-  accountId text
-  providerId text
-  userId text
+  id text [pk, not null]
+  accountId text [not null]
+  providerId text [not null]
+  userId text [not null]
   accessToken text
   refreshToken text
   idToken text
@@ -114,18 +136,28 @@ Table identity {
   refreshTokenExpiresAt timestamptz
   scope text
   password text
-  createdAt timestamptz
-  updatedAt timestamptz
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
+  indexes {
+    (providerId, accountId) [unique, name: 'identity_provider_account_unique']
+    (userId) [name: 'identity_user_id_idx']
+  }
   Note: 'Authentication identities: OAuth provider accounts and password credentials. Matches to the `account` table in Better Auth. Better Auth keys an identity on `(providerId, accountId)` and throws when a lookup matches two rows, so the pair is unique here. Never add an `issuer` column: 1.7.0 through 1.7.2 required one, 1.7.3 stopped writing it, and `NOT NULL` there rejects every sign-up.'
 }
 
 Table verification {
-  id text [pk]
-  identifier text
-  value text
-  expiresAt timestamptz
-  createdAt timestamptz
-  updatedAt timestamptz
+  id text [pk, not null]
+  identifier text [not null]
+  value text [not null]
+  expiresAt timestamptz [not null]
+  createdAt timestamptz [not null]
+  updatedAt timestamptz [not null]
+  indexes {
+    (identifier, value) [unique, name: 'verification_identifier_value_unique']
+    (identifier) [name: 'verification_identifier_idx']
+    (value) [name: 'verification_value_idx']
+    (expiresAt) [name: 'verification_expires_at_idx']
+  }
   Note: 'Stores verification tokens (email verification, password reset, etc.) Matches to the `verification` table in Better Auth.'
 }
 

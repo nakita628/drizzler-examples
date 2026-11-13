@@ -778,6 +778,8 @@ where "passkey"."id" = $1
 
 ### subscription
 
+![subscription](tables/subscription.svg)
+
 | Column                 | Type        | Constraints | Default                        | Description                                                                                                  |
 | ---------------------- | ----------- | ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
 | `id`                   | `text`      | PK NOT NULL | `.$defaultFn()`                |                                                                                                              |
@@ -1355,6 +1357,8 @@ where "identity"."id" = $1
 ### verification
 
 Stores verification tokens (email verification, password reset, etc.) Matches to the `verification` table in Better Auth.
+
+![verification](tables/verification.svg)
 
 | Column       | Type        | Constraints | Default                        | Description |
 | ------------ | ----------- | ----------- | ------------------------------ | ----------- |

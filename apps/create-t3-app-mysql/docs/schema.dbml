@@ -1,24 +1,28 @@
-Table posts {
-  id bigint [pk]
+Table project1_post {
+  id bigint [pk, not null]
   name varchar
-  createdById varchar
-  createdAt timestamp
+  createdById varchar [not null]
+  createdAt timestamp [not null]
   updatedAt timestamp
+  indexes {
+    (createdById) [name: 'created_by_idx']
+    (name) [name: 'name_idx']
+  }
 }
 
-Table users {
-  id varchar [pk]
+Table project1_user {
+  id varchar [pk, not null]
   name varchar
-  email varchar
+  email varchar [not null]
   emailVerified timestamp
   image varchar
 }
 
-Table accounts {
-  userId varchar
-  type varchar
-  provider varchar
-  providerAccountId varchar
+Table project1_account {
+  userId varchar [not null]
+  type varchar [not null]
+  provider varchar [not null]
+  providerAccountId varchar [not null]
   refresh_token text
   access_token text
   expires_at integer
@@ -26,22 +30,32 @@ Table accounts {
   scope varchar
   id_token text
   session_state varchar
+  indexes {
+    (provider, providerAccountId) [pk]
+    (userId) [name: 'account_user_id_idx']
+  }
 }
 
-Table sessions {
-  sessionToken varchar [pk]
-  userId varchar
-  expires timestamp
+Table project1_session {
+  sessionToken varchar [pk, not null]
+  userId varchar [not null]
+  expires timestamp [not null]
+  indexes {
+    (userId) [name: 'session_user_id_idx']
+  }
 }
 
-Table verificationTokens {
-  identifier varchar
-  token varchar
-  expires timestamp
+Table project1_verification_token {
+  identifier varchar [not null]
+  token varchar [not null]
+  expires timestamp [not null]
+  indexes {
+    (identifier, token) [pk]
+  }
 }
 
-Ref posts_createdById_users_id_fk: posts.createdById > users.id
+Ref project1_post_createdById_project1_user_id_fk: project1_post.createdById > project1_user.id
 
-Ref accounts_userId_users_id_fk: accounts.userId > users.id
+Ref project1_account_userId_project1_user_id_fk: project1_account.userId > project1_user.id
 
-Ref sessions_userId_users_id_fk: sessions.userId > users.id
+Ref project1_session_userId_project1_user_id_fk: project1_session.userId > project1_user.id

@@ -261,23 +261,23 @@ where "customers"."id" = $1
 
 ![employees and the tables it relates to](tables/employees.svg)
 
-| Column                                  | Type      | Constraints                     | Default | Description |
-| --------------------------------------- | --------- | ------------------------------- | ------- | ----------- |
-| `id`                                    | `varchar` | PK NOT NULL                     |         |             |
-| `lastName` (`last_name`)                | `varchar` | NOT NULL                        |         |             |
-| `firstName` (`first_name`)              | `varchar` | NULL                            |         |             |
-| `title`                                 | `varchar` | NOT NULL                        |         |             |
-| `titleOfCourtesy` (`title_of_courtesy`) | `varchar` | NOT NULL                        |         |             |
-| `birthDate` (`birth_date`)              | `date`    | NOT NULL                        |         |             |
-| `hireDate` (`hire_date`)                | `date`    | NOT NULL                        |         |             |
-| `address`                               | `varchar` | NOT NULL                        |         |             |
-| `city`                                  | `varchar` | NOT NULL                        |         |             |
-| `postalCode` (`postal_code`)            | `varchar` | NOT NULL                        |         |             |
-| `country`                               | `varchar` | NOT NULL                        |         |             |
-| `homePhone` (`home_phone`)              | `varchar` | NOT NULL                        |         |             |
-| `extension`                             | `integer` | NOT NULL                        |         |             |
-| `notes`                                 | `text`    | NOT NULL                        |         |             |
-| `recipientId` (`recipient_id`)          | `varchar` | NULL → [table.id](#table-table) |         |             |
+| Column                                  | Type      | Constraints                             | Default | Description |
+| --------------------------------------- | --------- | --------------------------------------- | ------- | ----------- |
+| `id`                                    | `varchar` | PK NOT NULL                             |         |             |
+| `lastName` (`last_name`)                | `varchar` | NOT NULL                                |         |             |
+| `firstName` (`first_name`)              | `varchar` | NULL                                    |         |             |
+| `title`                                 | `varchar` | NOT NULL                                |         |             |
+| `titleOfCourtesy` (`title_of_courtesy`) | `varchar` | NOT NULL                                |         |             |
+| `birthDate` (`birth_date`)              | `date`    | NOT NULL                                |         |             |
+| `hireDate` (`hire_date`)                | `date`    | NOT NULL                                |         |             |
+| `address`                               | `varchar` | NOT NULL                                |         |             |
+| `city`                                  | `varchar` | NOT NULL                                |         |             |
+| `postalCode` (`postal_code`)            | `varchar` | NOT NULL                                |         |             |
+| `country`                               | `varchar` | NOT NULL                                |         |             |
+| `homePhone` (`home_phone`)              | `varchar` | NOT NULL                                |         |             |
+| `extension`                             | `integer` | NOT NULL                                |         |             |
+| `notes`                                 | `text`    | NOT NULL                                |         |             |
+| `recipientId` (`recipient_id`)          | `varchar` | NULL → [employees.id](#table-employees) |         |             |
 
 #### Definition
 
@@ -305,10 +305,11 @@ ALTER TABLE "employees" ADD CONSTRAINT "employees_recipient_id_employees_id_fkey
 
 #### References
 
-- `recipientId` → [table.id](#table-table) (many to one)
+- `recipientId` → [employees.id](#table-employees) (many to one)
 
 #### Referenced by
 
+- `id` → [employees.recipientId](#table-employees) (one to many)
 - `id` → [orders.employeeId](#table-orders) (one to many, on delete cascade)
 
 <details>

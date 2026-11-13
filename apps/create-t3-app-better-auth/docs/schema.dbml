@@ -1,59 +1,63 @@
-Table posts {
-  id integer [pk]
+Table "pg-drizzle_post" {
+  id integer [pk, not null]
   name varchar
-  createdById varchar
-  createdAt timestamptz
+  createdById varchar [not null]
+  createdAt timestamptz [not null]
   updatedAt timestamptz
+  indexes {
+    (createdById) [name: 'created_by_idx']
+    (name) [name: 'name_idx']
+  }
 }
 
 Table user {
-  id text [pk]
-  name text
-  email text
-  emailVerified boolean
+  id text [pk, not null]
+  name text [not null]
+  email text [not null, unique]
+  email_verified boolean [not null]
   image text
-  createdAt timestamp
-  updatedAt timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
 }
 
 Table session {
-  id text [pk]
-  expiresAt timestamp
-  token text
-  createdAt timestamp
-  updatedAt timestamp
-  ipAddress text
-  userAgent text
-  userId text
+  id text [pk, not null]
+  expires_at timestamp [not null]
+  token text [not null, unique]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  ip_address text
+  user_agent text
+  user_id text [not null]
 }
 
 Table account {
-  id text [pk]
-  accountId text
-  providerId text
-  userId text
-  accessToken text
-  refreshToken text
-  idToken text
-  accessTokenExpiresAt timestamp
-  refreshTokenExpiresAt timestamp
+  id text [pk, not null]
+  account_id text [not null]
+  provider_id text [not null]
+  user_id text [not null]
+  access_token text
+  refresh_token text
+  id_token text
+  access_token_expires_at timestamp
+  refresh_token_expires_at timestamp
   scope text
   password text
-  createdAt timestamp
-  updatedAt timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
 }
 
 Table verification {
-  id text [pk]
-  identifier text
-  value text
-  expiresAt timestamp
-  createdAt timestamp
-  updatedAt timestamp
+  id text [pk, not null]
+  identifier text [not null]
+  value text [not null]
+  expires_at timestamp [not null]
+  created_at timestamp
+  updated_at timestamp
 }
 
-Ref posts_createdById_user_id_fk: posts.createdById > user.id
+Ref "pg-drizzle_post_createdById_user_id_fk": "pg-drizzle_post".createdById > user.id
 
-Ref session_userId_user_id_fk: session.userId > user.id [delete: cascade]
+Ref session_user_id_user_id_fk: session.user_id > user.id [delete: cascade]
 
-Ref account_userId_user_id_fk: account.userId > user.id [delete: cascade]
+Ref account_user_id_user_id_fk: account.user_id > user.id [delete: cascade]

@@ -1,29 +1,48 @@
 ```mermaid
 erDiagram
-    articles ||--|{ comments : "(id) - (articleId)"
-    users ||--|{ comments : "(id) - (authorId)"
-    articles ||--|{ articleTags : "(id) - (articleId)"
-    tags ||--|{ articleTags : "(name) - (tagName)"
-    users ||--|{ userFollows : "(id) - (followedId)"
-    users ||--|{ userFollows : "(id) - (followerId)"
+    users ||--o{ articles : "(id) - (author_id)"
+    articles ||--o{ favorite_articles : "(id) - (article_id)"
+    users ||--o{ favorite_articles : "(id) - (user_id)"
+    articles ||--o{ comments : "(id) - (article_id)"
+    users ||--o{ comments : "(id) - (author_id)"
+    articles ||--o{ article_tags : "(id) - (article_id)"
+    tags ||--o{ article_tags : "(name) - (tag_name)"
+    users ||--o{ user_follows : "(id) - (followed_id)"
+    users ||--o{ user_follows : "(id) - (follower_id)"
+    articles {
+        serial id PK
+        text slug
+        text title
+        text description
+        text body
+        timestamp created_at
+        timestamp updated_at
+        integer author_id FK
+    }
+    favorite_articles {
+        integer article_id PK, FK
+        integer user_id PK, FK
+        timestamp created_at
+        timestamp updated_at
+    }
     comments {
         serial id PK
         text body
-        integer articleId FK
-        integer authorId FK
-        timestamp createdAt
-        timestamp updatedAt
+        integer article_id FK
+        integer author_id FK
+        timestamp created_at
+        timestamp updated_at
     }
     tags {
         text name PK
-        timestamp createdAt
-        timestamp updatedAt
+        timestamp created_at
+        timestamp updated_at
     }
-    articleTags {
-        integer articleId FK
-        text tagName FK
-        timestamp createdAt
-        timestamp updatedAt
+    article_tags {
+        integer article_id PK, FK
+        text tag_name PK, FK
+        timestamp created_at
+        timestamp updated_at
     }
     users {
         serial id PK
@@ -32,13 +51,13 @@ erDiagram
         text image
         text password
         text username
-        timestamp createdAt
-        timestamp updatedAt
+        timestamp created_at
+        timestamp updated_at
     }
-    userFollows {
-        integer followedId FK
-        integer followerId FK
-        timestamp createdAt
-        timestamp updatedAt
+    user_follows {
+        integer followed_id PK, FK
+        integer follower_id PK, FK
+        timestamp created_at
+        timestamp updated_at
     }
 ```

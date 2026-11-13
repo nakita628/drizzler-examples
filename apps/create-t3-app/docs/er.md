@@ -1,27 +1,27 @@
 ```mermaid
 erDiagram
-    users ||--|{ posts : "(id) - (createdById)"
-    users ||--|{ accounts : "(id) - (userId)"
-    users ||--|{ sessions : "(id) - (userId)"
-    posts {
+    project1_user ||--o{ project1_post : "(id) - (createdById)"
+    project1_user ||--o{ project1_account : "(id) - (userId)"
+    project1_user ||--o{ project1_session : "(id) - (userId)"
+    project1_post {
         integer id PK
         varchar name
         varchar createdById FK
-        timestamp createdAt
-        timestamp updatedAt
+        timestamptz createdAt
+        timestamptz updatedAt
     }
-    users {
+    project1_user {
         varchar id PK
         varchar name
         varchar email
-        timestamp emailVerified
+        timestamptz emailVerified
         varchar image
     }
-    accounts {
+    project1_account {
         varchar userId FK
         varchar type
-        varchar provider
-        varchar providerAccountId
+        varchar provider PK
+        varchar providerAccountId PK
         text refresh_token
         text access_token
         integer expires_at
@@ -30,14 +30,14 @@ erDiagram
         text id_token
         varchar session_state
     }
-    sessions {
+    project1_session {
         varchar sessionToken PK
         varchar userId FK
-        timestamp expires
+        timestamptz expires
     }
-    verificationTokens {
-        varchar identifier
-        varchar token
-        timestamp expires
+    project1_verification_token {
+        varchar identifier PK
+        varchar token PK
+        timestamptz expires
     }
 ```

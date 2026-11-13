@@ -26,5 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- `articles` and `favorite_articles` are missing from every output. Both are declared in `src/articles/articles.schema.ts` with `import { pgTable as table }`, and drizzler does not recognise the aliased `pgTable`. They show up once the alias is removed ([#12](https://github.com/nakita628/drizzler/issues/12)).
-- Because those tables are missing, `schema.dbml` keeps refs to `articles` (from `comments` and `article_tags`), which makes it fail to parse.
+None.

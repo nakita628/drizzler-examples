@@ -1,27 +1,27 @@
 ```mermaid
 erDiagram
-    users ||--|{ posts : "(id) - (createdById)"
-    users ||--|{ accounts : "(id) - (userId)"
-    users ||--|{ sessions : "(id) - (userId)"
-    posts {
-        integer id
+    project1_user ||--o{ project1_post : "(id) - (createdById)"
+    project1_user ||--o{ project1_account : "(id) - (userId)"
+    project1_user ||--o{ project1_session : "(id) - (userId)"
+    project1_post {
+        integer id PK
         text name
         text createdById FK
         integer createdAt
         integer updatedAt
     }
-    users {
+    project1_user {
         text id PK
         text name
         text email
         integer emailVerified
         text image
     }
-    accounts {
+    project1_account {
         text userId FK
         text type
-        text provider
-        text providerAccountId
+        text provider PK
+        text providerAccountId PK
         text refresh_token
         text access_token
         integer expires_at
@@ -30,14 +30,14 @@ erDiagram
         text id_token
         text session_state
     }
-    sessions {
+    project1_session {
         text sessionToken PK
         text userId FK
         integer expires
     }
-    verificationTokens {
-        text identifier
-        text token
+    project1_verification_token {
+        text identifier PK
+        text token PK
         integer expires
     }
 ```
