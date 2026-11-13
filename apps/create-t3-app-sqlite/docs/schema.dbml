@@ -1,0 +1,47 @@
+Table posts {
+  id integer
+  name text
+  createdById text
+  createdAt integer
+  updatedAt integer
+}
+
+Table users {
+  id text [pk]
+  name text
+  email text
+  emailVerified integer
+  image text
+}
+
+Table accounts {
+  userId text
+  type text
+  provider text
+  providerAccountId text
+  refresh_token text
+  access_token text
+  expires_at integer
+  token_type text
+  scope text
+  id_token text
+  session_state text
+}
+
+Table sessions {
+  sessionToken text [pk]
+  userId text
+  expires integer
+}
+
+Table verificationTokens {
+  identifier text
+  token text
+  expires integer
+}
+
+Ref posts_createdById_users_id_fk: posts.createdById > users.id
+
+Ref accounts_userId_users_id_fk: accounts.userId > users.id
+
+Ref sessions_userId_users_id_fk: sessions.userId > users.id

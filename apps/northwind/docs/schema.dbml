@@ -1,0 +1,92 @@
+Table customers {
+  id varchar [pk]
+  companyName varchar
+  contactName varchar
+  contactTitle varchar
+  address varchar
+  city varchar
+  postalCode varchar
+  region varchar
+  country varchar
+  phone varchar
+  fax varchar
+}
+
+Table employees {
+  id varchar [pk]
+  lastName varchar
+  firstName varchar
+  title varchar
+  titleOfCourtesy varchar
+  birthDate date
+  hireDate date
+  address varchar
+  city varchar
+  postalCode varchar
+  country varchar
+  homePhone varchar
+  extension integer
+  notes text
+  recipientId varchar
+}
+
+Table orders {
+  id varchar [pk]
+  orderDate date
+  requiredDate date
+  shippedDate date
+  shipVia integer
+  freight double precision
+  shipName varchar
+  shipCity varchar
+  shipRegion varchar
+  shipPostalCode varchar
+  shipCountry varchar
+  customerId varchar
+  employeeId varchar
+}
+
+Table suppliers {
+  id varchar [pk]
+  companyName varchar
+  contactName varchar
+  contactTitle varchar
+  address varchar
+  city varchar
+  region varchar
+  postalCode varchar
+  country varchar
+  phone varchar
+}
+
+Table products {
+  id varchar [pk]
+  name varchar
+  quantityPerUnit varchar
+  unitPrice double precision
+  unitsInStock integer
+  unitsOnOrder integer
+  reorderLevel integer
+  discontinued integer
+  supplierId varchar
+}
+
+Table details {
+  unitPrice double precision
+  quantity integer
+  discount double precision
+  orderId varchar
+  productId varchar
+}
+
+Ref employees_recipientId_table_id_fk: employees.recipientId > table.id
+
+Ref orders_customerId_customers_id_fk: orders.customerId > customers.id
+
+Ref orders_employeeId_employees_id_fk: orders.employeeId > employees.id
+
+Ref products_supplierId_suppliers_id_fk: products.supplierId > suppliers.id
+
+Ref details_orderId_orders_id_fk: details.orderId > orders.id
+
+Ref details_productId_products_id_fk: details.productId > products.id

@@ -1,0 +1,51 @@
+Table comments {
+  id serial [pk, increment]
+  body text
+  articleId integer
+  authorId integer
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table tags {
+  name text [pk]
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table articleTags {
+  articleId integer
+  tagName text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table users {
+  id serial [pk, increment]
+  email text
+  bio text
+  image text
+  password text
+  username text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table userFollows {
+  followedId integer
+  followerId integer
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Ref comments_articleId_articles_id_fk: comments.articleId > articles.id
+
+Ref comments_authorId_users_id_fk: comments.authorId > users.id
+
+Ref articleTags_articleId_articles_id_fk: articleTags.articleId > articles.id
+
+Ref articleTags_tagName_tags_name_fk: articleTags.tagName > tags.name
+
+Ref userFollows_followedId_users_id_fk: userFollows.followedId > users.id
+
+Ref userFollows_followerId_users_id_fk: userFollows.followerId > users.id

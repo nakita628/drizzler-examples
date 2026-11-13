@@ -16,8 +16,15 @@ The Northwind Traders schema (PostgreSQL) from Drizzle's own ORM benchmarks.
 pnpm generate
 ```
 
-The output is written to [`docs/`](docs/): `README.md`, `er.svg`, `er.png`, `er-dark.png` and `tables/*.svg`.
+The output is written to [`docs/`](docs/):
+
+- [`README.md`](docs/README.md): table docs with the SQL
+- [`er.svg`](docs/er.svg), [`er.png`](docs/er.png), [`er-dark.png`](docs/er-dark.png) and `tables/*.svg`: ER diagrams
+- [`schema.dbml`](docs/schema.dbml): DBML
+- [`er.md`](docs/er.md): Mermaid `erDiagram`
 
 ## Known issues
 
 - The self-reference `employees.recipient_id → employees.id` is missing from the ER diagram, and the table docs link it to `table.id` (`#table-table`). drizzler reads `foreignColumns: [table.id]` as a table named after the callback parameter `table`. drizzle-kit gets the constraint right in the generated SQL.
+- The same wrong target ends up in `schema.dbml` (`Ref … employees.recipientId > table.id`) and `er.md` (`table ||--|{ employees`), so the DBML refers to a table that does not exist.
+- `schema.dbml` does not parse: `double precision` is written unquoted (`freight double precision`), so the parser takes `double` as the type and rejects `precision`. It must be quoted (`"double precision"`).

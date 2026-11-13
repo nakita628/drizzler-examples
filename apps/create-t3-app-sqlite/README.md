@@ -16,7 +16,12 @@ The Drizzle + NextAuth.js (Auth.js) schema that `create-t3-app` scaffolds for SQ
 pnpm generate
 ```
 
-The output is written to [`docs/`](docs/): `README.md`, `er.svg`, `er.png`, `er-dark.png` and `tables/*.svg`.
+The output is written to [`docs/`](docs/):
+
+- [`README.md`](docs/README.md): table docs with the SQL
+- [`er.svg`](docs/er.svg), [`er.png`](docs/er.png), [`er-dark.png`](docs/er-dark.png) and `tables/*.svg`: ER diagrams
+- [`schema.dbml`](docs/schema.dbml): DBML
+- [`er.md`](docs/er.md): Mermaid `erDiagram`
 
 ## Known issues
 

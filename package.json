@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "generate": "pnpm -r --filter './apps/*' generate",
-    "typecheck": "pnpm -r --filter './apps/*' typecheck"
+    "typecheck": "pnpm -r --filter './apps/*' typecheck",
+    "check:dbml": "node scripts/check-dbml.mjs"
   },
-  "packageManager": "pnpm@11.7.0"
+  "packageManager": "pnpm@11.7.0",
+  "devDependencies": {
+    "@dbml/core": "^12.0.0"
+  }
 }

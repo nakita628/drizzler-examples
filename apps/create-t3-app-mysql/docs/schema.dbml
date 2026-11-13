@@ -1,0 +1,47 @@
+Table posts {
+  id bigint [pk]
+  name varchar
+  createdById varchar
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table users {
+  id varchar [pk]
+  name varchar
+  email varchar
+  emailVerified timestamp
+  image varchar
+}
+
+Table accounts {
+  userId varchar
+  type varchar
+  provider varchar
+  providerAccountId varchar
+  refresh_token text
+  access_token text
+  expires_at integer
+  token_type varchar
+  scope varchar
+  id_token text
+  session_state varchar
+}
+
+Table sessions {
+  sessionToken varchar [pk]
+  userId varchar
+  expires timestamp
+}
+
+Table verificationTokens {
+  identifier varchar
+  token varchar
+  expires timestamp
+}
+
+Ref posts_createdById_users_id_fk: posts.createdById > users.id
+
+Ref accounts_userId_users_id_fk: accounts.userId > users.id
+
+Ref sessions_userId_users_id_fk: sessions.userId > users.id
