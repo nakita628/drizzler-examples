@@ -14,6 +14,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | type-only import evaluated |
 | [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | type-only import evaluated |
 | [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
+| [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | `snakeCase` names in DBML/Mermaid, `timestamptz` written as `timestamp`, DBML refs omit `on delete` |
 
 ## Output
 
@@ -32,7 +33,7 @@ Every app writes the same set of files to `docs/`:
 
 These show up in all the DBML and Mermaid output, even where it parses:
 
-- DBML has no `not null`, no composite primary keys (`indexes { (a, b) [pk] }`), no indexes and no notes, although drizzler knows about all of them (they are in the table docs).
+- DBML has no `not null`, no `[unique]`, no composite primary keys (`indexes { (a, b) [pk] }`) and no indexes, although drizzler knows about all of them (they are in the table docs). A table's JSDoc is emitted as a DBML `Note`.
 - DBML and Mermaid name tables and columns by their TypeScript keys (`users`, `createdById`) rather than their SQL names (`project1_user`, `order_details`).
 - Mermaid writes every foreign key as `||--|{` (one to one-or-more). A plain foreign key means zero or more, `||--o{`, and a nullable one is `|o--o{`.
 - Mermaid writes Drizzle builder names as types (`doublePrecision`), while DBML writes SQL types (`double precision`).
