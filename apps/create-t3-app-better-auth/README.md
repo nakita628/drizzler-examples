@@ -23,3 +23,7 @@ The output is written to [`docs/`](docs/):
 - [`schema.dbml`](docs/schema.dbml): DBML
 - [`er.md`](docs/er.md): Mermaid `erDiagram`
 
+## Known issues
+
+No failures particular to this schema. It still hits the repo-wide gaps: TypeScript keys instead of SQL names ([#14](https://github.com/nakita628/drizzler/issues/14)), Mermaid cardinality ([#15](https://github.com/nakita628/drizzler/issues/15)), Mermaid builder names ([#16](https://github.com/nakita628/drizzler/issues/16)), and DBML constraints left out ([#17](https://github.com/nakita628/drizzler/issues/17)).
+

@@ -28,7 +28,7 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- DBML, Mermaid and the ER diagram name columns by their TypeScript keys (`emailVerified`, `credentialID`). The SQL uses the snake_case names (`email_verified`, `credential_id`). This is the repo-wide naming gap, and here it covers almost every column, because the names come from `snakeCase.table` rather than from a string passed to the builder.
-- Mermaid still writes the builder name `timestamp` for `timestamp({ withTimezone: true })`. DBML now writes `timestamptz`, and the SQL is `timestamp with time zone`.
-- `subscription` and `verification` have no `tables/*.svg`. drizzler only writes that diagram for a table that joins another, and neither table has a foreign key. Both tables are in the full ER diagram, the DBML and the table docs.
-- The repo-wide DBML gaps show up too: no `not null`, no `[unique]`, no indexes. The SQL and the table docs have the composite uniques (`invitation_org_email_unique`, `member_user_org_unique`, and the others) and the named indexes. DBML refs do include `[delete: cascade]`.
+- DBML, Mermaid and the ER diagram name columns by their TypeScript keys (`emailVerified`, `credentialID`). The SQL uses the snake_case names (`email_verified`, `credential_id`). This is the repo-wide naming gap, and here it covers almost every column, because the names come from `snakeCase.table` rather than from a string passed to the builder ([#14](https://github.com/nakita628/drizzler/issues/14)).
+- Mermaid still writes the builder name `timestamp` for `timestamp({ withTimezone: true })`. DBML now writes `timestamptz`, and the SQL is `timestamp with time zone` ([#16](https://github.com/nakita628/drizzler/issues/16)).
+- `subscription` and `verification` have no `tables/*.svg`. drizzler only writes that diagram for a table that joins another, and neither table has a foreign key. Both tables are in the full ER diagram, the DBML and the table docs ([#18](https://github.com/nakita628/drizzler/issues/18)).
+- The repo-wide DBML gaps show up too: no `not null`, no `[unique]`, no indexes ([#17](https://github.com/nakita628/drizzler/issues/17)). The SQL and the table docs have the composite uniques (`invitation_org_email_unique`, `member_user_org_unique`, and the others) and the named indexes. DBML refs do include `[delete: cascade]`.

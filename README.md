@@ -8,13 +8,13 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 
 | App | Source | Dialect | Known issues |
 | --- | --- | --- | --- |
-| [northwind](apps/northwind) | drizzle-team/drizzle-northwind-benchmarks-pg | PostgreSQL | self-FK in object-style extra config, unquoted `double precision` in DBML |
-| [realworld](apps/realworld) | bedstack/elysia-drizzle-realworld-example | PostgreSQL | `pgTable as table` alias |
-| [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | type-only import evaluated |
-| [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | type-only import evaluated |
-| [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | type-only import evaluated |
+| [northwind](apps/northwind) | drizzle-team/drizzle-northwind-benchmarks-pg | PostgreSQL | [#10](https://github.com/nakita628/drizzler/issues/10) self-FK in object-style extra config, [#11](https://github.com/nakita628/drizzler/issues/11) unquoted `double precision` in DBML |
+| [realworld](apps/realworld) | bedstack/elysia-drizzle-realworld-example | PostgreSQL | [#12](https://github.com/nakita628/drizzler/issues/12) `pgTable as table` alias |
+| [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | [#13](https://github.com/nakita628/drizzler/issues/13) type-only import evaluated |
+| [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | [#13](https://github.com/nakita628/drizzler/issues/13) type-only import evaluated |
+| [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | [#13](https://github.com/nakita628/drizzler/issues/13) type-only import evaluated |
 | [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
-| [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | `snakeCase` names in DBML/Mermaid |
+| [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | [#14](https://github.com/nakita628/drizzler/issues/14) `snakeCase` names in DBML/Mermaid, [#18](https://github.com/nakita628/drizzler/issues/18) no `tables/*.svg` without a relation |
 
 ## Output
 
@@ -33,10 +33,10 @@ Every app writes the same set of files to `docs/`:
 
 These show up in all the DBML and Mermaid output, even where it parses:
 
-- DBML has no `not null`, no `[unique]`, no composite primary keys (`indexes { (a, b) [pk] }`) and no indexes, although drizzler knows about all of them (they are in the table docs). A table's JSDoc is emitted as a DBML `Note`.
-- DBML and Mermaid name tables and columns by their TypeScript keys (`users`, `createdById`) rather than their SQL names (`project1_user`, `order_details`).
-- Mermaid writes every foreign key as `||--|{` (one to one-or-more). A plain foreign key means zero or more, `||--o{`, and a nullable one is `|o--o{`.
-- Mermaid writes Drizzle builder names as types (`doublePrecision`), while DBML writes SQL types (`double precision`).
+- DBML has no `not null`, no `[unique]`, no composite primary keys (`indexes { (a, b) [pk] }`) and no indexes, although drizzler knows about all of them (they are in the table docs) ([#17](https://github.com/nakita628/drizzler/issues/17)). A table's JSDoc is emitted as a DBML `Note`.
+- DBML and Mermaid name tables and columns by their TypeScript keys (`users`, `createdById`) rather than their SQL names (`project1_user`, `order_details`) ([#14](https://github.com/nakita628/drizzler/issues/14)).
+- Mermaid writes every foreign key as `||--|{` (one to one-or-more). A plain foreign key means zero or more, `||--o{`, and a nullable one is `|o--o{` ([#15](https://github.com/nakita628/drizzler/issues/15)).
+- Mermaid writes Drizzle builder names as types (`doublePrecision`, `timestamp` for a `timestamptz` column), while DBML writes SQL types (`double precision`, `timestamptz`) ([#16](https://github.com/nakita628/drizzler/issues/16)).
 
 ## Layout
 

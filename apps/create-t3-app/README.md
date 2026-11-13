@@ -25,4 +25,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- The SQL sections (DDL and query SQL) are left out with "Package subpath './adapters' is not defined by "exports"". The schema has `import { type AdapterAccount } from "next-auth/adapters"`, a type-only import, but drizzler evaluates it at runtime. next-auth v5 exports only types at that subpath. The ER diagram and the table docs are still generated.
+- The SQL sections (DDL and query SQL) are left out with "Package subpath './adapters' is not defined by "exports"". The schema has `import { type AdapterAccount } from "next-auth/adapters"`, a type-only import, but drizzler evaluates it at runtime. next-auth v5 exports only types at that subpath. The ER diagram and the table docs are still generated ([#13](https://github.com/nakita628/drizzler/issues/13)).
