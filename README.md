@@ -14,7 +14,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | type-only import evaluated |
 | [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | type-only import evaluated |
 | [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
-| [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | `snakeCase` names in DBML/Mermaid, `timestamptz` written as `timestamp`, DBML refs omit `on delete` |
+| [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | `snakeCase` names in DBML/Mermaid |
 
 ## Output
 

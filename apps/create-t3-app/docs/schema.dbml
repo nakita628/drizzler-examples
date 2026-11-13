@@ -2,15 +2,15 @@ Table posts {
   id integer [pk]
   name varchar
   createdById varchar
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
 }
 
 Table users {
   id varchar [pk]
   name varchar
   email varchar
-  emailVerified timestamp
+  emailVerified timestamptz
   image varchar
 }
 
@@ -31,13 +31,13 @@ Table accounts {
 Table sessions {
   sessionToken varchar [pk]
   userId varchar
-  expires timestamp
+  expires timestamptz
 }
 
 Table verificationTokens {
   identifier varchar
   token varchar
-  expires timestamp
+  expires timestamptz
 }
 
 Ref posts_createdById_users_id_fk: posts.createdById > users.id

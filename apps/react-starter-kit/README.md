@@ -29,7 +29,6 @@ The output is written to [`docs/`](docs/):
 ## Known issues
 
 - DBML, Mermaid and the ER diagram name columns by their TypeScript keys (`emailVerified`, `credentialID`). The SQL uses the snake_case names (`email_verified`, `credential_id`). This is the repo-wide naming gap, and here it covers almost every column, because the names come from `snakeCase.table` rather than from a string passed to the builder.
-- `timestamp({ withTimezone: true })` is `timestamp with time zone` in the SQL and `timestamp` in DBML and Mermaid. DBML's type map has `timestamptz`, but the builder name is `timestamp` and `withTimezone` is not read.
-- Every foreign key is `on delete cascade`. The table docs say so. `schema.dbml` refs do not (`Ref session_userId_user_id_fk: session.userId > user.id` has no `[delete: cascade]`).
+- Mermaid still writes the builder name `timestamp` for `timestamp({ withTimezone: true })`. DBML now writes `timestamptz`, and the SQL is `timestamp with time zone`.
 - `subscription` and `verification` have no `tables/*.svg`. drizzler only writes that diagram for a table that joins another, and neither table has a foreign key. Both tables are in the full ER diagram, the DBML and the table docs.
-- The repo-wide DBML gaps show up too: no `not null`, no `[unique]`, no indexes. The SQL and the table docs have the composite uniques (`invitation_org_email_unique`, `member_user_org_unique`, and the others) and the named indexes.
+- The repo-wide DBML gaps show up too: no `not null`, no `[unique]`, no indexes. The SQL and the table docs have the composite uniques (`invitation_org_email_unique`, `member_user_org_unique`, and the others) and the named indexes. DBML refs do include `[delete: cascade]`.

@@ -5,11 +5,11 @@ Table invitation {
   organizationId text
   role text
   status text
-  expiresAt timestamp
-  acceptedAt timestamp
-  rejectedAt timestamp
-  createdAt timestamp
-  updatedAt timestamp
+  expiresAt timestamptz
+  acceptedAt timestamptz
+  rejectedAt timestamptz
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'Invitations table for Better Auth organization plugin. Manages pending invites to organizations. `acceptedAt` and `rejectedAt` are available for application hooks. Better Auth updates `status` but does not populate these extra fields.'
 }
 
@@ -20,8 +20,8 @@ Table organization {
   logo text
   metadata text
   stripeCustomerId text
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'Organizations table for Better Auth organization plugin. Each organization represents a separate tenant with isolated data.'
 }
 
@@ -30,8 +30,8 @@ Table member {
   userId text
   organizationId text
   role text
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'Organization membership table for Better Auth organization plugin. Links users to organizations with specific roles. Role values (Better Auth defaults): - "owner": Full control, can delete organization - "admin": Can manage members and settings - "member": Standard access'
 }
 
@@ -46,11 +46,11 @@ Table passkey {
   backedUp boolean
   transports text
   aaguid text
-  lastUsedAt timestamp [note: 'Extended operational fields']
+  lastUsedAt timestamptz [note: 'Extended operational fields']
   deviceName text
   platform text
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'Passkey credential store. Extended fields beyond Better Auth defaults: - lastUsedAt: Tracks last authentication for security audits - deviceName: User-friendly name (e.g., "MacBook Pro", "iPhone 15") - platform: Authenticator platform ("platform" | "cross-platform")'
 }
 
@@ -61,19 +61,19 @@ Table subscription {
   stripeCustomerId text
   stripeSubscriptionId text
   status text
-  periodStart timestamp
-  periodEnd timestamp
-  trialStart timestamp
-  trialEnd timestamp
+  periodStart timestamptz
+  periodEnd timestamptz
+  trialStart timestamptz
+  trialEnd timestamptz
   cancelAtPeriodEnd boolean
-  cancelAt timestamp
-  canceledAt timestamp
-  endedAt timestamp
+  cancelAt timestamptz
+  canceledAt timestamptz
+  endedAt timestamptz
   seats integer
   billingInterval text
   stripeScheduleId text [note: 'Stripe schedule ID for a plan change deferred to period end; cleared when the change is applied or canceled.']
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
 }
 
 Table user {
@@ -84,17 +84,17 @@ Table user {
   image text
   isAnonymous boolean
   stripeCustomerId text
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'User accounts table. Matches to the `user` table in Better Auth.'
 }
 
 Table session {
   id text [pk]
-  expiresAt timestamp
+  expiresAt timestamptz
   token text
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
   ipAddress text
   userAgent text
   userId text
@@ -110,12 +110,12 @@ Table identity {
   accessToken text
   refreshToken text
   idToken text
-  accessTokenExpiresAt timestamp
-  refreshTokenExpiresAt timestamp
+  accessTokenExpiresAt timestamptz
+  refreshTokenExpiresAt timestamptz
   scope text
   password text
-  createdAt timestamp
-  updatedAt timestamp
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'Authentication identities: OAuth provider accounts and password credentials. Matches to the `account` table in Better Auth. Better Auth keys an identity on `(providerId, accountId)` and throws when a lookup matches two rows, so the pair is unique here. Never add an `issuer` column: 1.7.0 through 1.7.2 required one, 1.7.3 stopped writing it, and `NOT NULL` there rejects every sign-up.'
 }
 
@@ -123,22 +123,22 @@ Table verification {
   id text [pk]
   identifier text
   value text
-  expiresAt timestamp
-  createdAt timestamp
-  updatedAt timestamp
+  expiresAt timestamptz
+  createdAt timestamptz
+  updatedAt timestamptz
   Note: 'Stores verification tokens (email verification, password reset, etc.) Matches to the `verification` table in Better Auth.'
 }
 
-Ref invitation_inviterId_user_id_fk: invitation.inviterId > user.id
+Ref invitation_inviterId_user_id_fk: invitation.inviterId > user.id [delete: cascade]
 
-Ref invitation_organizationId_organization_id_fk: invitation.organizationId > organization.id
+Ref invitation_organizationId_organization_id_fk: invitation.organizationId > organization.id [delete: cascade]
 
-Ref member_userId_user_id_fk: member.userId > user.id
+Ref member_userId_user_id_fk: member.userId > user.id [delete: cascade]
 
-Ref member_organizationId_organization_id_fk: member.organizationId > organization.id
+Ref member_organizationId_organization_id_fk: member.organizationId > organization.id [delete: cascade]
 
-Ref passkey_userId_user_id_fk: passkey.userId > user.id
+Ref passkey_userId_user_id_fk: passkey.userId > user.id [delete: cascade]
 
-Ref session_userId_user_id_fk: session.userId > user.id
+Ref session_userId_user_id_fk: session.userId > user.id [delete: cascade]
 
-Ref identity_userId_user_id_fk: identity.userId > user.id
+Ref identity_userId_user_id_fk: identity.userId > user.id [delete: cascade]

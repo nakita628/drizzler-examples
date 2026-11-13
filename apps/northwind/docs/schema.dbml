@@ -81,12 +81,12 @@ Table details {
 
 Ref employees_recipientId_table_id_fk: employees.recipientId > table.id
 
-Ref orders_customerId_customers_id_fk: orders.customerId > customers.id
+Ref orders_customerId_customers_id_fk: orders.customerId > customers.id [delete: cascade]
 
-Ref orders_employeeId_employees_id_fk: orders.employeeId > employees.id
+Ref orders_employeeId_employees_id_fk: orders.employeeId > employees.id [delete: cascade]
 
-Ref products_supplierId_suppliers_id_fk: products.supplierId > suppliers.id
+Ref products_supplierId_suppliers_id_fk: products.supplierId > suppliers.id [delete: cascade]
 
-Ref details_orderId_orders_id_fk: details.orderId > orders.id
+Ref details_orderId_orders_id_fk: details.orderId > orders.id [delete: cascade]
 
-Ref details_productId_products_id_fk: details.productId > products.id
+Ref details_productId_products_id_fk: details.productId > products.id [delete: cascade]

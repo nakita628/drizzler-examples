@@ -38,14 +38,14 @@ Table userFollows {
   updatedAt timestamp
 }
 
-Ref comments_articleId_articles_id_fk: comments.articleId > articles.id
+Ref comments_articleId_articles_id_fk: comments.articleId > articles.id [delete: cascade]
 
-Ref comments_authorId_users_id_fk: comments.authorId > users.id
+Ref comments_authorId_users_id_fk: comments.authorId > users.id [delete: cascade]
 
-Ref articleTags_articleId_articles_id_fk: articleTags.articleId > articles.id
+Ref articleTags_articleId_articles_id_fk: articleTags.articleId > articles.id [delete: cascade]
 
-Ref articleTags_tagName_tags_name_fk: articleTags.tagName > tags.name
+Ref articleTags_tagName_tags_name_fk: articleTags.tagName > tags.name [delete: cascade]
 
-Ref userFollows_followedId_users_id_fk: userFollows.followedId > users.id
+Ref userFollows_followedId_users_id_fk: userFollows.followedId > users.id [delete: cascade]
 
-Ref userFollows_followerId_users_id_fk: userFollows.followerId > users.id
+Ref userFollows_followerId_users_id_fk: userFollows.followerId > users.id [delete: cascade]
