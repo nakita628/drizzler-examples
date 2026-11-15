@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="-40 -40 80 80">
+<defs>
+<pattern id="dots" x="-0.7" y="-0.7" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="0.7" cy="0.7" r="0.7" fill="#d4d4dc"/></pattern>
+<filter id="node-shadow" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.08"/></filter>
+</defs>
+<rect x="-40" y="-40" width="80" height="80" fill="#f7f8fb"/>
+<rect x="-40" y="-40" width="80" height="80" fill="url(#dots)"/>
+</svg>
