@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- The five tables are in the SQL and missing everywhere else. `sqliteTable()` is called inside `defineTables()`, so the DBML is empty, the Mermaid file is an empty `erDiagram`, the ER diagram has no tables, and there is no `tables/*.svg` ([#29](https://github.com/nakita628/drizzler/issues/29)).
+None.
