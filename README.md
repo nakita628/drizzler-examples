@@ -47,6 +47,11 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [duolingo-clone](apps/duolingo-clone) | sanidhyy/duolingo-clone | PostgreSQL | — |
 | [canva-clone](apps/canva-clone) | Davronov-Alimardon/canva-clone | PostgreSQL | — |
 | [refref](apps/refref) | amicalhq/refref | PostgreSQL | — |
+| [openbio](apps/openbio) | vanxh/openbio | PostgreSQL | — |
+| [infinitunes](apps/infinitunes) | rajput-hemant/infinitunes | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52) |
+| [lipi](apps/lipi) | rajput-hemant/lipi | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52) |
+| [rdt-li](apps/rdt-li) | nrjdalal/rdt-li | PostgreSQL | — |
+| [devterms](apps/devterms) | aelew/devterms | SQLite | [#53](https://github.com/nakita628/drizzler/issues/53) |
 
 ## Output
 
