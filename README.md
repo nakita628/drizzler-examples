@@ -21,6 +21,8 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [midday](apps/midday) | midday-ai/midday | PostgreSQL | [#33](https://github.com/nakita628/drizzler/issues/33), [#35](https://github.com/nakita628/drizzler/issues/35), [#36](https://github.com/nakita628/drizzler/issues/36), [#37](https://github.com/nakita628/drizzler/issues/37) |
 | [kan](apps/kan) | kanbn/kan | PostgreSQL | [#38](https://github.com/nakita628/drizzler/issues/38) |
 | [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | [#34](https://github.com/nakita628/drizzler/issues/34), [#39](https://github.com/nakita628/drizzler/issues/39), [#40](https://github.com/nakita628/drizzler/issues/40) |
+| [dyad](apps/dyad) | dyad-sh/dyad | SQLite | — |
+| [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
 
 ## Output
 
