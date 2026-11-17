@@ -32,6 +32,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [cap](apps/cap) | CapSoftware/Cap | MySQL | — |
 | [pages-cms](apps/pages-cms) | pages-cms/pages-cms | PostgreSQL | — |
 | [turborepo-elysia](apps/turborepo-elysia) | vercel/turborepo (with-nextjs-elysia) | PostgreSQL | [#49](https://github.com/nakita628/drizzler/issues/49) |
+| [sigle](apps/sigle) | sigle/sigle | PostgreSQL | — |
 
 ## Output
 
