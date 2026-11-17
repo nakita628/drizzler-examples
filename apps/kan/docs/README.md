@@ -743,10 +743,20 @@ ALTER TABLE "workspace" ADD CONSTRAINT "workspace_deletedBy_user_id_fkey" FOREIG
 | [slugs](#table-slugs)                                           | `workspace_slugs`              |             |
 | [slugChecks](#table-slugChecks)                                 | `workspace_slug_checks`        |             |
 
-| Enum                                       | Name in the database | Description |
-| ------------------------------------------ | -------------------- | ----------- |
-| [importSourceEnum](#enum-importSourceEnum) | `source`             |             |
-| [importStatusEnum](#enum-importStatusEnum) | `status`             |             |
+| Enum                                               | Name in the database | Description |
+| -------------------------------------------------- | -------------------- | ----------- |
+| [boardVisibilityEnum](#enum-boardVisibilityEnum)   | `board_visibility`   |             |
+| [boardMemberRoleEnum](#enum-boardMemberRoleEnum)   | `board_member_role`  |             |
+| [boardTypeEnum](#enum-boardTypeEnum)               | `board_type`         |             |
+| [activityTypeEnum](#enum-activityTypeEnum)         | `card_activity_type` |             |
+| [importSourceEnum](#enum-importSourceEnum)         | `source`             |             |
+| [importStatusEnum](#enum-importStatusEnum)         | `status`             |             |
+| [notificationTypeEnum](#enum-notificationTypeEnum) | `notification_type`  |             |
+| [inviteLinkStatusEnum](#enum-inviteLinkStatusEnum) | `invite_link_status` |             |
+| [memberRoleEnum](#enum-memberRoleEnum)             | `role`               |             |
+| [memberStatusEnum](#enum-memberStatusEnum)         | `member_status`      |             |
+| [slugTypeEnum](#enum-slugTypeEnum)                 | `slug_type`          |             |
+| [workspacePlanEnum](#enum-workspacePlanEnum)       | `workspace_plan`     |             |
 
 ## Tables
 
@@ -1327,24 +1337,24 @@ Table `board`.
 
 ![boards and the tables it relates to](tables/boards.svg)
 
-| Column          | Type                  | Constraints                                   | Default               | Description |
-| --------------- | --------------------- | --------------------------------------------- | --------------------- | ----------- |
-| `id`            | `bigserial`           | PK NOT NULL                                   |                       |             |
-| `publicId`      | `varchar`             | UNIQUE NOT NULL                               |                       |             |
-| `name`          | `varchar`             | NOT NULL                                      |                       |             |
-| `description`   | `text`                | NULL                                          |                       |             |
-| `slug`          | `varchar`             | NOT NULL                                      |                       |             |
-| `createdBy`     | `uuid`                | NULL → [users.id](#table-users)               |                       |             |
-| `createdAt`     | `timestamp`           | NOT NULL                                      | `.defaultNow()`       |             |
-| `updatedAt`     | `timestamp`           | NULL                                          |                       |             |
-| `deletedAt`     | `timestamp`           | NULL                                          |                       |             |
-| `deletedBy`     | `uuid`                | NULL → [users.id](#table-users)               |                       |             |
-| `importId`      | `bigint`              | NULL → [imports.id](#table-imports)           |                       |             |
-| `workspaceId`   | `bigint`              | NOT NULL → [workspaces.id](#table-workspaces) |                       |             |
-| `visibility`    | `boardVisibilityEnum` | NOT NULL                                      | `.default("private")` |             |
-| `type`          | `boardTypeEnum`       | NOT NULL                                      | `.default("regular")` |             |
-| `isArchived`    | `boolean`             | NOT NULL                                      | `.default(false)`     |             |
-| `sourceBoardId` | `bigint`              | NULL                                          |                       |             |
+| Column          | Type                                               | Constraints                                   | Default               | Description |
+| --------------- | -------------------------------------------------- | --------------------------------------------- | --------------------- | ----------- |
+| `id`            | `bigserial`                                        | PK NOT NULL                                   |                       |             |
+| `publicId`      | `varchar`                                          | UNIQUE NOT NULL                               |                       |             |
+| `name`          | `varchar`                                          | NOT NULL                                      |                       |             |
+| `description`   | `text`                                             | NULL                                          |                       |             |
+| `slug`          | `varchar`                                          | NOT NULL                                      |                       |             |
+| `createdBy`     | `uuid`                                             | NULL → [users.id](#table-users)               |                       |             |
+| `createdAt`     | `timestamp`                                        | NOT NULL                                      | `.defaultNow()`       |             |
+| `updatedAt`     | `timestamp`                                        | NULL                                          |                       |             |
+| `deletedAt`     | `timestamp`                                        | NULL                                          |                       |             |
+| `deletedBy`     | `uuid`                                             | NULL → [users.id](#table-users)               |                       |             |
+| `importId`      | `bigint`                                           | NULL → [imports.id](#table-imports)           |                       |             |
+| `workspaceId`   | `bigint`                                           | NOT NULL → [workspaces.id](#table-workspaces) |                       |             |
+| `visibility`    | [`boardVisibilityEnum`](#enum-boardVisibilityEnum) | NOT NULL                                      | `.default("private")` |             |
+| `type`          | [`boardTypeEnum`](#enum-boardTypeEnum)             | NOT NULL                                      | `.default("regular")` |             |
+| `isArchived`    | `boolean`                                          | NOT NULL                                      | `.default(false)`     |             |
+| `sourceBoardId` | `bigint`                                           | NULL                                          |                       |             |
 
 #### Definition
 
@@ -1659,13 +1669,13 @@ Table `board_members`.
 
 ![boardMembers and the tables it relates to](tables/boardMembers.svg)
 
-| Column              | Type                  | Constraints                                                  | Default              | Description |
-| ------------------- | --------------------- | ------------------------------------------------------------ | -------------------- | ----------- |
-| `boardId`           | `bigint`              | PK NOT NULL → [boards.id](#table-boards)                     |                      |             |
-| `workspaceMemberId` | `bigint`              | PK NOT NULL → [workspaceMembers.id](#table-workspaceMembers) |                      |             |
-| `role`              | `boardMemberRoleEnum` | NOT NULL                                                     | `.default("member")` |             |
-| `createdBy`         | `uuid`                | NULL → [users.id](#table-users)                              |                      |             |
-| `createdAt`         | `timestamp`           | NOT NULL                                                     | `.defaultNow()`      |             |
+| Column              | Type                                               | Constraints                                                  | Default              | Description |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------ | -------------------- | ----------- |
+| `boardId`           | `bigint`                                           | PK NOT NULL → [boards.id](#table-boards)                     |                      |             |
+| `workspaceMemberId` | `bigint`                                           | PK NOT NULL → [workspaceMembers.id](#table-workspaceMembers) |                      |             |
+| `role`              | [`boardMemberRoleEnum`](#enum-boardMemberRoleEnum) | NOT NULL                                                     | `.default("member")` |             |
+| `createdBy`         | `uuid`                                             | NULL → [users.id](#table-users)                              |                      |             |
+| `createdAt`         | `timestamp`                                        | NOT NULL                                                     | `.defaultNow()`      |             |
 
 #### Definition
 
@@ -1767,7 +1777,7 @@ values ($1, $2, default, default, default)
 
 ```ts
 db.update(boardMembers)
-  .set({ role: "role" })
+  .set({ role: "admin" })
   .where(and(eq(boardMembers.boardId, 1), eq(boardMembers.workspaceMemberId, 1)));
 ```
 
@@ -1775,7 +1785,7 @@ db.update(boardMembers)
 update "board_members"
 set "role" = $1
 where (("board_members"."boardId" = $2) and ("board_members"."workspaceMemberId" = $3))
--- params: ["role",1,1]
+-- params: ["admin",1,1]
 ```
 
 **Delete**: Deletes a row of boardMembers, found by its primary key.
@@ -1970,31 +1980,31 @@ Table `card_activity`.
 
 ![cardActivities and the tables it relates to](tables/cardActivities.svg)
 
-| Column              | Type               | Constraints                                           | Default         | Description |
-| ------------------- | ------------------ | ----------------------------------------------------- | --------------- | ----------- |
-| `id`                | `bigserial`        | PK NOT NULL                                           |                 |             |
-| `publicId`          | `varchar`          | UNIQUE NOT NULL                                       |                 |             |
-| `type`              | `activityTypeEnum` | NOT NULL                                              |                 |             |
-| `cardId`            | `bigint`           | NOT NULL → [cards.id](#table-cards)                   |                 |             |
-| `fromIndex`         | `integer`          | NULL                                                  |                 |             |
-| `toIndex`           | `integer`          | NULL                                                  |                 |             |
-| `fromListId`        | `bigint`           | NULL → [lists.id](#table-lists)                       |                 |             |
-| `toListId`          | `bigint`           | NULL → [lists.id](#table-lists)                       |                 |             |
-| `labelId`           | `bigint`           | NULL → [labels.id](#table-labels)                     |                 |             |
-| `workspaceMemberId` | `bigint`           | NULL → [workspaceMembers.id](#table-workspaceMembers) |                 |             |
-| `fromTitle`         | `text`             | NULL                                                  |                 |             |
-| `toTitle`           | `text`             | NULL                                                  |                 |             |
-| `fromDescription`   | `text`             | NULL                                                  |                 |             |
-| `toDescription`     | `text`             | NULL                                                  |                 |             |
-| `createdBy`         | `uuid`             | NULL → [users.id](#table-users)                       |                 |             |
-| `createdAt`         | `timestamp`        | NOT NULL                                              | `.defaultNow()` |             |
-| `commentId`         | `bigint`           | NULL → [comments.id](#table-comments)                 |                 |             |
-| `fromComment`       | `text`             | NULL                                                  |                 |             |
-| `toComment`         | `text`             | NULL                                                  |                 |             |
-| `fromDueDate`       | `timestamp`        | NULL                                                  |                 |             |
-| `toDueDate`         | `timestamp`        | NULL                                                  |                 |             |
-| `sourceBoardId`     | `bigint`           | NULL → [boards.id](#table-boards)                     |                 |             |
-| `attachmentId`      | `bigint`           | NULL → [cardAttachments.id](#table-cardAttachments)   |                 |             |
+| Column              | Type                                         | Constraints                                           | Default         | Description |
+| ------------------- | -------------------------------------------- | ----------------------------------------------------- | --------------- | ----------- |
+| `id`                | `bigserial`                                  | PK NOT NULL                                           |                 |             |
+| `publicId`          | `varchar`                                    | UNIQUE NOT NULL                                       |                 |             |
+| `type`              | [`activityTypeEnum`](#enum-activityTypeEnum) | NOT NULL                                              |                 |             |
+| `cardId`            | `bigint`                                     | NOT NULL → [cards.id](#table-cards)                   |                 |             |
+| `fromIndex`         | `integer`                                    | NULL                                                  |                 |             |
+| `toIndex`           | `integer`                                    | NULL                                                  |                 |             |
+| `fromListId`        | `bigint`                                     | NULL → [lists.id](#table-lists)                       |                 |             |
+| `toListId`          | `bigint`                                     | NULL → [lists.id](#table-lists)                       |                 |             |
+| `labelId`           | `bigint`                                     | NULL → [labels.id](#table-labels)                     |                 |             |
+| `workspaceMemberId` | `bigint`                                     | NULL → [workspaceMembers.id](#table-workspaceMembers) |                 |             |
+| `fromTitle`         | `text`                                       | NULL                                                  |                 |             |
+| `toTitle`           | `text`                                       | NULL                                                  |                 |             |
+| `fromDescription`   | `text`                                       | NULL                                                  |                 |             |
+| `toDescription`     | `text`                                       | NULL                                                  |                 |             |
+| `createdBy`         | `uuid`                                       | NULL → [users.id](#table-users)                       |                 |             |
+| `createdAt`         | `timestamp`                                  | NOT NULL                                              | `.defaultNow()` |             |
+| `commentId`         | `bigint`                                     | NULL → [comments.id](#table-comments)                 |                 |             |
+| `fromComment`       | `text`                                       | NULL                                                  |                 |             |
+| `toComment`         | `text`                                       | NULL                                                  |                 |             |
+| `fromDueDate`       | `timestamp`                                  | NULL                                                  |                 |             |
+| `toDueDate`         | `timestamp`                                  | NULL                                                  |                 |             |
+| `sourceBoardId`     | `bigint`                                     | NULL → [boards.id](#table-boards)                     |                 |             |
+| `attachmentId`      | `bigint`                                     | NULL → [cardAttachments.id](#table-cardAttachments)   |                 |             |
 
 #### Definition
 
@@ -2117,13 +2127,13 @@ limit $2
 **Insert**: Adds a row to cardActivities, giving the columns that have no default.
 
 ```ts
-db.insert(cardActivities).values({ publicId: "publicId", type: "type", cardId: 1 });
+db.insert(cardActivities).values({ publicId: "publicId", type: "card.created", cardId: 1 });
 ```
 
 ```sql
 insert into "card_activity" ("id", "publicId", "type", "cardId", "fromIndex", "toIndex", "fromListId", "toListId", "labelId", "workspaceMemberId", "fromTitle", "toTitle", "fromDescription", "toDescription", "createdBy", "createdAt", "commentId", "fromComment", "toComment", "fromDueDate", "toDueDate", "sourceBoardId", "attachmentId")
 values (default, $1, $2, $3, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default)
--- params: ["publicId","type",1]
+-- params: ["publicId","card.created",1]
 ```
 
 **Update**: Changes a row of cardActivities, found by its primary key.
@@ -3721,19 +3731,19 @@ Table `notification`.
 
 ![notifications and the tables it relates to](tables/notifications.svg)
 
-| Column        | Type                   | Constraints                               | Default         | Description |
-| ------------- | ---------------------- | ----------------------------------------- | --------------- | ----------- |
-| `id`          | `bigserial`            | PK NOT NULL                               |                 |             |
-| `publicId`    | `varchar`              | UNIQUE NOT NULL                           |                 |             |
-| `type`        | `notificationTypeEnum` | NOT NULL                                  |                 |             |
-| `userId`      | `uuid`                 | NOT NULL → [users.id](#table-users)       |                 |             |
-| `cardId`      | `bigint`               | NULL → [cards.id](#table-cards)           |                 |             |
-| `commentId`   | `bigint`               | NULL → [comments.id](#table-comments)     |                 |             |
-| `workspaceId` | `bigint`               | NULL → [workspaces.id](#table-workspaces) |                 |             |
-| `metadata`    | `text`                 | NULL                                      |                 |             |
-| `readAt`      | `timestamp`            | NULL                                      |                 |             |
-| `createdAt`   | `timestamp`            | NOT NULL                                  | `.defaultNow()` |             |
-| `deletedAt`   | `timestamp`            | NULL                                      |                 |             |
+| Column        | Type                                                 | Constraints                               | Default         | Description |
+| ------------- | ---------------------------------------------------- | ----------------------------------------- | --------------- | ----------- |
+| `id`          | `bigserial`                                          | PK NOT NULL                               |                 |             |
+| `publicId`    | `varchar`                                            | UNIQUE NOT NULL                           |                 |             |
+| `type`        | [`notificationTypeEnum`](#enum-notificationTypeEnum) | NOT NULL                                  |                 |             |
+| `userId`      | `uuid`                                               | NOT NULL → [users.id](#table-users)       |                 |             |
+| `cardId`      | `bigint`                                             | NULL → [cards.id](#table-cards)           |                 |             |
+| `commentId`   | `bigint`                                             | NULL → [comments.id](#table-comments)     |                 |             |
+| `workspaceId` | `bigint`                                             | NULL → [workspaces.id](#table-workspaces) |                 |             |
+| `metadata`    | `text`                                               | NULL                                      |                 |             |
+| `readAt`      | `timestamp`                                          | NULL                                      |                 |             |
+| `createdAt`   | `timestamp`                                          | NOT NULL                                  | `.defaultNow()` |             |
+| `deletedAt`   | `timestamp`                                          | NULL                                      |                 |             |
 
 #### Definition
 
@@ -3843,7 +3853,7 @@ limit $2
 ```ts
 db.insert(notifications).values({
   publicId: "publicId",
-  type: "type",
+  type: "mention",
   userId: "00000000-0000-0000-0000-000000000000",
 });
 ```
@@ -3851,7 +3861,7 @@ db.insert(notifications).values({
 ```sql
 insert into "notification" ("id", "publicId", "type", "userId", "cardId", "commentId", "workspaceId", "metadata", "readAt", "createdAt", "deletedAt")
 values (default, $1, $2, $3, default, default, default, default, default, default, default)
--- params: ["publicId","type","00000000-0000-0000-0000-000000000000"]
+-- params: ["publicId","mention","00000000-0000-0000-0000-000000000000"]
 ```
 
 **Update**: Changes a row of notifications, found by its primary key.
@@ -4780,18 +4790,18 @@ Table `workspace_invite_links`.
 
 ![workspaceInviteLinks and the tables it relates to](tables/workspaceInviteLinks.svg)
 
-| Column        | Type                   | Constraints                                   | Default              | Description |
-| ------------- | ---------------------- | --------------------------------------------- | -------------------- | ----------- |
-| `id`          | `bigserial`            | PK NOT NULL                                   |                      |             |
-| `publicId`    | `varchar`              | UNIQUE NOT NULL                               |                      |             |
-| `workspaceId` | `bigint`               | NOT NULL → [workspaces.id](#table-workspaces) |                      |             |
-| `code`        | `varchar`              | UNIQUE NOT NULL                               |                      |             |
-| `status`      | `inviteLinkStatusEnum` | NOT NULL                                      | `.default("active")` |             |
-| `expiresAt`   | `timestamp`            | NULL                                          |                      |             |
-| `createdAt`   | `timestamp`            | NOT NULL                                      | `.defaultNow()`      |             |
-| `createdBy`   | `uuid`                 | NULL → [users.id](#table-users)               |                      |             |
-| `updatedAt`   | `timestamp`            | NULL                                          |                      |             |
-| `updatedBy`   | `uuid`                 | NULL → [users.id](#table-users)               |                      |             |
+| Column        | Type                                                 | Constraints                                   | Default              | Description |
+| ------------- | ---------------------------------------------------- | --------------------------------------------- | -------------------- | ----------- |
+| `id`          | `bigserial`                                          | PK NOT NULL                                   |                      |             |
+| `publicId`    | `varchar`                                            | UNIQUE NOT NULL                               |                      |             |
+| `workspaceId` | `bigint`                                             | NOT NULL → [workspaces.id](#table-workspaces) |                      |             |
+| `code`        | `varchar`                                            | UNIQUE NOT NULL                               |                      |             |
+| `status`      | [`inviteLinkStatusEnum`](#enum-inviteLinkStatusEnum) | NOT NULL                                      | `.default("active")` |             |
+| `expiresAt`   | `timestamp`                                          | NULL                                          |                      |             |
+| `createdAt`   | `timestamp`                                          | NOT NULL                                      | `.defaultNow()`      |             |
+| `createdBy`   | `uuid`                                               | NULL → [users.id](#table-users)               |                      |             |
+| `updatedAt`   | `timestamp`                                          | NULL                                          |                      |             |
+| `updatedBy`   | `uuid`                                               | NULL → [users.id](#table-users)               |                      |             |
 
 #### Definition
 
@@ -4921,23 +4931,23 @@ Table `workspace`.
 
 ![workspaces and the tables it relates to](tables/workspaces.svg)
 
-| Column                | Type                | Constraints                     | Default            | Description |
-| --------------------- | ------------------- | ------------------------------- | ------------------ | ----------- |
-| `id`                  | `bigserial`         | PK NOT NULL                     |                    |             |
-| `publicId`            | `varchar`           | UNIQUE NOT NULL                 |                    |             |
-| `name`                | `varchar`           | NOT NULL                        |                    |             |
-| `description`         | `text`              | NULL                            |                    |             |
-| `slug`                | `varchar`           | UNIQUE NOT NULL                 |                    |             |
-| `plan`                | `workspacePlanEnum` | NOT NULL                        | `.default("free")` |             |
-| `showEmailsToMembers` | `boolean`           | NOT NULL                        | `.default(true)`   |             |
-| `weekStartDay`        | `integer`           | NOT NULL                        | `.default(1)`      |             |
-| `cardPrefix`          | `varchar`           | NOT NULL                        | `.default("")`     |             |
-| `cardCounter`         | `integer`           | NOT NULL                        | `.default(0)`      |             |
-| `createdBy`           | `uuid`              | NULL → [users.id](#table-users) |                    |             |
-| `createdAt`           | `timestamp`         | NOT NULL                        | `.defaultNow()`    |             |
-| `updatedAt`           | `timestamp`         | NULL                            |                    |             |
-| `deletedAt`           | `timestamp`         | NULL                            |                    |             |
-| `deletedBy`           | `uuid`              | NULL → [users.id](#table-users) |                    |             |
+| Column                | Type                                           | Constraints                     | Default            | Description |
+| --------------------- | ---------------------------------------------- | ------------------------------- | ------------------ | ----------- |
+| `id`                  | `bigserial`                                    | PK NOT NULL                     |                    |             |
+| `publicId`            | `varchar`                                      | UNIQUE NOT NULL                 |                    |             |
+| `name`                | `varchar`                                      | NOT NULL                        |                    |             |
+| `description`         | `text`                                         | NULL                            |                    |             |
+| `slug`                | `varchar`                                      | UNIQUE NOT NULL                 |                    |             |
+| `plan`                | [`workspacePlanEnum`](#enum-workspacePlanEnum) | NOT NULL                        | `.default("free")` |             |
+| `showEmailsToMembers` | `boolean`                                      | NOT NULL                        | `.default(true)`   |             |
+| `weekStartDay`        | `integer`                                      | NOT NULL                        | `.default(1)`      |             |
+| `cardPrefix`          | `varchar`                                      | NOT NULL                        | `.default("")`     |             |
+| `cardCounter`         | `integer`                                      | NOT NULL                        | `.default(0)`      |             |
+| `createdBy`           | `uuid`                                         | NULL → [users.id](#table-users) |                    |             |
+| `createdAt`           | `timestamp`                                    | NOT NULL                        | `.defaultNow()`    |             |
+| `updatedAt`           | `timestamp`                                    | NULL                            |                    |             |
+| `deletedAt`           | `timestamp`                                    | NULL                            |                    |             |
+| `deletedBy`           | `uuid`                                         | NULL → [users.id](#table-users) |                    |             |
 
 #### Definition
 
@@ -5086,21 +5096,21 @@ Table `workspace_members`.
 
 ![workspaceMembers and the tables it relates to](tables/workspaceMembers.svg)
 
-| Column        | Type               | Constraints                                       | Default               | Description      |
-| ------------- | ------------------ | ------------------------------------------------- | --------------------- | ---------------- |
-| `id`          | `bigserial`        | PK NOT NULL                                       |                       |                  |
-| `publicId`    | `varchar`          | UNIQUE NOT NULL                                   |                       |                  |
-| `email`       | `varchar`          | NOT NULL                                          |                       |                  |
-| `userId`      | `uuid`             | NULL → [users.id](#table-users)                   |                       |                  |
-| `workspaceId` | `bigint`           | NOT NULL → [workspaces.id](#table-workspaces)     |                       |                  |
-| `createdBy`   | `uuid`             | NOT NULL                                          |                       |                  |
-| `createdAt`   | `timestamp`        | NOT NULL                                          | `.defaultNow()`       |                  |
-| `updatedAt`   | `timestamp`        | NULL                                              |                       |                  |
-| `deletedAt`   | `timestamp`        | NULL                                              |                       |                  |
-| `deletedBy`   | `uuid`             | NULL → [users.id](#table-users)                   |                       |                  |
-| `role`        | `memberRoleEnum`   | NOT NULL                                          |                       | Legacy role enum |
-| `roleId`      | `bigint`           | NULL → [workspaceRoles.id](#table-workspaceRoles) |                       |                  |
-| `status`      | `memberStatusEnum` | NOT NULL                                          | `.default("invited")` |                  |
+| Column        | Type                                         | Constraints                                       | Default               | Description      |
+| ------------- | -------------------------------------------- | ------------------------------------------------- | --------------------- | ---------------- |
+| `id`          | `bigserial`                                  | PK NOT NULL                                       |                       |                  |
+| `publicId`    | `varchar`                                    | UNIQUE NOT NULL                                   |                       |                  |
+| `email`       | `varchar`                                    | NOT NULL                                          |                       |                  |
+| `userId`      | `uuid`                                       | NULL → [users.id](#table-users)                   |                       |                  |
+| `workspaceId` | `bigint`                                     | NOT NULL → [workspaces.id](#table-workspaces)     |                       |                  |
+| `createdBy`   | `uuid`                                       | NOT NULL                                          |                       |                  |
+| `createdAt`   | `timestamp`                                  | NOT NULL                                          | `.defaultNow()`       |                  |
+| `updatedAt`   | `timestamp`                                  | NULL                                              |                       |                  |
+| `deletedAt`   | `timestamp`                                  | NULL                                              |                       |                  |
+| `deletedBy`   | `uuid`                                       | NULL → [users.id](#table-users)                   |                       |                  |
+| `role`        | [`memberRoleEnum`](#enum-memberRoleEnum)     | NOT NULL                                          |                       | Legacy role enum |
+| `roleId`      | `bigint`                                     | NULL → [workspaceRoles.id](#table-workspaceRoles) |                       |                  |
+| `status`      | [`memberStatusEnum`](#enum-memberStatusEnum) | NOT NULL                                          | `.default("invited")` |                  |
 
 #### Definition
 
@@ -5203,14 +5213,14 @@ db.insert(workspaceMembers).values({
   email: "email",
   workspaceId: 1,
   createdBy: "00000000-0000-0000-0000-000000000000",
-  role: "role",
+  role: "admin",
 });
 ```
 
 ```sql
 insert into "workspace_members" ("id", "publicId", "email", "userId", "workspaceId", "createdBy", "createdAt", "updatedAt", "deletedAt", "deletedBy", "role", "roleId", "status")
 values (default, $1, $2, default, $3, $4, default, default, default, default, $5, default, default)
--- params: ["publicId","email",1,"00000000-0000-0000-0000-000000000000","role"]
+-- params: ["publicId","email",1,"00000000-0000-0000-0000-000000000000","admin"]
 ```
 
 **Update**: Changes a row of workspaceMembers, found by its primary key.
@@ -5248,10 +5258,10 @@ Table `workspace_slugs`.
 
 ![slugs](tables/slugs.svg)
 
-| Column | Type           | Constraints     | Default | Description |
-| ------ | -------------- | --------------- | ------- | ----------- |
-| `slug` | `varchar`      | UNIQUE NOT NULL |         |             |
-| `type` | `slugTypeEnum` | NOT NULL        |         |             |
+| Column | Type                                 | Constraints     | Default | Description |
+| ------ | ------------------------------------ | --------------- | ------- | ----------- |
+| `slug` | `varchar`                            | UNIQUE NOT NULL |         |             |
+| `type` | [`slugTypeEnum`](#enum-slugTypeEnum) | NOT NULL        |         |             |
 
 #### Definition
 
@@ -5301,13 +5311,13 @@ from "workspace_slugs" as "d0"
 **Insert**: Adds a row to slugs, giving the columns that have no default.
 
 ```ts
-db.insert(slugs).values({ slug: "slug", type: "type" });
+db.insert(slugs).values({ slug: "slug", type: "reserved" });
 ```
 
 ```sql
 insert into "workspace_slugs" ("slug", "type")
 values ($1, $2)
--- params: ["slug","type"]
+-- params: ["slug","reserved"]
 ```
 
 </details>
@@ -5446,6 +5456,90 @@ where "workspace_slug_checks"."id" = $1
 
 ## Enums
 
+<a id="enum-boardVisibilityEnum"></a>
+
+### boardVisibilityEnum
+
+Type `board_visibility`.
+
+- `private`
+- `public`
+
+#### Definition
+
+```sql
+CREATE TYPE "board_visibility" AS ENUM('private', 'public');
+```
+
+<a id="enum-boardMemberRoleEnum"></a>
+
+### boardMemberRoleEnum
+
+Type `board_member_role`.
+
+- `admin`
+- `member`
+
+#### Definition
+
+```sql
+CREATE TYPE "board_member_role" AS ENUM('admin', 'member');
+```
+
+<a id="enum-boardTypeEnum"></a>
+
+### boardTypeEnum
+
+Type `board_type`.
+
+- `regular`
+- `template`
+
+#### Definition
+
+```sql
+CREATE TYPE "board_type" AS ENUM('regular', 'template');
+```
+
+<a id="enum-activityTypeEnum"></a>
+
+### activityTypeEnum
+
+Type `card_activity_type`.
+
+- `card.created`
+- `card.updated.title`
+- `card.updated.description`
+- `card.updated.index`
+- `card.updated.list`
+- `card.updated.label.added`
+- `card.updated.label.removed`
+- `card.updated.member.added`
+- `card.updated.member.removed`
+- `card.updated.comment.added`
+- `card.updated.comment.updated`
+- `card.updated.comment.deleted`
+- `card.updated.checklist.added`
+- `card.updated.checklist.renamed`
+- `card.updated.checklist.deleted`
+- `card.updated.checklist.item.added`
+- `card.updated.checklist.item.updated`
+- `card.updated.checklist.item.completed`
+- `card.updated.checklist.item.uncompleted`
+- `card.updated.checklist.item.deleted`
+- `card.updated.attachment.added`
+- `card.updated.attachment.removed`
+- `card.updated.dueDate.added`
+- `card.updated.dueDate.updated`
+- `card.updated.dueDate.removed`
+- `card.archived`
+
+#### Definition
+
+```sql
+CREATE TYPE "card_activity_type" AS ENUM('card.created', 'card.updated.title', 'card.updated.description', 'card.updated.index', 'card.updated.list', 'card.updated.label.added', 'card.updated.label.removed', 'card.updated.member.added', 'card.updated.member.removed', 'card.updated.comment.added', 'card.updated.comment.updated', 'card.updated.comment.deleted', 'card.updated.checklist.added', 'card.updated.checklist.renamed', 'card.updated.checklist.deleted', 'card.updated.checklist.item.added', 'card.updated.checklist.item.updated', 'card.updated.checklist.item.completed', 'card.updated.checklist.item.uncompleted', 'card.updated.checklist.item.deleted', 'card.updated.attachment.added', 'card.updated.attachment.removed', 'card.updated.dueDate.added', 'card.updated.dueDate.updated', 'card.updated.dueDate.removed', 'card.archived');
+```
+
 <a id="enum-importSourceEnum"></a>
 
 ### importSourceEnum
@@ -5475,4 +5569,101 @@ Type `status`.
 
 ```sql
 CREATE TYPE "status" AS ENUM('started', 'success', 'failed');
+```
+
+<a id="enum-notificationTypeEnum"></a>
+
+### notificationTypeEnum
+
+Type `notification_type`.
+
+- `mention`
+- `workspace.member.added`
+- `workspace.member.removed`
+- `workspace.role.changed`
+
+#### Definition
+
+```sql
+CREATE TYPE "notification_type" AS ENUM('mention', 'workspace.member.added', 'workspace.member.removed', 'workspace.role.changed');
+```
+
+<a id="enum-inviteLinkStatusEnum"></a>
+
+### inviteLinkStatusEnum
+
+Type `invite_link_status`.
+
+- `active`
+- `inactive`
+
+#### Definition
+
+```sql
+CREATE TYPE "invite_link_status" AS ENUM('active', 'inactive');
+```
+
+<a id="enum-memberRoleEnum"></a>
+
+### memberRoleEnum
+
+Type `role`.
+
+- `admin`
+- `member`
+- `guest`
+
+#### Definition
+
+```sql
+CREATE TYPE "role" AS ENUM('admin', 'member', 'guest');
+```
+
+<a id="enum-memberStatusEnum"></a>
+
+### memberStatusEnum
+
+Type `member_status`.
+
+- `invited`
+- `active`
+- `removed`
+- `paused`
+
+#### Definition
+
+```sql
+CREATE TYPE "member_status" AS ENUM('invited', 'active', 'removed', 'paused');
+```
+
+<a id="enum-slugTypeEnum"></a>
+
+### slugTypeEnum
+
+Type `slug_type`.
+
+- `reserved`
+- `premium`
+
+#### Definition
+
+```sql
+CREATE TYPE "slug_type" AS ENUM('reserved', 'premium');
+```
+
+<a id="enum-workspacePlanEnum"></a>
+
+### workspacePlanEnum
+
+Type `workspace_plan`.
+
+- `free`
+- `team`
+- `pro`
+- `enterprise`
+
+#### Definition
+
+```sql
+CREATE TYPE "workspace_plan" AS ENUM('free', 'team', 'pro', 'enterprise');
 ```

@@ -1,4 +1,7 @@
 Table custom_property_definitions {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   name text [not null]
   key text [not null]
@@ -9,6 +12,9 @@ Table custom_property_definitions {
 }
 
 Table document_custom_property_values {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   document_id text [not null]
   property_definition_id text [not null]
   text_value text
@@ -21,6 +27,9 @@ Table document_custom_property_values {
 }
 
 Table custom_property_select_options {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   property_definition_id text [not null]
   name text [not null]
   key text [not null]
@@ -28,6 +37,9 @@ Table custom_property_select_options {
 }
 
 Table document_share_links {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   document_id text [not null]
   created_by text
@@ -39,6 +51,9 @@ Table document_share_links {
 }
 
 Table document_views {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   name text [not null]
   query text [not null]
@@ -46,6 +61,8 @@ Table document_views {
 }
 
 Table document_activity_log {
+  id text [pk, not null]
+  created_at integer [not null]
   document_id text [not null]
   event text [not null]
   event_data text
@@ -54,6 +71,9 @@ Table document_activity_log {
 }
 
 Table documents {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   created_by text
   original_name text [not null]
@@ -80,6 +100,9 @@ Table kv_store {
 }
 
 Table organizations {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   name text [not null]
   customer_id text
   deleted_at integer
@@ -88,12 +111,18 @@ Table organizations {
 }
 
 Table organization_members {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   user_id text [not null]
   role text [not null]
 }
 
 Table organization_invitations {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   email text [not null]
   role text [not null]
@@ -103,11 +132,17 @@ Table organization_invitations {
 }
 
 Table user_roles {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   user_id text [not null]
   role text [not null]
 }
 
 Table tags {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   name text [not null]
   normalized_name text
@@ -124,6 +159,9 @@ Table documents_tags {
 }
 
 Table users {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   email text [not null, unique]
   email_verified integer [not null]
   name text
@@ -133,6 +171,9 @@ Table users {
 }
 
 Table organization_ai_credits_usage {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   credits_consumed integer [not null]
   usage text [not null]
@@ -140,6 +181,9 @@ Table organization_ai_credits_usage {
 }
 
 Table api_keys {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   name text [not null]
   key_hash text [not null, unique]
   prefix text [not null, note: 'the prefix is used to identify the key, it is the']
@@ -157,6 +201,9 @@ Table api_key_organizations {
 }
 
 Table auth_sessions {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   token text [not null]
   user_id text
   expires_at integer [not null]
@@ -166,6 +213,9 @@ Table auth_sessions {
 }
 
 Table auth_accounts {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   user_id text
   account_id text [not null]
   provider_id text [not null]
@@ -179,12 +229,18 @@ Table auth_accounts {
 }
 
 Table auth_verifications {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   identifier text [not null]
   value text [not null]
   expires_at integer [not null]
 }
 
 Table auth_two_factor {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   user_id text
   secret text
   backup_codes text
@@ -199,6 +255,9 @@ Table documents_fts {
 }
 
 Table intake_emails {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   email_address text [not null, unique]
   organization_id text [not null]
   allowed_origins text [not null]
@@ -206,6 +265,9 @@ Table intake_emails {
 }
 
 Table organization_settings {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null, unique, note: 'One settings row per organization']
   ai_auto_tagging_enabled integer [note: 'AI auto-tagging settings']
   ai_auto_tagging_can_create_new_tags integer
@@ -214,6 +276,9 @@ Table organization_settings {
 }
 
 Table user_plan_entitlements {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   granted_at integer [not null]
   expires_at integer
   last_verified_at integer
@@ -232,9 +297,14 @@ Table organization_subscriptions {
   current_period_end integer [not null]
   current_period_start integer [not null]
   cancel_at_period_end integer [not null]
+  created_at integer [not null]
+  updated_at integer [not null]
 }
 
 Table tagging_rules {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   organization_id text [not null]
   name text [not null]
   description text
@@ -243,6 +313,9 @@ Table tagging_rules {
 }
 
 Table tagging_rule_conditions {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   tagging_rule_id text [not null]
   field text [not null]
   operator text [not null]
@@ -251,11 +324,17 @@ Table tagging_rule_conditions {
 }
 
 Table tagging_rule_actions {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   tagging_rule_id text [not null]
   tag_id text [not null]
 }
 
 Table webhooks {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   name text [not null]
   url text [not null]
   secret text
@@ -265,11 +344,17 @@ Table webhooks {
 }
 
 Table webhook_events {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   webhook_id text [not null]
   event_name text [not null]
 }
 
 Table webhook_deliveries {
+  id text [pk, not null]
+  created_at integer [not null]
+  updated_at integer [not null]
   webhook_id text [not null]
   event_name text [not null]
   request_payload text [not null]

@@ -31,7 +31,7 @@ erDiagram
     canvas ||--o{ user_canvases : "(id) - (canvas_id)"
     users ||--o{ user_projects : "(id) - (user_id)"
     projects ||--o{ user_projects : "(id) - (project_id)"
-    users ||--o| users : "(id) - (id)"
+    "auth.users" ||--o| users : "(id) - (id)"
     canvas {
         uuid id PK
         uuid project_id FK
@@ -49,7 +49,7 @@ erDiagram
     }
     conversations {
         uuid id PK
-        agentType agent_type
+        agent_type agent_type
         uuid project_id FK
         varchar display_name
         timestamptz created_at
@@ -83,7 +83,7 @@ erDiagram
         uuid project_id PK, FK
         timestamptz created_at
         timestamptz updated_at
-        projectCustomDomainStatusEnum status
+        project_custom_domain_status status
     }
     custom_domain_verification {
         uuid id PK
@@ -95,7 +95,7 @@ erDiagram
         text freestyle_verification_id
         jsonb txt_record
         jsonb a_records
-        verificationRequestStatus status
+        verification_request_status status
     }
     deployments {
         uuid id PK
@@ -103,8 +103,8 @@ erDiagram
         uuid project_id FK
         text sandbox_id
         text urls
-        deploymentType type
-        deploymentStatus status
+        deployment_type type
+        deployment_status status
         text message "Deployment progress"
         text build_log
         text error
@@ -152,7 +152,7 @@ erDiagram
         jsonb context
         timestamptz created_at
         timestamptz updated_at
-        projectCreateStatus status
+        project_create_status status
     }
     project_invitations {
         uuid id PK
@@ -160,7 +160,7 @@ erDiagram
         uuid inviter_id FK
         varchar invitee_email
         varchar token
-        projectRole role
+        project_role role
         timestamptz expires_at
         timestamptz created_at
         timestamptz updated_at
@@ -196,14 +196,14 @@ erDiagram
     prices {
         uuid id PK
         uuid product_id FK "Relationships"
-        priceKeys price_key "Metadata"
+        price_keys price_key "Metadata"
         integer monthly_message_limit
         text stripe_price_id "Stripe"
     }
     products {
         uuid id PK
         text name
-        productType type
+        product_type type
         text stripe_product_id "Stripe"
     }
     rate_limits {
@@ -227,25 +227,25 @@ erDiagram
         timestamptz started_at "Metadata"
         timestamptz updated_at
         timestamptz ended_at
-        subscriptionStatusEnum status
+        subscription_status status
         text stripe_customer_id "Stripe"
         text stripe_subscription_id
         text stripe_subscription_item_id
         text stripe_subscription_schedule_id
         timestamptz stripe_current_period_start "The current period start and end is used to determine if the subscription has renewed."
         timestamptz stripe_current_period_end
-        scheduledSubscriptionAction scheduled_action "Scheduled price change"
+        scheduled_subscription_action scheduled_action "Scheduled price change"
         uuid scheduled_price_id FK
         timestamptz scheduled_change_at
     }
     usage_records {
         uuid id PK
         uuid user_id FK "Relationships"
-        usageTypes type "Metadata"
+        usage_types type "Metadata"
         timestamptz timestamp
         varchar trace_id
     }
-    users {
+    "auth.users" {
         uuid id PK
         text email
         timestamp email_confirmed_at
@@ -271,7 +271,7 @@ erDiagram
         uuid user_id PK, FK
         uuid project_id PK, FK
         timestamptz created_at
-        projectRole role
+        project_role role
     }
     users {
         uuid id PK, FK

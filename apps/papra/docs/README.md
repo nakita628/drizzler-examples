@@ -464,15 +464,18 @@ Table `custom_property_definitions`.
 
 ![customPropertyDefinitionsTable and the tables it relates to](tables/customPropertyDefinitionsTable.svg)
 
-| Column                               | Type      | Constraints                                                   | Default       | Description |
-| ------------------------------------ | --------- | ------------------------------------------------------------- | ------------- | ----------- |
-| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |               |             |
-| `name`                               | `text`    | NOT NULL                                                      |               |             |
-| `key`                                | `text`    | NOT NULL                                                      |               |             |
-| `description`                        | `text`    | NULL                                                          |               |             |
-| `type`                               | `text`    | NOT NULL                                                      |               |             |
-| `config`                             | `text`    | NULL                                                          |               |             |
-| `displayOrder` (`display_order`)     | `integer` | NOT NULL                                                      | `.default(0)` |             |
+| Column                               | Type      | Constraints                                                   | Default                        | Description |
+| ------------------------------------ | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `name`                               | `text`    | NOT NULL                                                      |                                |             |
+| `key`                                | `text`    | NOT NULL                                                      |                                |             |
+| `description`                        | `text`    | NULL                                                          |                                |             |
+| `type`                               | `text`    | NOT NULL                                                      |                                |             |
+| `config`                             | `text`    | NULL                                                          |                                |             |
+| `displayOrder` (`display_order`)     | `integer` | NOT NULL                                                      | `.default(0)`                  |             |
 
 #### Definition
 
@@ -537,6 +540,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "custom_property_definitions" as "d0"
 ```
 
+**Find by primary key**: One row of customPropertyDefinitionsTable, through the relational query API.
+
+```ts
+db.query.customPropertyDefinitionsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."name" as "name", "d0"."key" as "key", "d0"."description" as "description", "d0"."type" as "type", "d0"."config" as "config", "d0"."display_order" as "displayOrder"
+from "custom_property_definitions" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to customPropertyDefinitionsTable, giving the columns that have no default.
 
 ```ts
@@ -551,7 +568,34 @@ db.insert(customPropertyDefinitionsTable).values({
 ```sql
 insert into "custom_property_definitions" ("id", "created_at", "updated_at", "organization_id", "name", "key", "description", "type", "config", "display_order")
 values (?, ?, ?, ?, ?, ?, null, ?, null, ?)
--- params: ["cpd_alfasvdq1f4djl0ym2yir1mw",1767225600000,1767225600000,"organizationId","name","key","type",0]
+-- params: ["cpd_a4nz0tpx1jkd5aprpbbuor5m",1767225600000,1767225600000,"organizationId","name","key","type",0]
+```
+
+**Update**: Changes a row of customPropertyDefinitionsTable, found by its primary key.
+
+```ts
+db.update(customPropertyDefinitionsTable)
+  .set({ createdAt: 1 })
+  .where(eq(customPropertyDefinitionsTable.id, "id"));
+```
+
+```sql
+update "custom_property_definitions"
+set "created_at" = ?, "updated_at" = ?
+where "custom_property_definitions"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of customPropertyDefinitionsTable, found by its primary key.
+
+```ts
+db.delete(customPropertyDefinitionsTable).where(eq(customPropertyDefinitionsTable.id, "id"));
+```
+
+```sql
+delete from "custom_property_definitions"
+where "custom_property_definitions"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -564,17 +608,20 @@ Table `document_custom_property_values`.
 
 ![documentCustomPropertyValuesTable and the tables it relates to](tables/documentCustomPropertyValuesTable.svg)
 
-| Column                                            | Type      | Constraints                                                                           | Default | Description |
-| ------------------------------------------------- | --------- | ------------------------------------------------------------------------------------- | ------- | ----------- |
-| `documentId` (`document_id`)                      | `text`    | NOT NULL → [documentsTable.id](#table-documentsTable)                                 |         |             |
-| `propertyDefinitionId` (`property_definition_id`) | `text`    | NOT NULL → [customPropertyDefinitionsTable.id](#table-customPropertyDefinitionsTable) |         |             |
-| `textValue` (`text_value`)                        | `text`    | NULL                                                                                  |         |             |
-| `numberValue` (`number_value`)                    | `real`    | NULL                                                                                  |         |             |
-| `dateValue` (`date_value`)                        | `integer` | NULL                                                                                  |         |             |
-| `booleanValue` (`boolean_value`)                  | `integer` | NULL                                                                                  |         |             |
-| `selectOptionId` (`select_option_id`)             | `text`    | NULL → [customPropertySelectOptionsTable.id](#table-customPropertySelectOptionsTable) |         |             |
-| `userId` (`user_id`)                              | `text`    | NULL → [usersTable.id](#table-usersTable)                                             |         |             |
-| `relatedDocumentId` (`related_document_id`)       | `text`    | NULL → [documentsTable.id](#table-documentsTable)                                     |         |             |
+| Column                                            | Type      | Constraints                                                                           | Default                        | Description |
+| ------------------------------------------------- | --------- | ------------------------------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                              | `text`    | PK NOT NULL                                                                           | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                        | `integer` | NOT NULL                                                                              | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                        | `integer` | NOT NULL                                                                              | `.$defaultFn()` `.$onUpdate()` |             |
+| `documentId` (`document_id`)                      | `text`    | NOT NULL → [documentsTable.id](#table-documentsTable)                                 |                                |             |
+| `propertyDefinitionId` (`property_definition_id`) | `text`    | NOT NULL → [customPropertyDefinitionsTable.id](#table-customPropertyDefinitionsTable) |                                |             |
+| `textValue` (`text_value`)                        | `text`    | NULL                                                                                  |                                |             |
+| `numberValue` (`number_value`)                    | `real`    | NULL                                                                                  |                                |             |
+| `dateValue` (`date_value`)                        | `integer` | NULL                                                                                  |                                |             |
+| `booleanValue` (`boolean_value`)                  | `integer` | NULL                                                                                  |                                |             |
+| `selectOptionId` (`select_option_id`)             | `text`    | NULL → [customPropertySelectOptionsTable.id](#table-customPropertySelectOptionsTable) |                                |             |
+| `userId` (`user_id`)                              | `text`    | NULL → [usersTable.id](#table-usersTable)                                             |                                |             |
+| `relatedDocumentId` (`related_document_id`)       | `text`    | NULL → [documentsTable.id](#table-documentsTable)                                     |                                |             |
 
 #### Definition
 
@@ -644,6 +691,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "document_custom_property_values" as "d0"
 ```
 
+**Find by primary key**: One row of documentCustomPropertyValuesTable, through the relational query API.
+
+```ts
+db.query.documentCustomPropertyValuesTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."document_id" as "documentId", "d0"."property_definition_id" as "propertyDefinitionId", "d0"."text_value" as "textValue", "d0"."number_value" as "numberValue", "d0"."date_value" as "dateValue", "d0"."boolean_value" as "booleanValue", "d0"."select_option_id" as "selectOptionId", "d0"."user_id" as "userId", "d0"."related_document_id" as "relatedDocumentId"
+from "document_custom_property_values" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to documentCustomPropertyValuesTable, giving the columns that have no default.
 
 ```ts
@@ -656,7 +717,34 @@ db.insert(documentCustomPropertyValuesTable).values({
 ```sql
 insert into "document_custom_property_values" ("id", "created_at", "updated_at", "document_id", "property_definition_id", "text_value", "number_value", "date_value", "boolean_value", "select_option_id", "user_id", "related_document_id")
 values (?, ?, ?, ?, ?, null, null, null, null, null, null, null)
--- params: ["dcpv_a7dy8z4ab41a1aou1nvwfeik",1767225600000,1767225600000,"documentId","propertyDefinitionId"]
+-- params: ["dcpv_am5g4o4brrfpteuhsr2sh629",1767225600000,1767225600000,"documentId","propertyDefinitionId"]
+```
+
+**Update**: Changes a row of documentCustomPropertyValuesTable, found by its primary key.
+
+```ts
+db.update(documentCustomPropertyValuesTable)
+  .set({ createdAt: 1 })
+  .where(eq(documentCustomPropertyValuesTable.id, "id"));
+```
+
+```sql
+update "document_custom_property_values"
+set "created_at" = ?, "updated_at" = ?
+where "document_custom_property_values"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of documentCustomPropertyValuesTable, found by its primary key.
+
+```ts
+db.delete(documentCustomPropertyValuesTable).where(eq(documentCustomPropertyValuesTable.id, "id"));
+```
+
+```sql
+delete from "document_custom_property_values"
+where "document_custom_property_values"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -669,12 +757,15 @@ Table `custom_property_select_options`.
 
 ![customPropertySelectOptionsTable and the tables it relates to](tables/customPropertySelectOptionsTable.svg)
 
-| Column                                            | Type      | Constraints                                                                           | Default       | Description |
-| ------------------------------------------------- | --------- | ------------------------------------------------------------------------------------- | ------------- | ----------- |
-| `propertyDefinitionId` (`property_definition_id`) | `text`    | NOT NULL → [customPropertyDefinitionsTable.id](#table-customPropertyDefinitionsTable) |               |             |
-| `name`                                            | `text`    | NOT NULL                                                                              |               |             |
-| `key`                                             | `text`    | NOT NULL                                                                              |               |             |
-| `displayOrder` (`display_order`)                  | `integer` | NOT NULL                                                                              | `.default(0)` |             |
+| Column                                            | Type      | Constraints                                                                           | Default                        | Description |
+| ------------------------------------------------- | --------- | ------------------------------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                              | `text`    | PK NOT NULL                                                                           | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                        | `integer` | NOT NULL                                                                              | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                        | `integer` | NOT NULL                                                                              | `.$defaultFn()` `.$onUpdate()` |             |
+| `propertyDefinitionId` (`property_definition_id`) | `text`    | NOT NULL → [customPropertyDefinitionsTable.id](#table-customPropertyDefinitionsTable) |                                |             |
+| `name`                                            | `text`    | NOT NULL                                                                              |                                |             |
+| `key`                                             | `text`    | NOT NULL                                                                              |                                |             |
+| `displayOrder` (`display_order`)                  | `integer` | NOT NULL                                                                              | `.default(0)`                  |             |
 
 #### Definition
 
@@ -735,6 +826,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "custom_property_select_options" as "d0"
 ```
 
+**Find by primary key**: One row of customPropertySelectOptionsTable, through the relational query API.
+
+```ts
+db.query.customPropertySelectOptionsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."property_definition_id" as "propertyDefinitionId", "d0"."name" as "name", "d0"."key" as "key", "d0"."display_order" as "displayOrder"
+from "custom_property_select_options" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to customPropertySelectOptionsTable, giving the columns that have no default.
 
 ```ts
@@ -748,7 +853,34 @@ db.insert(customPropertySelectOptionsTable).values({
 ```sql
 insert into "custom_property_select_options" ("id", "created_at", "updated_at", "property_definition_id", "name", "key", "display_order")
 values (?, ?, ?, ?, ?, ?, ?)
--- params: ["cpso_ajatc4ix2zld7wafeh7jzeod",1767225600000,1767225600000,"propertyDefinitionId","name","key",0]
+-- params: ["cpso_apl073e3y6vte1v04udwc9hi",1767225600000,1767225600000,"propertyDefinitionId","name","key",0]
+```
+
+**Update**: Changes a row of customPropertySelectOptionsTable, found by its primary key.
+
+```ts
+db.update(customPropertySelectOptionsTable)
+  .set({ createdAt: 1 })
+  .where(eq(customPropertySelectOptionsTable.id, "id"));
+```
+
+```sql
+update "custom_property_select_options"
+set "created_at" = ?, "updated_at" = ?
+where "custom_property_select_options"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of customPropertySelectOptionsTable, found by its primary key.
+
+```ts
+db.delete(customPropertySelectOptionsTable).where(eq(customPropertySelectOptionsTable.id, "id"));
+```
+
+```sql
+delete from "custom_property_select_options"
+where "custom_property_select_options"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -761,16 +893,19 @@ Table `document_share_links`.
 
 ![documentShareLinksTable and the tables it relates to](tables/documentShareLinksTable.svg)
 
-| Column                                | Type      | Constraints                                                   | Default          | Description |
-| ------------------------------------- | --------- | ------------------------------------------------------------- | ---------------- | ----------- |
-| `organizationId` (`organization_id`)  | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                  |             |
-| `documentId` (`document_id`)          | `text`    | NOT NULL → [documentsTable.id](#table-documentsTable)         |                  |             |
-| `createdBy` (`created_by`)            | `text`    | NULL → [usersTable.id](#table-usersTable)                     |                  |             |
-| `token`                               | `text`    | NOT NULL                                                      |                  |             |
-| `expiresAt` (`expires_at`)            | `integer` | NULL                                                          |                  |             |
-| `passwordHash` (`password_hash`)      | `text`    | NULL                                                          |                  |             |
-| `isEnabled` (`is_enabled`)            | `integer` | NOT NULL                                                      | `.default(true)` |             |
-| `lastAccessedAt` (`last_accessed_at`) | `integer` | NULL                                                          |                  |             |
+| Column                                | Type      | Constraints                                                   | Default                        | Description |
+| ------------------------------------- | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                  | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)            | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)            | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`)  | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `documentId` (`document_id`)          | `text`    | NOT NULL → [documentsTable.id](#table-documentsTable)         |                                |             |
+| `createdBy` (`created_by`)            | `text`    | NULL → [usersTable.id](#table-usersTable)                     |                                |             |
+| `token`                               | `text`    | NOT NULL                                                      |                                |             |
+| `expiresAt` (`expires_at`)            | `integer` | NULL                                                          |                                |             |
+| `passwordHash` (`password_hash`)      | `text`    | NULL                                                          |                                |             |
+| `isEnabled` (`is_enabled`)            | `integer` | NOT NULL                                                      | `.default(true)`               |             |
+| `lastAccessedAt` (`last_accessed_at`) | `integer` | NULL                                                          |                                |             |
 
 #### Definition
 
@@ -835,6 +970,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "document_share_links" as "d0"
 ```
 
+**Find by primary key**: One row of documentShareLinksTable, through the relational query API.
+
+```ts
+db.query.documentShareLinksTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."document_id" as "documentId", "d0"."created_by" as "createdBy", "d0"."token" as "token", "d0"."expires_at" as "expiresAt", "d0"."password_hash" as "passwordHash", "d0"."is_enabled" as "isEnabled", "d0"."last_accessed_at" as "lastAccessedAt"
+from "document_share_links" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to documentShareLinksTable, giving the columns that have no default.
 
 ```ts
@@ -848,7 +997,34 @@ db.insert(documentShareLinksTable).values({
 ```sql
 insert into "document_share_links" ("id", "created_at", "updated_at", "organization_id", "document_id", "created_by", "token", "expires_at", "password_hash", "is_enabled", "last_accessed_at")
 values (?, ?, ?, ?, ?, null, ?, null, null, ?, null)
--- params: ["dsl_agk9iqt2pwk7uizoj5533aef",1767225600000,1767225600000,"organizationId","documentId","token",1]
+-- params: ["dsl_aeedy93gdhiex97ewgnbbdb0",1767225600000,1767225600000,"organizationId","documentId","token",1]
+```
+
+**Update**: Changes a row of documentShareLinksTable, found by its primary key.
+
+```ts
+db.update(documentShareLinksTable)
+  .set({ createdAt: 1 })
+  .where(eq(documentShareLinksTable.id, "id"));
+```
+
+```sql
+update "document_share_links"
+set "created_at" = ?, "updated_at" = ?
+where "document_share_links"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of documentShareLinksTable, found by its primary key.
+
+```ts
+db.delete(documentShareLinksTable).where(eq(documentShareLinksTable.id, "id"));
+```
+
+```sql
+delete from "document_share_links"
+where "document_share_links"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -861,12 +1037,15 @@ Table `document_views`.
 
 ![documentViewsTable and the tables it relates to](tables/documentViewsTable.svg)
 
-| Column                               | Type   | Constraints                                                   | Default | Description |
-| ------------------------------------ | ------ | ------------------------------------------------------------- | ------- | ----------- |
-| `organizationId` (`organization_id`) | `text` | NOT NULL → [organizationsTable.id](#table-organizationsTable) |         |             |
-| `name`                               | `text` | NOT NULL                                                      |         |             |
-| `query`                              | `text` | NOT NULL                                                      |         |             |
-| `description`                        | `text` | NULL                                                          |         |             |
+| Column                               | Type      | Constraints                                                   | Default                        | Description |
+| ------------------------------------ | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `name`                               | `text`    | NOT NULL                                                      |                                |             |
+| `query`                              | `text`    | NOT NULL                                                      |                                |             |
+| `description`                        | `text`    | NULL                                                          |                                |             |
 
 #### Definition
 
@@ -923,6 +1102,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "document_views" as "d0"
 ```
 
+**Find by primary key**: One row of documentViewsTable, through the relational query API.
+
+```ts
+db.query.documentViewsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."name" as "name", "d0"."query" as "query", "d0"."description" as "description"
+from "document_views" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to documentViewsTable, giving the columns that have no default.
 
 ```ts
@@ -936,7 +1129,32 @@ db.insert(documentViewsTable).values({
 ```sql
 insert into "document_views" ("id", "created_at", "updated_at", "organization_id", "name", "query", "description")
 values (?, ?, ?, ?, ?, ?, null)
--- params: ["dv_a9pjntips1nfirgctqsiupih",1767225600000,1767225600000,"organizationId","name","query"]
+-- params: ["dv_ar91n6cn44ugx0qosd8v9aku",1767225600000,1767225600000,"organizationId","name","query"]
+```
+
+**Update**: Changes a row of documentViewsTable, found by its primary key.
+
+```ts
+db.update(documentViewsTable).set({ createdAt: 1 }).where(eq(documentViewsTable.id, "id"));
+```
+
+```sql
+update "document_views"
+set "created_at" = ?, "updated_at" = ?
+where "document_views"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of documentViewsTable, found by its primary key.
+
+```ts
+db.delete(documentViewsTable).where(eq(documentViewsTable.id, "id"));
+```
+
+```sql
+delete from "document_views"
+where "document_views"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -949,13 +1167,15 @@ Table `document_activity_log`.
 
 ![documentActivityLogTable and the tables it relates to](tables/documentActivityLogTable.svg)
 
-| Column                       | Type   | Constraints                                           | Default | Description |
-| ---------------------------- | ------ | ----------------------------------------------------- | ------- | ----------- |
-| `documentId` (`document_id`) | `text` | NOT NULL → [documentsTable.id](#table-documentsTable) |         |             |
-| `event`                      | `text` | NOT NULL                                              |         |             |
-| `eventData` (`event_data`)   | `text` | NULL                                                  |         |             |
-| `userId` (`user_id`)         | `text` | NULL → [usersTable.id](#table-usersTable)             |         |             |
-| `tagId` (`tag_id`)           | `text` | NULL → [tagsTable.id](#table-tagsTable)               |         |             |
+| Column                       | Type      | Constraints                                           | Default         | Description |
+| ---------------------------- | --------- | ----------------------------------------------------- | --------------- | ----------- |
+| `id`                         | `text`    | PK NOT NULL                                           | `.$defaultFn()` |             |
+| `createdAt` (`created_at`)   | `integer` | NOT NULL                                              | `.$defaultFn()` |             |
+| `documentId` (`document_id`) | `text`    | NOT NULL → [documentsTable.id](#table-documentsTable) |                 |             |
+| `event`                      | `text`    | NOT NULL                                              |                 |             |
+| `eventData` (`event_data`)   | `text`    | NULL                                                  |                 |             |
+| `userId` (`user_id`)         | `text`    | NULL → [usersTable.id](#table-usersTable)             |                 |             |
+| `tagId` (`tag_id`)           | `text`    | NULL → [tagsTable.id](#table-tagsTable)               |                 |             |
 
 #### Definition
 
@@ -1016,6 +1236,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."document_id" a
 from "document_activity_log" as "d0"
 ```
 
+**Find by primary key**: One row of documentActivityLogTable, through the relational query API.
+
+```ts
+db.query.documentActivityLogTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."document_id" as "documentId", "d0"."event" as "event", "d0"."event_data" as "eventData", "d0"."user_id" as "userId", "d0"."tag_id" as "tagId"
+from "document_activity_log" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to documentActivityLogTable, giving the columns that have no default.
 
 ```ts
@@ -1025,7 +1259,34 @@ db.insert(documentActivityLogTable).values({ documentId: "documentId", event: "e
 ```sql
 insert into "document_activity_log" ("id", "created_at", "document_id", "event", "event_data", "user_id", "tag_id")
 values (?, ?, ?, ?, null, null, null)
--- params: ["doc_act_a3pb1dmpfqdqtv10d4rp14c6",1767225600000,"documentId","event"]
+-- params: ["doc_act_a0s6gwzvpldz3qwcpieoey4b",1767225600000,"documentId","event"]
+```
+
+**Update**: Changes a row of documentActivityLogTable, found by its primary key.
+
+```ts
+db.update(documentActivityLogTable)
+  .set({ createdAt: 1 })
+  .where(eq(documentActivityLogTable.id, "id"));
+```
+
+```sql
+update "document_activity_log"
+set "created_at" = ?
+where "document_activity_log"."id" = ?
+-- params: [1,"id"]
+```
+
+**Delete**: Deletes a row of documentActivityLogTable, found by its primary key.
+
+```ts
+db.delete(documentActivityLogTable).where(eq(documentActivityLogTable.id, "id"));
+```
+
+```sql
+delete from "document_activity_log"
+where "document_activity_log"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1038,25 +1299,28 @@ Table `documents`.
 
 ![documentsTable and the tables it relates to](tables/documentsTable.svg)
 
-| Column                                                     | Type      | Constraints                                                   | Default           | Description |
-| ---------------------------------------------------------- | --------- | ------------------------------------------------------------- | ----------------- | ----------- |
-| `organizationId` (`organization_id`)                       | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                   |             |
-| `createdBy` (`created_by`)                                 | `text`    | NULL → [usersTable.id](#table-usersTable)                     |                   |             |
-| `originalName` (`original_name`)                           | `text`    | NOT NULL                                                      |                   |             |
-| `originalSize` (`original_size`)                           | `integer` | NOT NULL                                                      | `.default(0)`     |             |
-| `originalStorageKey` (`original_storage_key`)              | `text`    | NOT NULL                                                      |                   |             |
-| `originalSha256Hash` (`original_sha256_hash`)              | `text`    | NOT NULL                                                      |                   |             |
-| `name`                                                     | `text`    | NOT NULL                                                      |                   |             |
-| `mimeType` (`mime_type`)                                   | `text`    | NOT NULL                                                      |                   |             |
-| `content`                                                  | `text`    | NOT NULL                                                      | `.default('')`    |             |
-| `documentDate` (`document_date`)                           | `integer` | NULL                                                          |                   |             |
-| `notes`                                                    | `text`    | NULL                                                          |                   |             |
-| `fileEncryptionKeyWrapped` (`file_encryption_key_wrapped`) | `text`    | NULL                                                          |                   |             |
-| `fileEncryptionKekVersion` (`file_encryption_kek_version`) | `text`    | NULL                                                          |                   |             |
-| `fileEncryptionAlgorithm` (`file_encryption_algorithm`)    | `text`    | NULL                                                          |                   |             |
-| `deletedAt` (`deleted_at`)                                 | `integer` | NULL                                                          |                   |             |
-| `deletedBy` (`deleted_by`)                                 | `text`    | NULL → [usersTable.id](#table-usersTable)                     |                   |             |
-| `isDeleted` (`is_deleted`)                                 | `integer` | NOT NULL                                                      | `.default(false)` |             |
+| Column                                                     | Type      | Constraints                                                   | Default                        | Description |
+| ---------------------------------------------------------- | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                                       | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                                 | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                                 | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`)                       | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `createdBy` (`created_by`)                                 | `text`    | NULL → [usersTable.id](#table-usersTable)                     |                                |             |
+| `originalName` (`original_name`)                           | `text`    | NOT NULL                                                      |                                |             |
+| `originalSize` (`original_size`)                           | `integer` | NOT NULL                                                      | `.default(0)`                  |             |
+| `originalStorageKey` (`original_storage_key`)              | `text`    | NOT NULL                                                      |                                |             |
+| `originalSha256Hash` (`original_sha256_hash`)              | `text`    | NOT NULL                                                      |                                |             |
+| `name`                                                     | `text`    | NOT NULL                                                      |                                |             |
+| `mimeType` (`mime_type`)                                   | `text`    | NOT NULL                                                      |                                |             |
+| `content`                                                  | `text`    | NOT NULL                                                      | `.default('')`                 |             |
+| `documentDate` (`document_date`)                           | `integer` | NULL                                                          |                                |             |
+| `notes`                                                    | `text`    | NULL                                                          |                                |             |
+| `fileEncryptionKeyWrapped` (`file_encryption_key_wrapped`) | `text`    | NULL                                                          |                                |             |
+| `fileEncryptionKekVersion` (`file_encryption_kek_version`) | `text`    | NULL                                                          |                                |             |
+| `fileEncryptionAlgorithm` (`file_encryption_algorithm`)    | `text`    | NULL                                                          |                                |             |
+| `deletedAt` (`deleted_at`)                                 | `integer` | NULL                                                          |                                |             |
+| `deletedBy` (`deleted_by`)                                 | `text`    | NULL → [usersTable.id](#table-usersTable)                     |                                |             |
+| `isDeleted` (`is_deleted`)                                 | `integer` | NOT NULL                                                      | `.default(false)`              |             |
 
 #### Definition
 
@@ -1138,6 +1402,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "documents" as "d0"
 ```
 
+**Find by primary key**: One row of documentsTable, through the relational query API.
+
+```ts
+db.query.documentsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."created_by" as "createdBy", "d0"."original_name" as "originalName", "d0"."original_size" as "originalSize", "d0"."original_storage_key" as "originalStorageKey", "d0"."original_sha256_hash" as "originalSha256Hash", "d0"."name" as "name", "d0"."mime_type" as "mimeType", "d0"."content" as "content", "d0"."document_date" as "documentDate", "d0"."notes" as "notes", "d0"."file_encryption_key_wrapped" as "fileEncryptionKeyWrapped", "d0"."file_encryption_kek_version" as "fileEncryptionKekVersion", "d0"."file_encryption_algorithm" as "fileEncryptionAlgorithm", "d0"."deleted_at" as "deletedAt", "d0"."deleted_by" as "deletedBy", "d0"."is_deleted" as "isDeleted"
+from "documents" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to documentsTable, giving the columns that have no default.
 
 ```ts
@@ -1154,7 +1432,32 @@ db.insert(documentsTable).values({
 ```sql
 insert into "documents" ("id", "created_at", "updated_at", "organization_id", "created_by", "original_name", "original_size", "original_storage_key", "original_sha256_hash", "name", "mime_type", "content", "document_date", "notes", "file_encryption_key_wrapped", "file_encryption_kek_version", "file_encryption_algorithm", "deleted_at", "deleted_by", "is_deleted")
 values (?, ?, ?, ?, null, ?, ?, ?, ?, ?, ?, ?, null, null, null, null, null, null, null, ?)
--- params: ["doc_a0dgd2z153rqj5ybyg8ty1ur",1767225600000,1767225600000,"organizationId","originalName",0,"originalStorageKey","originalSha256Hash","name","mimeType","",0]
+-- params: ["doc_ao02gjg1nat8avnqwb4293ko",1767225600000,1767225600000,"organizationId","originalName",0,"originalStorageKey","originalSha256Hash","name","mimeType","",0]
+```
+
+**Update**: Changes a row of documentsTable, found by its primary key.
+
+```ts
+db.update(documentsTable).set({ createdAt: 1 }).where(eq(documentsTable.id, "id"));
+```
+
+```sql
+update "documents"
+set "created_at" = ?, "updated_at" = ?
+where "documents"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of documentsTable, found by its primary key.
+
+```ts
+db.delete(documentsTable).where(eq(documentsTable.id, "id"));
+```
+
+```sql
+delete from "documents"
+where "documents"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1280,13 +1583,16 @@ Table `organizations`.
 
 ![organizationsTable and the tables it relates to](tables/organizationsTable.svg)
 
-| Column                                    | Type      | Constraints                               | Default | Description                                                                                               |
-| ----------------------------------------- | --------- | ----------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
-| `name`                                    | `text`    | NOT NULL                                  |         |                                                                                                           |
-| `customerId` (`customer_id`)              | `text`    | NULL                                      |         |                                                                                                           |
-| `deletedAt` (`deleted_at`)                | `integer` | NULL                                      |         |                                                                                                           |
-| `deletedBy` (`deleted_by`)                | `text`    | NULL → [usersTable.id](#table-usersTable) |         |                                                                                                           |
-| `scheduledPurgeAt` (`scheduled_purge_at`) | `integer` | NULL                                      |         | When the organization is soft-deleted, we schedule a purge date some days in the future for hard deletion |
+| Column                                    | Type      | Constraints                               | Default                        | Description                                                                                               |
+| ----------------------------------------- | --------- | ----------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `id`                                      | `text`    | PK NOT NULL                               | `.$defaultFn()`                |                                                                                                           |
+| `createdAt` (`created_at`)                | `integer` | NOT NULL                                  | `.$defaultFn()`                |                                                                                                           |
+| `updatedAt` (`updated_at`)                | `integer` | NOT NULL                                  | `.$defaultFn()` `.$onUpdate()` |                                                                                                           |
+| `name`                                    | `text`    | NOT NULL                                  |                                |                                                                                                           |
+| `customerId` (`customer_id`)              | `text`    | NULL                                      |                                |                                                                                                           |
+| `deletedAt` (`deleted_at`)                | `integer` | NULL                                      |                                |                                                                                                           |
+| `deletedBy` (`deleted_by`)                | `text`    | NULL → [usersTable.id](#table-usersTable) |                                |                                                                                                           |
+| `scheduledPurgeAt` (`scheduled_purge_at`) | `integer` | NULL                                      |                                | When the organization is soft-deleted, we schedule a purge date some days in the future for hard deletion |
 
 #### Definition
 
@@ -1361,6 +1667,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "organizations" as "d0"
 ```
 
+**Find by primary key**: One row of organizationsTable, through the relational query API.
+
+```ts
+db.query.organizationsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."name" as "name", "d0"."customer_id" as "customerId", "d0"."deleted_at" as "deletedAt", "d0"."deleted_by" as "deletedBy", "d0"."scheduled_purge_at" as "scheduledPurgeAt"
+from "organizations" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to organizationsTable, giving the columns that have no default.
 
 ```ts
@@ -1370,7 +1690,32 @@ db.insert(organizationsTable).values({ name: "name" });
 ```sql
 insert into "organizations" ("id", "created_at", "updated_at", "name", "customer_id", "deleted_at", "deleted_by", "scheduled_purge_at")
 values (?, ?, ?, ?, null, null, null, null)
--- params: ["org_axl45sy79ejg1xmyg6uczfct",1767225600000,1767225600000,"name"]
+-- params: ["org_a2cjdi3v9cpfx424yeqex50p",1767225600000,1767225600000,"name"]
+```
+
+**Update**: Changes a row of organizationsTable, found by its primary key.
+
+```ts
+db.update(organizationsTable).set({ createdAt: 1 }).where(eq(organizationsTable.id, "id"));
+```
+
+```sql
+update "organizations"
+set "created_at" = ?, "updated_at" = ?
+where "organizations"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of organizationsTable, found by its primary key.
+
+```ts
+db.delete(organizationsTable).where(eq(organizationsTable.id, "id"));
+```
+
+```sql
+delete from "organizations"
+where "organizations"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1383,11 +1728,14 @@ Table `organization_members`.
 
 ![organizationMembersTable and the tables it relates to](tables/organizationMembersTable.svg)
 
-| Column                               | Type   | Constraints                                                   | Default | Description |
-| ------------------------------------ | ------ | ------------------------------------------------------------- | ------- | ----------- |
-| `organizationId` (`organization_id`) | `text` | NOT NULL → [organizationsTable.id](#table-organizationsTable) |         |             |
-| `userId` (`user_id`)                 | `text` | NOT NULL → [usersTable.id](#table-usersTable)                 |         |             |
-| `role`                               | `text` | NOT NULL                                                      |         |             |
+| Column                               | Type      | Constraints                                                   | Default                        | Description |
+| ------------------------------------ | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `userId` (`user_id`)                 | `text`    | NOT NULL → [usersTable.id](#table-usersTable)                 |                                |             |
+| `role`                               | `text`    | NOT NULL                                                      |                                |             |
 
 #### Definition
 
@@ -1449,6 +1797,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "organization_members" as "d0"
 ```
 
+**Find by primary key**: One row of organizationMembersTable, through the relational query API.
+
+```ts
+db.query.organizationMembersTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."user_id" as "userId", "d0"."role" as "role"
+from "organization_members" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to organizationMembersTable, giving the columns that have no default.
 
 ```ts
@@ -1462,7 +1824,34 @@ db.insert(organizationMembersTable).values({
 ```sql
 insert into "organization_members" ("id", "created_at", "updated_at", "organization_id", "user_id", "role")
 values (?, ?, ?, ?, ?, ?)
--- params: ["org_mem_a4d9t9jsg3cp9fpy54ei7a6u",1767225600000,1767225600000,"organizationId","userId","role"]
+-- params: ["org_mem_ai0p3zrmdh00d0i3d7zyq12a",1767225600000,1767225600000,"organizationId","userId","role"]
+```
+
+**Update**: Changes a row of organizationMembersTable, found by its primary key.
+
+```ts
+db.update(organizationMembersTable)
+  .set({ createdAt: 1 })
+  .where(eq(organizationMembersTable.id, "id"));
+```
+
+```sql
+update "organization_members"
+set "created_at" = ?, "updated_at" = ?
+where "organization_members"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of organizationMembersTable, found by its primary key.
+
+```ts
+db.delete(organizationMembersTable).where(eq(organizationMembersTable.id, "id"));
+```
+
+```sql
+delete from "organization_members"
+where "organization_members"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1477,6 +1866,9 @@ Table `organization_invitations`.
 
 | Column                               | Type      | Constraints                                                   | Default                                            | Description |
 | ------------------------------------ | --------- | ------------------------------------------------------------- | -------------------------------------------------- | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                                    |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()`                                    |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()`                     |             |
 | `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                                    |             |
 | `email`                              | `text`    | NOT NULL                                                      |                                                    |             |
 | `role`                               | `text`    | NOT NULL                                                      |                                                    |             |
@@ -1543,6 +1935,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "organization_invitations" as "d0"
 ```
 
+**Find by primary key**: One row of organizationInvitationsTable, through the relational query API.
+
+```ts
+db.query.organizationInvitationsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."email" as "email", "d0"."role" as "role", "d0"."status" as "status", "d0"."expires_at" as "expiresAt", "d0"."inviter_id" as "inviterId"
+from "organization_invitations" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to organizationInvitationsTable, giving the columns that have no default.
 
 ```ts
@@ -1558,7 +1964,34 @@ db.insert(organizationInvitationsTable).values({
 ```sql
 insert into "organization_invitations" ("id", "created_at", "updated_at", "organization_id", "email", "role", "status", "expires_at", "inviter_id")
 values (?, ?, ?, ?, ?, ?, ?, ?, ?)
--- params: ["org_inv_atbvn0auc163quzam5cdzhs0",1767225600000,1767225600000,"organizationId","email","role","pending",1,"inviterId"]
+-- params: ["org_inv_auv5s7fq4vn1e74xj48l2jfh",1767225600000,1767225600000,"organizationId","email","role","pending",1,"inviterId"]
+```
+
+**Update**: Changes a row of organizationInvitationsTable, found by its primary key.
+
+```ts
+db.update(organizationInvitationsTable)
+  .set({ createdAt: 1 })
+  .where(eq(organizationInvitationsTable.id, "id"));
+```
+
+```sql
+update "organization_invitations"
+set "created_at" = ?, "updated_at" = ?
+where "organization_invitations"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of organizationInvitationsTable, found by its primary key.
+
+```ts
+db.delete(organizationInvitationsTable).where(eq(organizationInvitationsTable.id, "id"));
+```
+
+```sql
+delete from "organization_invitations"
+where "organization_invitations"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1571,10 +2004,13 @@ Table `user_roles`.
 
 ![userRolesTable and the tables it relates to](tables/userRolesTable.svg)
 
-| Column               | Type   | Constraints                                   | Default | Description |
-| -------------------- | ------ | --------------------------------------------- | ------- | ----------- |
-| `userId` (`user_id`) | `text` | NOT NULL → [usersTable.id](#table-usersTable) |         |             |
-| `role`               | `text` | NOT NULL                                      |         |             |
+| Column                     | Type      | Constraints                                   | Default                        | Description |
+| -------------------------- | --------- | --------------------------------------------- | ------------------------------ | ----------- |
+| `id`                       | `text`    | PK NOT NULL                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`) | `integer` | NOT NULL                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`) | `integer` | NOT NULL                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `userId` (`user_id`)       | `text`    | NOT NULL → [usersTable.id](#table-usersTable) |                                |             |
+| `role`                     | `text`    | NOT NULL                                      |                                |             |
 
 #### Definition
 
@@ -1629,6 +2065,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "user_roles" as "d0"
 ```
 
+**Find by primary key**: One row of userRolesTable, through the relational query API.
+
+```ts
+db.query.userRolesTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."user_id" as "userId", "d0"."role" as "role"
+from "user_roles" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to userRolesTable, giving the columns that have no default.
 
 ```ts
@@ -1638,7 +2088,32 @@ db.insert(userRolesTable).values({ userId: "userId", role: "role" });
 ```sql
 insert into "user_roles" ("id", "created_at", "updated_at", "user_id", "role")
 values (?, ?, ?, ?, ?)
--- params: ["rol_abeiu352suyt16102rwy2bjg",1767225600000,1767225600000,"userId","role"]
+-- params: ["rol_aclocc10wliycp375vyxq2ov",1767225600000,1767225600000,"userId","role"]
+```
+
+**Update**: Changes a row of userRolesTable, found by its primary key.
+
+```ts
+db.update(userRolesTable).set({ createdAt: 1 }).where(eq(userRolesTable.id, "id"));
+```
+
+```sql
+update "user_roles"
+set "created_at" = ?, "updated_at" = ?
+where "user_roles"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of userRolesTable, found by its primary key.
+
+```ts
+db.delete(userRolesTable).where(eq(userRolesTable.id, "id"));
+```
+
+```sql
+delete from "user_roles"
+where "user_roles"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1651,13 +2126,16 @@ Table `tags`.
 
 ![tagsTable and the tables it relates to](tables/tagsTable.svg)
 
-| Column                               | Type   | Constraints                                                   | Default | Description |
-| ------------------------------------ | ------ | ------------------------------------------------------------- | ------- | ----------- |
-| `organizationId` (`organization_id`) | `text` | NOT NULL → [organizationsTable.id](#table-organizationsTable) |         |             |
-| `name`                               | `text` | NOT NULL                                                      |         |             |
-| `normalizedName` (`normalized_name`) | `text` | NULL                                                          |         |             |
-| `color`                              | `text` | NOT NULL                                                      |         |             |
-| `description`                        | `text` | NULL                                                          |         |             |
+| Column                               | Type      | Constraints                                                   | Default                        | Description |
+| ------------------------------------ | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `name`                               | `text`    | NOT NULL                                                      |                                |             |
+| `normalizedName` (`normalized_name`) | `text`    | NULL                                                          |                                |             |
+| `color`                              | `text`    | NOT NULL                                                      |                                |             |
+| `description`                        | `text`    | NULL                                                          |                                |             |
 
 #### Definition
 
@@ -1721,6 +2199,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "tags" as "d0"
 ```
 
+**Find by primary key**: One row of tagsTable, through the relational query API.
+
+```ts
+db.query.tagsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."name" as "name", "d0"."normalized_name" as "normalizedName", "d0"."color" as "color", "d0"."description" as "description"
+from "tags" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to tagsTable, giving the columns that have no default.
 
 ```ts
@@ -1730,7 +2222,32 @@ db.insert(tagsTable).values({ organizationId: "organizationId", name: "name", co
 ```sql
 insert into "tags" ("id", "created_at", "updated_at", "organization_id", "name", "normalized_name", "color", "description")
 values (?, ?, ?, ?, ?, null, ?, null)
--- params: ["tag_awzd3tp8gzj9k8bj1w4b0b99",1767225600000,1767225600000,"organizationId","name","color"]
+-- params: ["tag_ax67dtquynoyt879nx7qy6b4",1767225600000,1767225600000,"organizationId","name","color"]
+```
+
+**Update**: Changes a row of tagsTable, found by its primary key.
+
+```ts
+db.update(tagsTable).set({ createdAt: 1 }).where(eq(tagsTable.id, "id"));
+```
+
+```sql
+update "tags"
+set "created_at" = ?, "updated_at" = ?
+where "tags"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of tagsTable, found by its primary key.
+
+```ts
+db.delete(tagsTable).where(eq(tagsTable.id, "id"));
+```
+
+```sql
+delete from "tags"
+where "tags"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1855,14 +2372,17 @@ Table `users`.
 
 ![usersTable and the tables it relates to](tables/usersTable.svg)
 
-| Column                                            | Type      | Constraints     | Default           | Description |
-| ------------------------------------------------- | --------- | --------------- | ----------------- | ----------- |
-| `email`                                           | `text`    | UNIQUE NOT NULL |                   |             |
-| `emailVerified` (`email_verified`)                | `integer` | NOT NULL        | `.default(false)` |             |
-| `name`                                            | `text`    | NULL            |                   |             |
-| `image`                                           | `text`    | NULL            |                   |             |
-| `maxOrganizationCount` (`max_organization_count`) | `integer` | NULL            |                   |             |
-| `twoFactorEnabled` (`two_factor_enabled`)         | `integer` | NOT NULL        | `.default(false)` |             |
+| Column                                            | Type      | Constraints     | Default                        | Description |
+| ------------------------------------------------- | --------- | --------------- | ------------------------------ | ----------- |
+| `id`                                              | `text`    | PK NOT NULL     | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                        | `integer` | NOT NULL        | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                        | `integer` | NOT NULL        | `.$defaultFn()` `.$onUpdate()` |             |
+| `email`                                           | `text`    | UNIQUE NOT NULL |                                |             |
+| `emailVerified` (`email_verified`)                | `integer` | NOT NULL        | `.default(false)`              |             |
+| `name`                                            | `text`    | NULL            |                                |             |
+| `image`                                           | `text`    | NULL            |                                |             |
+| `maxOrganizationCount` (`max_organization_count`) | `integer` | NULL            |                                |             |
+| `twoFactorEnabled` (`two_factor_enabled`)         | `integer` | NOT NULL        | `.default(false)`              |             |
 
 #### Definition
 
@@ -1934,6 +2454,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "users" as "d0"
 ```
 
+**Find by primary key**: One row of usersTable, through the relational query API.
+
+```ts
+db.query.usersTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."email" as "email", "d0"."email_verified" as "emailVerified", "d0"."name" as "name", "d0"."image" as "image", "d0"."max_organization_count" as "maxOrganizationCount", "d0"."two_factor_enabled" as "twoFactorEnabled"
+from "users" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to usersTable, giving the columns that have no default.
 
 ```ts
@@ -1943,7 +2477,32 @@ db.insert(usersTable).values({ email: "email" });
 ```sql
 insert into "users" ("id", "created_at", "updated_at", "email", "email_verified", "name", "image", "max_organization_count", "two_factor_enabled")
 values (?, ?, ?, ?, ?, null, null, null, ?)
--- params: ["usr_atja78zz3eiweubb7apoahfe",1767225600000,1767225600000,"email",0,0]
+-- params: ["usr_a8pb1h3mjexrzg4norjbrmyj",1767225600000,1767225600000,"email",0,0]
+```
+
+**Update**: Changes a row of usersTable, found by its primary key.
+
+```ts
+db.update(usersTable).set({ createdAt: 1 }).where(eq(usersTable.id, "id"));
+```
+
+```sql
+update "users"
+set "created_at" = ?, "updated_at" = ?
+where "users"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of usersTable, found by its primary key.
+
+```ts
+db.delete(usersTable).where(eq(usersTable.id, "id"));
+```
+
+```sql
+delete from "users"
+where "users"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -1956,12 +2515,15 @@ Table `organization_ai_credits_usage`.
 
 ![organizationAiCreditsUsageTable and the tables it relates to](tables/organizationAiCreditsUsageTable.svg)
 
-| Column                                 | Type      | Constraints                                                   | Default | Description |
-| -------------------------------------- | --------- | ------------------------------------------------------------- | ------- | ----------- |
-| `organizationId` (`organization_id`)   | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |         |             |
-| `creditsConsumed` (`credits_consumed`) | `integer` | NOT NULL                                                      |         |             |
-| `usage`                                | `text`    | NOT NULL                                                      |         |             |
-| `source`                               | `text`    | NOT NULL                                                      |         |             |
+| Column                                 | Type      | Constraints                                                   | Default                        | Description |
+| -------------------------------------- | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                   | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)             | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)             | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`)   | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `creditsConsumed` (`credits_consumed`) | `integer` | NOT NULL                                                      |                                |             |
+| `usage`                                | `text`    | NOT NULL                                                      |                                |             |
+| `source`                               | `text`    | NOT NULL                                                      |                                |             |
 
 #### Definition
 
@@ -2018,6 +2580,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "organization_ai_credits_usage" as "d0"
 ```
 
+**Find by primary key**: One row of organizationAiCreditsUsageTable, through the relational query API.
+
+```ts
+db.query.organizationAiCreditsUsageTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."credits_consumed" as "creditsConsumed", "d0"."usage" as "usage", "d0"."source" as "source"
+from "organization_ai_credits_usage" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to organizationAiCreditsUsageTable, giving the columns that have no default.
 
 ```ts
@@ -2032,7 +2608,34 @@ db.insert(organizationAiCreditsUsageTable).values({
 ```sql
 insert into "organization_ai_credits_usage" ("id", "created_at", "updated_at", "organization_id", "credits_consumed", "usage", "source")
 values (?, ?, ?, ?, ?, ?, ?)
--- params: ["aicu_aaisvcco71sp8to1oeq69t15",1767225600000,1767225600000,"organizationId",1,"\"usage\"","source"]
+-- params: ["aicu_antt310xszshcdjk1avp84mq",1767225600000,1767225600000,"organizationId",1,"\"usage\"","source"]
+```
+
+**Update**: Changes a row of organizationAiCreditsUsageTable, found by its primary key.
+
+```ts
+db.update(organizationAiCreditsUsageTable)
+  .set({ createdAt: 1 })
+  .where(eq(organizationAiCreditsUsageTable.id, "id"));
+```
+
+```sql
+update "organization_ai_credits_usage"
+set "created_at" = ?, "updated_at" = ?
+where "organization_ai_credits_usage"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of organizationAiCreditsUsageTable, found by its primary key.
+
+```ts
+db.delete(organizationAiCreditsUsageTable).where(eq(organizationAiCreditsUsageTable.id, "id"));
+```
+
+```sql
+delete from "organization_ai_credits_usage"
+where "organization_ai_credits_usage"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2045,16 +2648,19 @@ Table `api_keys`.
 
 ![apiKeysTable and the tables it relates to](tables/apiKeysTable.svg)
 
-| Column                                   | Type      | Constraints                                   | Default           | Description                                       |
-| ---------------------------------------- | --------- | --------------------------------------------- | ----------------- | ------------------------------------------------- |
-| `name`                                   | `text`    | NOT NULL                                      |                   |                                                   |
-| `keyHash` (`key_hash`)                   | `text`    | UNIQUE NOT NULL                               |                   |                                                   |
-| `prefix`                                 | `text`    | NOT NULL                                      |                   | the prefix is used to identify the key, it is the |
-| `userId` (`user_id`)                     | `text`    | NOT NULL → [usersTable.id](#table-usersTable) |                   |                                                   |
-| `lastUsedAt` (`last_used_at`)            | `integer` | NULL                                          |                   |                                                   |
-| `expiresAt` (`expires_at`)               | `integer` | NULL                                          |                   |                                                   |
-| `permissions`                            | `text`    | NOT NULL                                      | `.default([])`    |                                                   |
-| `allOrganizations` (`all_organizations`) | `integer` | NOT NULL                                      | `.default(false)` |                                                   |
+| Column                                   | Type      | Constraints                                   | Default                        | Description                                       |
+| ---------------------------------------- | --------- | --------------------------------------------- | ------------------------------ | ------------------------------------------------- |
+| `id`                                     | `text`    | PK NOT NULL                                   | `.$defaultFn()`                |                                                   |
+| `createdAt` (`created_at`)               | `integer` | NOT NULL                                      | `.$defaultFn()`                |                                                   |
+| `updatedAt` (`updated_at`)               | `integer` | NOT NULL                                      | `.$defaultFn()` `.$onUpdate()` |                                                   |
+| `name`                                   | `text`    | NOT NULL                                      |                                |                                                   |
+| `keyHash` (`key_hash`)                   | `text`    | UNIQUE NOT NULL                               |                                |                                                   |
+| `prefix`                                 | `text`    | NOT NULL                                      |                                | the prefix is used to identify the key, it is the |
+| `userId` (`user_id`)                     | `text`    | NOT NULL → [usersTable.id](#table-usersTable) |                                |                                                   |
+| `lastUsedAt` (`last_used_at`)            | `integer` | NULL                                          |                                |                                                   |
+| `expiresAt` (`expires_at`)               | `integer` | NULL                                          |                                |                                                   |
+| `permissions`                            | `text`    | NOT NULL                                      | `.default([])`                 |                                                   |
+| `allOrganizations` (`all_organizations`) | `integer` | NOT NULL                                      | `.default(false)`              |                                                   |
 
 #### Definition
 
@@ -2119,6 +2725,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "api_keys" as "d0"
 ```
 
+**Find by primary key**: One row of apiKeysTable, through the relational query API.
+
+```ts
+db.query.apiKeysTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."name" as "name", "d0"."key_hash" as "keyHash", "d0"."prefix" as "prefix", "d0"."user_id" as "userId", "d0"."last_used_at" as "lastUsedAt", "d0"."expires_at" as "expiresAt", "d0"."permissions" as "permissions", "d0"."all_organizations" as "allOrganizations"
+from "api_keys" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to apiKeysTable, giving the columns that have no default.
 
 ```ts
@@ -2133,7 +2753,32 @@ db.insert(apiKeysTable).values({
 ```sql
 insert into "api_keys" ("id", "created_at", "updated_at", "name", "key_hash", "prefix", "user_id", "last_used_at", "expires_at", "permissions", "all_organizations")
 values (?, ?, ?, ?, ?, ?, ?, null, null, ?, ?)
--- params: ["ak_ajsp50iyr059xpwbowjb67nz",1767225600000,1767225600000,"name","keyHash","prefix","userId","[]",0]
+-- params: ["ak_awbdlxo26154fr6zn1xfdvlo",1767225600000,1767225600000,"name","keyHash","prefix","userId","[]",0]
+```
+
+**Update**: Changes a row of apiKeysTable, found by its primary key.
+
+```ts
+db.update(apiKeysTable).set({ createdAt: 1 }).where(eq(apiKeysTable.id, "id"));
+```
+
+```sql
+update "api_keys"
+set "created_at" = ?, "updated_at" = ?
+where "api_keys"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of apiKeysTable, found by its primary key.
+
+```ts
+db.delete(apiKeysTable).where(eq(apiKeysTable.id, "id"));
+```
+
+```sql
+delete from "api_keys"
+where "api_keys"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2228,14 +2873,17 @@ Table `auth_sessions`.
 
 ![sessionsTable and the tables it relates to](tables/sessionsTable.svg)
 
-| Column                                            | Type      | Constraints                                               | Default | Description |
-| ------------------------------------------------- | --------- | --------------------------------------------------------- | ------- | ----------- |
-| `token`                                           | `text`    | NOT NULL                                                  |         |             |
-| `userId` (`user_id`)                              | `text`    | NULL → [usersTable.id](#table-usersTable)                 |         |             |
-| `expiresAt` (`expires_at`)                        | `integer` | NOT NULL                                                  |         |             |
-| `ipAddress` (`ip_address`)                        | `text`    | NULL                                                      |         |             |
-| `userAgent` (`user_agent`)                        | `text`    | NULL                                                      |         |             |
-| `activeOrganizationId` (`active_organization_id`) | `text`    | NULL → [organizationsTable.id](#table-organizationsTable) |         |             |
+| Column                                            | Type      | Constraints                                               | Default                        | Description |
+| ------------------------------------------------- | --------- | --------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                              | `text`    | PK NOT NULL                                               | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                        | `integer` | NOT NULL                                                  | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                        | `integer` | NOT NULL                                                  | `.$defaultFn()` `.$onUpdate()` |             |
+| `token`                                           | `text`    | NOT NULL                                                  |                                |             |
+| `userId` (`user_id`)                              | `text`    | NULL → [usersTable.id](#table-usersTable)                 |                                |             |
+| `expiresAt` (`expires_at`)                        | `integer` | NOT NULL                                                  |                                |             |
+| `ipAddress` (`ip_address`)                        | `text`    | NULL                                                      |                                |             |
+| `userAgent` (`user_agent`)                        | `text`    | NULL                                                      |                                |             |
+| `activeOrganizationId` (`active_organization_id`) | `text`    | NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
 
 #### Definition
 
@@ -2296,6 +2944,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "auth_sessions" as "d0"
 ```
 
+**Find by primary key**: One row of sessionsTable, through the relational query API.
+
+```ts
+db.query.sessionsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."token" as "token", "d0"."user_id" as "userId", "d0"."expires_at" as "expiresAt", "d0"."ip_address" as "ipAddress", "d0"."user_agent" as "userAgent", "d0"."active_organization_id" as "activeOrganizationId"
+from "auth_sessions" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to sessionsTable, giving the columns that have no default.
 
 ```ts
@@ -2305,7 +2967,32 @@ db.insert(sessionsTable).values({ token: "token", expiresAt: 1 });
 ```sql
 insert into "auth_sessions" ("id", "created_at", "updated_at", "token", "user_id", "expires_at", "ip_address", "user_agent", "active_organization_id")
 values (?, ?, ?, ?, null, ?, null, null, null)
--- params: ["auth_ses_a0qzuoiwvajf6te6zf071q75",1767225600000,1767225600000,"token",1]
+-- params: ["auth_ses_a83dyrirwmxpylb9owikwww6",1767225600000,1767225600000,"token",1]
+```
+
+**Update**: Changes a row of sessionsTable, found by its primary key.
+
+```ts
+db.update(sessionsTable).set({ createdAt: 1 }).where(eq(sessionsTable.id, "id"));
+```
+
+```sql
+update "auth_sessions"
+set "created_at" = ?, "updated_at" = ?
+where "auth_sessions"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of sessionsTable, found by its primary key.
+
+```ts
+db.delete(sessionsTable).where(eq(sessionsTable.id, "id"));
+```
+
+```sql
+delete from "auth_sessions"
+where "auth_sessions"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2318,18 +3005,21 @@ Table `auth_accounts`.
 
 ![accountsTable and the tables it relates to](tables/accountsTable.svg)
 
-| Column                                               | Type      | Constraints                               | Default | Description |
-| ---------------------------------------------------- | --------- | ----------------------------------------- | ------- | ----------- |
-| `userId` (`user_id`)                                 | `text`    | NULL → [usersTable.id](#table-usersTable) |         |             |
-| `accountId` (`account_id`)                           | `text`    | NOT NULL                                  |         |             |
-| `providerId` (`provider_id`)                         | `text`    | NOT NULL                                  |         |             |
-| `accessToken` (`access_token`)                       | `text`    | NULL                                      |         |             |
-| `refreshToken` (`refresh_token`)                     | `text`    | NULL                                      |         |             |
-| `accessTokenExpiresAt` (`access_token_expires_at`)   | `integer` | NULL                                      |         |             |
-| `refreshTokenExpiresAt` (`refresh_token_expires_at`) | `integer` | NULL                                      |         |             |
-| `scope`                                              | `text`    | NULL                                      |         |             |
-| `idToken` (`id_token`)                               | `text`    | NULL                                      |         |             |
-| `password`                                           | `text`    | NULL                                      |         |             |
+| Column                                               | Type      | Constraints                               | Default                        | Description |
+| ---------------------------------------------------- | --------- | ----------------------------------------- | ------------------------------ | ----------- |
+| `id`                                                 | `text`    | PK NOT NULL                               | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                           | `integer` | NOT NULL                                  | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                           | `integer` | NOT NULL                                  | `.$defaultFn()` `.$onUpdate()` |             |
+| `userId` (`user_id`)                                 | `text`    | NULL → [usersTable.id](#table-usersTable) |                                |             |
+| `accountId` (`account_id`)                           | `text`    | NOT NULL                                  |                                |             |
+| `providerId` (`provider_id`)                         | `text`    | NOT NULL                                  |                                |             |
+| `accessToken` (`access_token`)                       | `text`    | NULL                                      |                                |             |
+| `refreshToken` (`refresh_token`)                     | `text`    | NULL                                      |                                |             |
+| `accessTokenExpiresAt` (`access_token_expires_at`)   | `integer` | NULL                                      |                                |             |
+| `refreshTokenExpiresAt` (`refresh_token_expires_at`) | `integer` | NULL                                      |                                |             |
+| `scope`                                              | `text`    | NULL                                      |                                |             |
+| `idToken` (`id_token`)                               | `text`    | NULL                                      |                                |             |
+| `password`                                           | `text`    | NULL                                      |                                |             |
 
 #### Definition
 
@@ -2392,6 +3082,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "auth_accounts" as "d0"
 ```
 
+**Find by primary key**: One row of accountsTable, through the relational query API.
+
+```ts
+db.query.accountsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."user_id" as "userId", "d0"."account_id" as "accountId", "d0"."provider_id" as "providerId", "d0"."access_token" as "accessToken", "d0"."refresh_token" as "refreshToken", "d0"."access_token_expires_at" as "accessTokenExpiresAt", "d0"."refresh_token_expires_at" as "refreshTokenExpiresAt", "d0"."scope" as "scope", "d0"."id_token" as "idToken", "d0"."password" as "password"
+from "auth_accounts" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to accountsTable, giving the columns that have no default.
 
 ```ts
@@ -2401,7 +3105,32 @@ db.insert(accountsTable).values({ accountId: "accountId", providerId: "providerI
 ```sql
 insert into "auth_accounts" ("id", "created_at", "updated_at", "user_id", "account_id", "provider_id", "access_token", "refresh_token", "access_token_expires_at", "refresh_token_expires_at", "scope", "id_token", "password")
 values (?, ?, ?, null, ?, ?, null, null, null, null, null, null, null)
--- params: ["auth_acc_aajqxp06wlba5a5895681law",1767225600000,1767225600000,"accountId","providerId"]
+-- params: ["auth_acc_a0wwp0b4jq4haz8f9jxhpjqv",1767225600000,1767225600000,"accountId","providerId"]
+```
+
+**Update**: Changes a row of accountsTable, found by its primary key.
+
+```ts
+db.update(accountsTable).set({ createdAt: 1 }).where(eq(accountsTable.id, "id"));
+```
+
+```sql
+update "auth_accounts"
+set "created_at" = ?, "updated_at" = ?
+where "auth_accounts"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of accountsTable, found by its primary key.
+
+```ts
+db.delete(accountsTable).where(eq(accountsTable.id, "id"));
+```
+
+```sql
+delete from "auth_accounts"
+where "auth_accounts"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2414,11 +3143,14 @@ Table `auth_verifications`.
 
 ![verificationsTable](tables/verificationsTable.svg)
 
-| Column                     | Type      | Constraints | Default | Description |
-| -------------------------- | --------- | ----------- | ------- | ----------- |
-| `identifier`               | `text`    | NOT NULL    |         |             |
-| `value`                    | `text`    | NOT NULL    |         |             |
-| `expiresAt` (`expires_at`) | `integer` | NOT NULL    |         |             |
+| Column                     | Type      | Constraints | Default                        | Description |
+| -------------------------- | --------- | ----------- | ------------------------------ | ----------- |
+| `id`                       | `text`    | PK NOT NULL | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`) | `integer` | NOT NULL    | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`) | `integer` | NOT NULL    | `.$defaultFn()` `.$onUpdate()` |             |
+| `identifier`               | `text`    | NOT NULL    |                                |             |
+| `value`                    | `text`    | NOT NULL    |                                |             |
+| `expiresAt` (`expires_at`) | `integer` | NOT NULL    |                                |             |
 
 #### Definition
 
@@ -2469,6 +3201,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "auth_verifications" as "d0"
 ```
 
+**Find by primary key**: One row of verificationsTable, through the relational query API.
+
+```ts
+db.query.verificationsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."identifier" as "identifier", "d0"."value" as "value", "d0"."expires_at" as "expiresAt"
+from "auth_verifications" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to verificationsTable, giving the columns that have no default.
 
 ```ts
@@ -2478,7 +3224,32 @@ db.insert(verificationsTable).values({ identifier: "identifier", value: "value",
 ```sql
 insert into "auth_verifications" ("id", "created_at", "updated_at", "identifier", "value", "expires_at")
 values (?, ?, ?, ?, ?, ?)
--- params: ["auth_ver_avnf3rfe10ljc0oaj93nfcw5",1767225600000,1767225600000,"identifier","value",1]
+-- params: ["auth_ver_a4visnysr2lt8bs7b69l927z",1767225600000,1767225600000,"identifier","value",1]
+```
+
+**Update**: Changes a row of verificationsTable, found by its primary key.
+
+```ts
+db.update(verificationsTable).set({ createdAt: 1 }).where(eq(verificationsTable.id, "id"));
+```
+
+```sql
+update "auth_verifications"
+set "created_at" = ?, "updated_at" = ?
+where "auth_verifications"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of verificationsTable, found by its primary key.
+
+```ts
+db.delete(verificationsTable).where(eq(verificationsTable.id, "id"));
+```
+
+```sql
+delete from "auth_verifications"
+where "auth_verifications"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2491,12 +3262,15 @@ Table `auth_two_factor`.
 
 ![twoFactorTable and the tables it relates to](tables/twoFactorTable.svg)
 
-| Column                         | Type      | Constraints                               | Default          | Description                                                                                                                                                                                                 |
-| ------------------------------ | --------- | ----------------------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `userId` (`user_id`)           | `text`    | NULL → [usersTable.id](#table-usersTable) |                  |                                                                                                                                                                                                             |
-| `secret`                       | `text`    | NULL                                      |                  |                                                                                                                                                                                                             |
-| `backupCodes` (`backup_codes`) | `text`    | NULL                                      |                  |                                                                                                                                                                                                             |
-| `verified`                     | `integer` | NOT NULL                                  | `.default(true)` | Default to true for backfill purposes from better auth : https://github.com/better-auth/better-auth/blob/4cbc823e694c1adb10ef26cf8294263453a156d3/packages/better-auth/src/plugins/two-factor/schema.ts#L42 |
+| Column                         | Type      | Constraints                               | Default                        | Description                                                                                                                                                                                                 |
+| ------------------------------ | --------- | ----------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                           | `text`    | PK NOT NULL                               | `.$defaultFn()`                |                                                                                                                                                                                                             |
+| `createdAt` (`created_at`)     | `integer` | NOT NULL                                  | `.$defaultFn()`                |                                                                                                                                                                                                             |
+| `updatedAt` (`updated_at`)     | `integer` | NOT NULL                                  | `.$defaultFn()` `.$onUpdate()` |                                                                                                                                                                                                             |
+| `userId` (`user_id`)           | `text`    | NULL → [usersTable.id](#table-usersTable) |                                |                                                                                                                                                                                                             |
+| `secret`                       | `text`    | NULL                                      |                                |                                                                                                                                                                                                             |
+| `backupCodes` (`backup_codes`) | `text`    | NULL                                      |                                |                                                                                                                                                                                                             |
+| `verified`                     | `integer` | NOT NULL                                  | `.default(true)`               | Default to true for backfill purposes from better auth : https://github.com/better-auth/better-auth/blob/4cbc823e694c1adb10ef26cf8294263453a156d3/packages/better-auth/src/plugins/two-factor/schema.ts#L42 |
 
 #### Definition
 
@@ -2553,6 +3327,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "auth_two_factor" as "d0"
 ```
 
+**Find by primary key**: One row of twoFactorTable, through the relational query API.
+
+```ts
+db.query.twoFactorTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."user_id" as "userId", "d0"."secret" as "secret", "d0"."backup_codes" as "backupCodes", "d0"."verified" as "verified"
+from "auth_two_factor" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to twoFactorTable, giving the columns that have no default.
 
 ```ts
@@ -2562,7 +3350,32 @@ db.insert(twoFactorTable).values({});
 ```sql
 insert into "auth_two_factor" ("id", "created_at", "updated_at", "user_id", "secret", "backup_codes", "verified")
 values (?, ?, ?, null, null, null, ?)
--- params: ["auth_2fa_aqroaoamgdeixhrd6cyoqllo",1767225600000,1767225600000,1]
+-- params: ["auth_2fa_aj2b13nbmgmstn8w53b4e7y5",1767225600000,1767225600000,1]
+```
+
+**Update**: Changes a row of twoFactorTable, found by its primary key.
+
+```ts
+db.update(twoFactorTable).set({ createdAt: 1 }).where(eq(twoFactorTable.id, "id"));
+```
+
+```sql
+update "auth_two_factor"
+set "created_at" = ?, "updated_at" = ?
+where "auth_two_factor"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of twoFactorTable, found by its primary key.
+
+```ts
+db.delete(twoFactorTable).where(eq(twoFactorTable.id, "id"));
+```
+
+```sql
+delete from "auth_two_factor"
+where "auth_two_factor"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2656,12 +3469,15 @@ Table `intake_emails`.
 
 ![intakeEmailsTable and the tables it relates to](tables/intakeEmailsTable.svg)
 
-| Column                               | Type      | Constraints                                                   | Default          | Description |
-| ------------------------------------ | --------- | ------------------------------------------------------------- | ---------------- | ----------- |
-| `emailAddress` (`email_address`)     | `text`    | UNIQUE NOT NULL                                               |                  |             |
-| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                  |             |
-| `allowedOrigins` (`allowed_origins`) | `text`    | NOT NULL                                                      | `.default([])`   |             |
-| `isEnabled` (`is_enabled`)           | `integer` | NOT NULL                                                      | `.default(true)` |             |
+| Column                               | Type      | Constraints                                                   | Default                        | Description |
+| ------------------------------------ | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `emailAddress` (`email_address`)     | `text`    | UNIQUE NOT NULL                                               |                                |             |
+| `organizationId` (`organization_id`) | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `allowedOrigins` (`allowed_origins`) | `text`    | NOT NULL                                                      | `.default([])`                 |             |
+| `isEnabled` (`is_enabled`)           | `integer` | NOT NULL                                                      | `.default(true)`               |             |
 
 #### Definition
 
@@ -2718,6 +3534,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "intake_emails" as "d0"
 ```
 
+**Find by primary key**: One row of intakeEmailsTable, through the relational query API.
+
+```ts
+db.query.intakeEmailsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."email_address" as "emailAddress", "d0"."organization_id" as "organizationId", "d0"."allowed_origins" as "allowedOrigins", "d0"."is_enabled" as "isEnabled"
+from "intake_emails" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to intakeEmailsTable, giving the columns that have no default.
 
 ```ts
@@ -2730,7 +3560,32 @@ db.insert(intakeEmailsTable).values({
 ```sql
 insert into "intake_emails" ("id", "created_at", "updated_at", "email_address", "organization_id", "allowed_origins", "is_enabled")
 values (?, ?, ?, ?, ?, ?, ?)
--- params: ["ie_a7sujf7wdcfxxthk437qlwtm",1767225600000,1767225600000,"emailAddress","organizationId","[]",1]
+-- params: ["ie_ad90v59zqiaortyhthp6ij5x",1767225600000,1767225600000,"emailAddress","organizationId","[]",1]
+```
+
+**Update**: Changes a row of intakeEmailsTable, found by its primary key.
+
+```ts
+db.update(intakeEmailsTable).set({ createdAt: 1 }).where(eq(intakeEmailsTable.id, "id"));
+```
+
+```sql
+update "intake_emails"
+set "created_at" = ?, "updated_at" = ?
+where "intake_emails"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of intakeEmailsTable, found by its primary key.
+
+```ts
+db.delete(intakeEmailsTable).where(eq(intakeEmailsTable.id, "id"));
+```
+
+```sql
+delete from "intake_emails"
+where "intake_emails"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2743,13 +3598,16 @@ Table `organization_settings`.
 
 ![organizationSettingsTable and the tables it relates to](tables/organizationSettingsTable.svg)
 
-| Column                                                                  | Type      | Constraints                                                          | Default | Description                       |
-| ----------------------------------------------------------------------- | --------- | -------------------------------------------------------------------- | ------- | --------------------------------- |
-| `organizationId` (`organization_id`)                                    | `text`    | UNIQUE NOT NULL → [organizationsTable.id](#table-organizationsTable) |         | One settings row per organization |
-| `aiAutoTaggingEnabled` (`ai_auto_tagging_enabled`)                      | `integer` | NULL                                                                 |         | AI auto-tagging settings          |
-| `aiAutoTaggingCanCreateNewTags` (`ai_auto_tagging_can_create_new_tags`) | `integer` | NULL                                                                 |         |                                   |
-| `aiAutoTaggingMaxTags` (`ai_auto_tagging_max_tags`)                     | `integer` | NULL                                                                 |         |                                   |
-| `aiAutoTaggingModelId` (`ai_auto_tagging_model_id`)                     | `text`    | NULL                                                                 |         |                                   |
+| Column                                                                  | Type      | Constraints                                                          | Default                        | Description                       |
+| ----------------------------------------------------------------------- | --------- | -------------------------------------------------------------------- | ------------------------------ | --------------------------------- |
+| `id`                                                                    | `text`    | PK NOT NULL                                                          | `.$defaultFn()`                |                                   |
+| `createdAt` (`created_at`)                                              | `integer` | NOT NULL                                                             | `.$defaultFn()`                |                                   |
+| `updatedAt` (`updated_at`)                                              | `integer` | NOT NULL                                                             | `.$defaultFn()` `.$onUpdate()` |                                   |
+| `organizationId` (`organization_id`)                                    | `text`    | UNIQUE NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                | One settings row per organization |
+| `aiAutoTaggingEnabled` (`ai_auto_tagging_enabled`)                      | `integer` | NULL                                                                 |                                | AI auto-tagging settings          |
+| `aiAutoTaggingCanCreateNewTags` (`ai_auto_tagging_can_create_new_tags`) | `integer` | NULL                                                                 |                                |                                   |
+| `aiAutoTaggingMaxTags` (`ai_auto_tagging_max_tags`)                     | `integer` | NULL                                                                 |                                |                                   |
+| `aiAutoTaggingModelId` (`ai_auto_tagging_model_id`)                     | `text`    | NULL                                                                 |                                |                                   |
 
 #### Definition
 
@@ -2807,6 +3665,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "organization_settings" as "d0"
 ```
 
+**Find by primary key**: One row of organizationSettingsTable, through the relational query API.
+
+```ts
+db.query.organizationSettingsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."ai_auto_tagging_enabled" as "aiAutoTaggingEnabled", "d0"."ai_auto_tagging_can_create_new_tags" as "aiAutoTaggingCanCreateNewTags", "d0"."ai_auto_tagging_max_tags" as "aiAutoTaggingMaxTags", "d0"."ai_auto_tagging_model_id" as "aiAutoTaggingModelId"
+from "organization_settings" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to organizationSettingsTable, giving the columns that have no default.
 
 ```ts
@@ -2816,7 +3688,34 @@ db.insert(organizationSettingsTable).values({ organizationId: "organizationId" }
 ```sql
 insert into "organization_settings" ("id", "created_at", "updated_at", "organization_id", "ai_auto_tagging_enabled", "ai_auto_tagging_can_create_new_tags", "ai_auto_tagging_max_tags", "ai_auto_tagging_model_id")
 values (?, ?, ?, ?, null, null, null, null)
--- params: ["org_set_a3f9w0pn3r9yu0ojbi8txv8p",1767225600000,1767225600000,"organizationId"]
+-- params: ["org_set_az95fj6guz6s4qg5xcizquuj",1767225600000,1767225600000,"organizationId"]
+```
+
+**Update**: Changes a row of organizationSettingsTable, found by its primary key.
+
+```ts
+db.update(organizationSettingsTable)
+  .set({ createdAt: 1 })
+  .where(eq(organizationSettingsTable.id, "id"));
+```
+
+```sql
+update "organization_settings"
+set "created_at" = ?, "updated_at" = ?
+where "organization_settings"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of organizationSettingsTable, found by its primary key.
+
+```ts
+db.delete(organizationSettingsTable).where(eq(organizationSettingsTable.id, "id"));
+```
+
+```sql
+delete from "organization_settings"
+where "organization_settings"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2829,14 +3728,17 @@ Table `user_plan_entitlements`.
 
 ![planEntitlementsTable and the tables it relates to](tables/planEntitlementsTable.svg)
 
-| Column                                | Type      | Constraints                                   | Default | Description |
-| ------------------------------------- | --------- | --------------------------------------------- | ------- | ----------- |
-| `grantedAt` (`granted_at`)            | `integer` | NOT NULL                                      |         |             |
-| `expiresAt` (`expires_at`)            | `integer` | NULL                                          |         |             |
-| `lastVerifiedAt` (`last_verified_at`) | `integer` | NULL                                          |         |             |
-| `userId` (`user_id`)                  | `text`    | NOT NULL → [usersTable.id](#table-usersTable) |         |             |
-| `type`                                | `text`    | NOT NULL                                      |         |             |
-| `source`                              | `text`    | NOT NULL                                      |         |             |
+| Column                                | Type      | Constraints                                   | Default                        | Description |
+| ------------------------------------- | --------- | --------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                  | `text`    | PK NOT NULL                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)            | `integer` | NOT NULL                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)            | `integer` | NOT NULL                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `grantedAt` (`granted_at`)            | `integer` | NOT NULL                                      |                                |             |
+| `expiresAt` (`expires_at`)            | `integer` | NULL                                          |                                |             |
+| `lastVerifiedAt` (`last_verified_at`) | `integer` | NULL                                          |                                |             |
+| `userId` (`user_id`)                  | `text`    | NOT NULL → [usersTable.id](#table-usersTable) |                                |             |
+| `type`                                | `text`    | NOT NULL                                      |                                |             |
+| `source`                              | `text`    | NOT NULL                                      |                                |             |
 
 #### Definition
 
@@ -2895,6 +3797,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "user_plan_entitlements" as "d0"
 ```
 
+**Find by primary key**: One row of planEntitlementsTable, through the relational query API.
+
+```ts
+db.query.planEntitlementsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."granted_at" as "grantedAt", "d0"."expires_at" as "expiresAt", "d0"."last_verified_at" as "lastVerifiedAt", "d0"."user_id" as "userId", "d0"."type" as "type", "d0"."source" as "source"
+from "user_plan_entitlements" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to planEntitlementsTable, giving the columns that have no default.
 
 ```ts
@@ -2909,7 +3825,32 @@ db.insert(planEntitlementsTable).values({
 ```sql
 insert into "user_plan_entitlements" ("id", "created_at", "updated_at", "granted_at", "expires_at", "last_verified_at", "user_id", "type", "source")
 values (?, ?, ?, ?, null, null, ?, ?, ?)
--- params: ["pla_ent_axgyx6nj3sgg7to3xxbtjk4r",1767225600000,1767225600000,1,"userId","type","source"]
+-- params: ["pla_ent_ai8t94otr4of1mq0jegp70ak",1767225600000,1767225600000,1,"userId","type","source"]
+```
+
+**Update**: Changes a row of planEntitlementsTable, found by its primary key.
+
+```ts
+db.update(planEntitlementsTable).set({ createdAt: 1 }).where(eq(planEntitlementsTable.id, "id"));
+```
+
+```sql
+update "user_plan_entitlements"
+set "created_at" = ?, "updated_at" = ?
+where "user_plan_entitlements"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of planEntitlementsTable, found by its primary key.
+
+```ts
+db.delete(planEntitlementsTable).where(eq(planEntitlementsTable.id, "id"));
+```
+
+```sql
+delete from "user_plan_entitlements"
+where "user_plan_entitlements"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -2922,17 +3863,19 @@ Table `organization_subscriptions`.
 
 ![organizationSubscriptionsTable and the tables it relates to](tables/organizationSubscriptionsTable.svg)
 
-| Column                                        | Type      | Constraints                                                   | Default           | Description                                  |
-| --------------------------------------------- | --------- | ------------------------------------------------------------- | ----------------- | -------------------------------------------- |
-| `id`                                          | `text`    | PK NOT NULL                                                   |                   | stripe subscription id, no auto-generated id |
-| `customerId` (`customer_id`)                  | `text`    | NOT NULL                                                      |                   |                                              |
-| `organizationId` (`organization_id`)          | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                   |                                              |
-| `planId` (`plan_id`)                          | `text`    | NOT NULL                                                      |                   |                                              |
-| `status`                                      | `text`    | NOT NULL                                                      |                   |                                              |
-| `seatsCount` (`seats_count`)                  | `integer` | NOT NULL                                                      |                   |                                              |
-| `currentPeriodEnd` (`current_period_end`)     | `integer` | NOT NULL                                                      |                   |                                              |
-| `currentPeriodStart` (`current_period_start`) | `integer` | NOT NULL                                                      |                   |                                              |
-| `cancelAtPeriodEnd` (`cancel_at_period_end`)  | `integer` | NOT NULL                                                      | `.default(false)` |                                              |
+| Column                                        | Type      | Constraints                                                   | Default                        | Description                                  |
+| --------------------------------------------- | --------- | ------------------------------------------------------------- | ------------------------------ | -------------------------------------------- |
+| `id`                                          | `text`    | PK NOT NULL                                                   |                                | stripe subscription id, no auto-generated id |
+| `customerId` (`customer_id`)                  | `text`    | NOT NULL                                                      |                                |                                              |
+| `organizationId` (`organization_id`)          | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |                                              |
+| `planId` (`plan_id`)                          | `text`    | NOT NULL                                                      |                                |                                              |
+| `status`                                      | `text`    | NOT NULL                                                      |                                |                                              |
+| `seatsCount` (`seats_count`)                  | `integer` | NOT NULL                                                      |                                |                                              |
+| `currentPeriodEnd` (`current_period_end`)     | `integer` | NOT NULL                                                      |                                |                                              |
+| `currentPeriodStart` (`current_period_start`) | `integer` | NOT NULL                                                      |                                |                                              |
+| `cancelAtPeriodEnd` (`cancel_at_period_end`)  | `integer` | NOT NULL                                                      | `.default(false)`              |                                              |
+| `createdAt` (`created_at`)                    | `integer` | NOT NULL                                                      | `.$defaultFn()`                |                                              |
+| `updatedAt` (`updated_at`)                    | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |                                              |
 
 #### Definition
 
@@ -3065,13 +4008,16 @@ Table `tagging_rules`.
 
 ![taggingRulesTable and the tables it relates to](tables/taggingRulesTable.svg)
 
-| Column                                        | Type      | Constraints                                                   | Default           | Description |
-| --------------------------------------------- | --------- | ------------------------------------------------------------- | ----------------- | ----------- |
-| `organizationId` (`organization_id`)          | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                   |             |
-| `name`                                        | `text`    | NOT NULL                                                      |                   |             |
-| `description`                                 | `text`    | NULL                                                          |                   |             |
-| `enabled`                                     | `integer` | NOT NULL                                                      | `.default(true)`  |             |
-| `conditionMatchMode` (`condition_match_mode`) | `text`    | NOT NULL                                                      | `.default('all')` |             |
+| Column                                        | Type      | Constraints                                                   | Default                        | Description |
+| --------------------------------------------- | --------- | ------------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                          | `text`    | PK NOT NULL                                                   | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)                    | `integer` | NOT NULL                                                      | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)                    | `integer` | NOT NULL                                                      | `.$defaultFn()` `.$onUpdate()` |             |
+| `organizationId` (`organization_id`)          | `text`    | NOT NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
+| `name`                                        | `text`    | NOT NULL                                                      |                                |             |
+| `description`                                 | `text`    | NULL                                                          |                                |             |
+| `enabled`                                     | `integer` | NOT NULL                                                      | `.default(true)`               |             |
+| `conditionMatchMode` (`condition_match_mode`) | `text`    | NOT NULL                                                      | `.default('all')`              |             |
 
 #### Definition
 
@@ -3134,6 +4080,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "tagging_rules" as "d0"
 ```
 
+**Find by primary key**: One row of taggingRulesTable, through the relational query API.
+
+```ts
+db.query.taggingRulesTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."organization_id" as "organizationId", "d0"."name" as "name", "d0"."description" as "description", "d0"."enabled" as "enabled", "d0"."condition_match_mode" as "conditionMatchMode"
+from "tagging_rules" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to taggingRulesTable, giving the columns that have no default.
 
 ```ts
@@ -3143,7 +4103,32 @@ db.insert(taggingRulesTable).values({ organizationId: "organizationId", name: "n
 ```sql
 insert into "tagging_rules" ("id", "created_at", "updated_at", "organization_id", "name", "description", "enabled", "condition_match_mode")
 values (?, ?, ?, ?, ?, null, ?, ?)
--- params: ["tr_ahdvh4h7sogg27hdfdq4and5",1767225600000,1767225600000,"organizationId","name",1,"all"]
+-- params: ["tr_aiz9tds52omd8i70ekeoo6by",1767225600000,1767225600000,"organizationId","name",1,"all"]
+```
+
+**Update**: Changes a row of taggingRulesTable, found by its primary key.
+
+```ts
+db.update(taggingRulesTable).set({ createdAt: 1 }).where(eq(taggingRulesTable.id, "id"));
+```
+
+```sql
+update "tagging_rules"
+set "created_at" = ?, "updated_at" = ?
+where "tagging_rules"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of taggingRulesTable, found by its primary key.
+
+```ts
+db.delete(taggingRulesTable).where(eq(taggingRulesTable.id, "id"));
+```
+
+```sql
+delete from "tagging_rules"
+where "tagging_rules"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -3156,13 +4141,16 @@ Table `tagging_rule_conditions`.
 
 ![taggingRuleConditionsTable and the tables it relates to](tables/taggingRuleConditionsTable.svg)
 
-| Column                                  | Type      | Constraints                                                 | Default           | Description |
-| --------------------------------------- | --------- | ----------------------------------------------------------- | ----------------- | ----------- |
-| `taggingRuleId` (`tagging_rule_id`)     | `text`    | NOT NULL → [taggingRulesTable.id](#table-taggingRulesTable) |                   |             |
-| `field`                                 | `text`    | NOT NULL                                                    |                   |             |
-| `operator`                              | `text`    | NOT NULL                                                    |                   |             |
-| `value`                                 | `text`    | NOT NULL                                                    |                   |             |
-| `isCaseSensitive` (`is_case_sensitive`) | `integer` | NOT NULL                                                    | `.default(false)` |             |
+| Column                                  | Type      | Constraints                                                 | Default                        | Description |
+| --------------------------------------- | --------- | ----------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                    | `text`    | PK NOT NULL                                                 | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)              | `integer` | NOT NULL                                                    | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)              | `integer` | NOT NULL                                                    | `.$defaultFn()` `.$onUpdate()` |             |
+| `taggingRuleId` (`tagging_rule_id`)     | `text`    | NOT NULL → [taggingRulesTable.id](#table-taggingRulesTable) |                                |             |
+| `field`                                 | `text`    | NOT NULL                                                    |                                |             |
+| `operator`                              | `text`    | NOT NULL                                                    |                                |             |
+| `value`                                 | `text`    | NOT NULL                                                    |                                |             |
+| `isCaseSensitive` (`is_case_sensitive`) | `integer` | NOT NULL                                                    | `.default(false)`              |             |
 
 #### Definition
 
@@ -3220,6 +4208,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "tagging_rule_conditions" as "d0"
 ```
 
+**Find by primary key**: One row of taggingRuleConditionsTable, through the relational query API.
+
+```ts
+db.query.taggingRuleConditionsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."tagging_rule_id" as "taggingRuleId", "d0"."field" as "field", "d0"."operator" as "operator", "d0"."value" as "value", "d0"."is_case_sensitive" as "isCaseSensitive"
+from "tagging_rule_conditions" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to taggingRuleConditionsTable, giving the columns that have no default.
 
 ```ts
@@ -3234,7 +4236,34 @@ db.insert(taggingRuleConditionsTable).values({
 ```sql
 insert into "tagging_rule_conditions" ("id", "created_at", "updated_at", "tagging_rule_id", "field", "operator", "value", "is_case_sensitive")
 values (?, ?, ?, ?, ?, ?, ?, ?)
--- params: ["trc_a7nstwc1zp5yhv6cv3ogvj2y",1767225600000,1767225600000,"taggingRuleId","field","operator","value",0]
+-- params: ["trc_apu6v2s00txba27iz7to1x5u",1767225600000,1767225600000,"taggingRuleId","field","operator","value",0]
+```
+
+**Update**: Changes a row of taggingRuleConditionsTable, found by its primary key.
+
+```ts
+db.update(taggingRuleConditionsTable)
+  .set({ createdAt: 1 })
+  .where(eq(taggingRuleConditionsTable.id, "id"));
+```
+
+```sql
+update "tagging_rule_conditions"
+set "created_at" = ?, "updated_at" = ?
+where "tagging_rule_conditions"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of taggingRuleConditionsTable, found by its primary key.
+
+```ts
+db.delete(taggingRuleConditionsTable).where(eq(taggingRuleConditionsTable.id, "id"));
+```
+
+```sql
+delete from "tagging_rule_conditions"
+where "tagging_rule_conditions"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -3247,10 +4276,13 @@ Table `tagging_rule_actions`.
 
 ![taggingRuleActionsTable and the tables it relates to](tables/taggingRuleActionsTable.svg)
 
-| Column                              | Type   | Constraints                                                 | Default | Description |
-| ----------------------------------- | ------ | ----------------------------------------------------------- | ------- | ----------- |
-| `taggingRuleId` (`tagging_rule_id`) | `text` | NOT NULL → [taggingRulesTable.id](#table-taggingRulesTable) |         |             |
-| `tagId` (`tag_id`)                  | `text` | NOT NULL → [tagsTable.id](#table-tagsTable)                 |         |             |
+| Column                              | Type      | Constraints                                                 | Default                        | Description |
+| ----------------------------------- | --------- | ----------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                | `text`    | PK NOT NULL                                                 | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)          | `integer` | NOT NULL                                                    | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)          | `integer` | NOT NULL                                                    | `.$defaultFn()` `.$onUpdate()` |             |
+| `taggingRuleId` (`tagging_rule_id`) | `text`    | NOT NULL → [taggingRulesTable.id](#table-taggingRulesTable) |                                |             |
+| `tagId` (`tag_id`)                  | `text`    | NOT NULL → [tagsTable.id](#table-tagsTable)                 |                                |             |
 
 #### Definition
 
@@ -3307,6 +4339,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "tagging_rule_actions" as "d0"
 ```
 
+**Find by primary key**: One row of taggingRuleActionsTable, through the relational query API.
+
+```ts
+db.query.taggingRuleActionsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."tagging_rule_id" as "taggingRuleId", "d0"."tag_id" as "tagId"
+from "tagging_rule_actions" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to taggingRuleActionsTable, giving the columns that have no default.
 
 ```ts
@@ -3316,7 +4362,34 @@ db.insert(taggingRuleActionsTable).values({ taggingRuleId: "taggingRuleId", tagI
 ```sql
 insert into "tagging_rule_actions" ("id", "created_at", "updated_at", "tagging_rule_id", "tag_id")
 values (?, ?, ?, ?, ?)
--- params: ["tra_az5wnjlnibxl9a3jp2zqq374",1767225600000,1767225600000,"taggingRuleId","tagId"]
+-- params: ["tra_aed9hg280huq51tps21wkqa3",1767225600000,1767225600000,"taggingRuleId","tagId"]
+```
+
+**Update**: Changes a row of taggingRuleActionsTable, found by its primary key.
+
+```ts
+db.update(taggingRuleActionsTable)
+  .set({ createdAt: 1 })
+  .where(eq(taggingRuleActionsTable.id, "id"));
+```
+
+```sql
+update "tagging_rule_actions"
+set "created_at" = ?, "updated_at" = ?
+where "tagging_rule_actions"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of taggingRuleActionsTable, found by its primary key.
+
+```ts
+db.delete(taggingRuleActionsTable).where(eq(taggingRuleActionsTable.id, "id"));
+```
+
+```sql
+delete from "tagging_rule_actions"
+where "tagging_rule_actions"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -3329,14 +4402,17 @@ Table `webhooks`.
 
 ![webhooksTable and the tables it relates to](tables/webhooksTable.svg)
 
-| Column                               | Type      | Constraints                                               | Default          | Description |
-| ------------------------------------ | --------- | --------------------------------------------------------- | ---------------- | ----------- |
-| `name`                               | `text`    | NOT NULL                                                  |                  |             |
-| `url`                                | `text`    | NOT NULL                                                  |                  |             |
-| `secret`                             | `text`    | NULL                                                      |                  |             |
-| `enabled`                            | `integer` | NOT NULL                                                  | `.default(true)` |             |
-| `createdBy` (`created_by`)           | `text`    | NULL → [usersTable.id](#table-usersTable)                 |                  |             |
-| `organizationId` (`organization_id`) | `text`    | NULL → [organizationsTable.id](#table-organizationsTable) |                  |             |
+| Column                               | Type      | Constraints                                               | Default                        | Description |
+| ------------------------------------ | --------- | --------------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                 | `text`    | PK NOT NULL                                               | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)           | `integer` | NOT NULL                                                  | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)           | `integer` | NOT NULL                                                  | `.$defaultFn()` `.$onUpdate()` |             |
+| `name`                               | `text`    | NOT NULL                                                  |                                |             |
+| `url`                                | `text`    | NOT NULL                                                  |                                |             |
+| `secret`                             | `text`    | NULL                                                      |                                |             |
+| `enabled`                            | `integer` | NOT NULL                                                  | `.default(true)`               |             |
+| `createdBy` (`created_by`)           | `text`    | NULL → [usersTable.id](#table-usersTable)                 |                                |             |
+| `organizationId` (`organization_id`) | `text`    | NULL → [organizationsTable.id](#table-organizationsTable) |                                |             |
 
 #### Definition
 
@@ -3402,6 +4478,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "webhooks" as "d0"
 ```
 
+**Find by primary key**: One row of webhooksTable, through the relational query API.
+
+```ts
+db.query.webhooksTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."name" as "name", "d0"."url" as "url", "d0"."secret" as "secret", "d0"."enabled" as "enabled", "d0"."created_by" as "createdBy", "d0"."organization_id" as "organizationId"
+from "webhooks" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to webhooksTable, giving the columns that have no default.
 
 ```ts
@@ -3411,7 +4501,32 @@ db.insert(webhooksTable).values({ name: "name", url: "url" });
 ```sql
 insert into "webhooks" ("id", "created_at", "updated_at", "name", "url", "secret", "enabled", "created_by", "organization_id")
 values (?, ?, ?, ?, ?, null, ?, null, null)
--- params: ["wbh_alg4jzpigvv28vp2lpduia5q",1767225600000,1767225600000,"name","url",1]
+-- params: ["wbh_ahdcy3crmvqgh2sgz95e45og",1767225600000,1767225600000,"name","url",1]
+```
+
+**Update**: Changes a row of webhooksTable, found by its primary key.
+
+```ts
+db.update(webhooksTable).set({ createdAt: 1 }).where(eq(webhooksTable.id, "id"));
+```
+
+```sql
+update "webhooks"
+set "created_at" = ?, "updated_at" = ?
+where "webhooks"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of webhooksTable, found by its primary key.
+
+```ts
+db.delete(webhooksTable).where(eq(webhooksTable.id, "id"));
+```
+
+```sql
+delete from "webhooks"
+where "webhooks"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -3424,10 +4539,13 @@ Table `webhook_events`.
 
 ![webhookEventsTable and the tables it relates to](tables/webhookEventsTable.svg)
 
-| Column                     | Type   | Constraints                                         | Default | Description |
-| -------------------------- | ------ | --------------------------------------------------- | ------- | ----------- |
-| `webhookId` (`webhook_id`) | `text` | NOT NULL → [webhooksTable.id](#table-webhooksTable) |         |             |
-| `eventName` (`event_name`) | `text` | NOT NULL                                            |         |             |
+| Column                     | Type      | Constraints                                         | Default                        | Description |
+| -------------------------- | --------- | --------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                       | `text`    | PK NOT NULL                                         | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`) | `integer` | NOT NULL                                            | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`) | `integer` | NOT NULL                                            | `.$defaultFn()` `.$onUpdate()` |             |
+| `webhookId` (`webhook_id`) | `text`    | NOT NULL → [webhooksTable.id](#table-webhooksTable) |                                |             |
+| `eventName` (`event_name`) | `text`    | NOT NULL                                            |                                |             |
 
 #### Definition
 
@@ -3482,6 +4600,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "webhook_events" as "d0"
 ```
 
+**Find by primary key**: One row of webhookEventsTable, through the relational query API.
+
+```ts
+db.query.webhookEventsTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."webhook_id" as "webhookId", "d0"."event_name" as "eventName"
+from "webhook_events" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to webhookEventsTable, giving the columns that have no default.
 
 ```ts
@@ -3491,7 +4623,32 @@ db.insert(webhookEventsTable).values({ webhookId: "webhookId", eventName: "event
 ```sql
 insert into "webhook_events" ("id", "created_at", "updated_at", "webhook_id", "event_name")
 values (?, ?, ?, ?, ?)
--- params: ["wbh_ev_a1a3lutsg1lm896bf7fn79l3",1767225600000,1767225600000,"webhookId","eventName"]
+-- params: ["wbh_ev_anx214ocj10p3y46o0n0fmfh",1767225600000,1767225600000,"webhookId","eventName"]
+```
+
+**Update**: Changes a row of webhookEventsTable, found by its primary key.
+
+```ts
+db.update(webhookEventsTable).set({ createdAt: 1 }).where(eq(webhookEventsTable.id, "id"));
+```
+
+```sql
+update "webhook_events"
+set "created_at" = ?, "updated_at" = ?
+where "webhook_events"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of webhookEventsTable, found by its primary key.
+
+```ts
+db.delete(webhookEventsTable).where(eq(webhookEventsTable.id, "id"));
+```
+
+```sql
+delete from "webhook_events"
+where "webhook_events"."id" = ?
+-- params: ["id"]
 ```
 
 </details>
@@ -3504,13 +4661,16 @@ Table `webhook_deliveries`.
 
 ![webhookDeliveriesTable and the tables it relates to](tables/webhookDeliveriesTable.svg)
 
-| Column                                 | Type      | Constraints                                         | Default | Description |
-| -------------------------------------- | --------- | --------------------------------------------------- | ------- | ----------- |
-| `webhookId` (`webhook_id`)             | `text`    | NOT NULL → [webhooksTable.id](#table-webhooksTable) |         |             |
-| `eventName` (`event_name`)             | `text`    | NOT NULL                                            |         |             |
-| `requestPayload` (`request_payload`)   | `text`    | NOT NULL                                            |         |             |
-| `responsePayload` (`response_payload`) | `text`    | NOT NULL                                            |         |             |
-| `responseStatus` (`response_status`)   | `integer` | NOT NULL                                            |         |             |
+| Column                                 | Type      | Constraints                                         | Default                        | Description |
+| -------------------------------------- | --------- | --------------------------------------------------- | ------------------------------ | ----------- |
+| `id`                                   | `text`    | PK NOT NULL                                         | `.$defaultFn()`                |             |
+| `createdAt` (`created_at`)             | `integer` | NOT NULL                                            | `.$defaultFn()`                |             |
+| `updatedAt` (`updated_at`)             | `integer` | NOT NULL                                            | `.$defaultFn()` `.$onUpdate()` |             |
+| `webhookId` (`webhook_id`)             | `text`    | NOT NULL → [webhooksTable.id](#table-webhooksTable) |                                |             |
+| `eventName` (`event_name`)             | `text`    | NOT NULL                                            |                                |             |
+| `requestPayload` (`request_payload`)   | `text`    | NOT NULL                                            |                                |             |
+| `responsePayload` (`response_payload`) | `text`    | NOT NULL                                            |                                |             |
+| `responseStatus` (`response_status`)   | `integer` | NOT NULL                                            |                                |             |
 
 #### Definition
 
@@ -3568,6 +4728,20 @@ select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as
 from "webhook_deliveries" as "d0"
 ```
 
+**Find by primary key**: One row of webhookDeliveriesTable, through the relational query API.
+
+```ts
+db.query.webhookDeliveriesTable.findFirst({ where: { id: "id" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."webhook_id" as "webhookId", "d0"."event_name" as "eventName", "d0"."request_payload" as "requestPayload", "d0"."response_payload" as "responsePayload", "d0"."response_status" as "responseStatus"
+from "webhook_deliveries" as "d0"
+where "d0"."id" = ?
+limit ?
+-- params: ["id",1]
+```
+
 **Insert**: Adds a row to webhookDeliveriesTable, giving the columns that have no default.
 
 ```ts
@@ -3583,7 +4757,32 @@ db.insert(webhookDeliveriesTable).values({
 ```sql
 insert into "webhook_deliveries" ("id", "created_at", "updated_at", "webhook_id", "event_name", "request_payload", "response_payload", "response_status")
 values (?, ?, ?, ?, ?, ?, ?, ?)
--- params: ["wbh_dlv_acn0xjpbmlcgmpqbg80hq3vu",1767225600000,1767225600000,"webhookId","eventName","requestPayload","responsePayload",1]
+-- params: ["wbh_dlv_akl209fw59lz9xr97x7z05vj",1767225600000,1767225600000,"webhookId","eventName","requestPayload","responsePayload",1]
+```
+
+**Update**: Changes a row of webhookDeliveriesTable, found by its primary key.
+
+```ts
+db.update(webhookDeliveriesTable).set({ createdAt: 1 }).where(eq(webhookDeliveriesTable.id, "id"));
+```
+
+```sql
+update "webhook_deliveries"
+set "created_at" = ?, "updated_at" = ?
+where "webhook_deliveries"."id" = ?
+-- params: [1,1767225600000,"id"]
+```
+
+**Delete**: Deletes a row of webhookDeliveriesTable, found by its primary key.
+
+```ts
+db.delete(webhookDeliveriesTable).where(eq(webhookDeliveriesTable.id, "id"));
+```
+
+```sql
+delete from "webhook_deliveries"
+where "webhook_deliveries"."id" = ?
+-- params: ["id"]
 ```
 
 </details>

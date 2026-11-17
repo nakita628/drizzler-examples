@@ -141,8 +141,8 @@ erDiagram
         uuid deletedBy FK
         bigint importId FK
         bigint workspaceId FK
-        boardVisibilityEnum visibility
-        boardTypeEnum type
+        board_visibility visibility
+        board_type type
         boolean isArchived
         bigint sourceBoardId
     }
@@ -154,7 +154,7 @@ erDiagram
     board_members {
         bigint boardId PK, FK
         bigint workspaceMemberId PK, FK
-        boardMemberRoleEnum role
+        board_member_role role
         uuid createdBy FK
         timestamp createdAt
     }
@@ -177,7 +177,7 @@ erDiagram
     card_activity {
         bigserial id PK
         varchar publicId
-        activityTypeEnum type
+        card_activity_type type
         bigint cardId FK
         integer fromIndex
         integer toIndex
@@ -311,7 +311,7 @@ erDiagram
     notification {
         bigserial id PK
         varchar publicId
-        notificationTypeEnum type
+        notification_type type
         uuid userId FK
         bigint cardId FK
         bigint commentId FK
@@ -399,7 +399,7 @@ erDiagram
         varchar publicId
         bigint workspaceId FK
         varchar code
-        inviteLinkStatusEnum status
+        invite_link_status status
         timestamp expiresAt
         timestamp createdAt
         uuid createdBy FK
@@ -412,7 +412,7 @@ erDiagram
         varchar name
         text description
         varchar slug
-        workspacePlanEnum plan
+        workspace_plan plan
         boolean showEmailsToMembers
         integer weekStartDay
         varchar cardPrefix
@@ -434,13 +434,13 @@ erDiagram
         timestamp updatedAt
         timestamp deletedAt
         uuid deletedBy FK
-        memberRoleEnum role "Legacy role enum"
+        role role "Legacy role enum"
         bigint roleId FK
-        memberStatusEnum status
+        member_status status
     }
     workspace_slugs {
         varchar slug
-        slugTypeEnum type
+        slug_type type
     }
     workspace_slug_checks {
         bigserial id PK

@@ -28,4 +28,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#44](https://github.com/nakita628/drizzler/issues/44): the columns spread from `createPrimaryKeyField()` and `createTimestampColumns()` (`id`, `created_at`, `updated_at`) are missing from every table in the docs, the diagrams, the DBML and Mermaid. The refs to `id` remain, so `pnpm check:dbml` fails with `Column 'id' does not exist in Table 'public.organizations'`. The SQL has every column.
+None.

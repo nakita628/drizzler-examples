@@ -17,7 +17,7 @@ Table frames {
 
 Table conversations {
   id uuid [pk, not null]
-  agent_type agentType
+  agent_type agent_type
   project_id uuid [not null]
   display_name varchar
   created_at timestamptz [not null]
@@ -54,7 +54,7 @@ Table project_custom_domains {
   project_id uuid [not null]
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
-  status projectCustomDomainStatusEnum [not null]
+  status project_custom_domain_status [not null]
   indexes {
     (custom_domain_id, project_id) [pk]
   }
@@ -70,7 +70,7 @@ Table custom_domain_verification {
   freestyle_verification_id text [not null]
   txt_record jsonb [not null]
   a_records jsonb [not null]
-  status verificationRequestStatus [not null]
+  status verification_request_status [not null]
 }
 
 Table deployments {
@@ -79,8 +79,8 @@ Table deployments {
   project_id uuid [not null]
   sandbox_id text
   urls text
-  type deploymentType [not null]
-  status deploymentStatus [not null]
+  type deployment_type [not null]
+  status deployment_status [not null]
   message text [note: 'Deployment progress']
   build_log text
   error text
@@ -138,7 +138,7 @@ Table project_create_requests {
   context jsonb [not null]
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
-  status projectCreateStatus [not null]
+  status project_create_status [not null]
 }
 
 Table project_invitations {
@@ -147,7 +147,7 @@ Table project_invitations {
   inviter_id uuid [not null]
   invitee_email varchar [not null]
   token varchar [not null, unique]
-  role projectRole [not null]
+  role project_role [not null]
   expires_at timestamptz [not null]
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
@@ -190,7 +190,7 @@ Table legacy_subscriptions {
 Table prices {
   id uuid [pk, not null]
   product_id uuid [not null, note: 'Relationships']
-  price_key priceKeys [not null, note: 'Metadata']
+  price_key price_keys [not null, note: 'Metadata']
   monthly_message_limit integer [not null]
   stripe_price_id text [not null, unique, note: 'Stripe']
 }
@@ -198,7 +198,7 @@ Table prices {
 Table products {
   id uuid [pk, not null]
   name text [not null]
-  type productType [not null]
+  type product_type [not null]
   stripe_product_id text [not null, unique, note: 'Stripe']
 }
 
@@ -227,14 +227,14 @@ Table subscriptions {
   started_at timestamptz [not null, note: 'Metadata']
   updated_at timestamptz [not null]
   ended_at timestamptz
-  status subscriptionStatusEnum [not null]
+  status subscription_status [not null]
   stripe_customer_id text [not null, note: 'Stripe']
   stripe_subscription_id text [not null, unique]
   stripe_subscription_item_id text [not null, unique]
   stripe_subscription_schedule_id text
   stripe_current_period_start timestamptz [not null, note: 'The current period start and end is used to determine if the subscription has renewed.']
   stripe_current_period_end timestamptz [not null]
-  scheduled_action scheduledSubscriptionAction [note: 'Scheduled price change']
+  scheduled_action scheduled_subscription_action [note: 'Scheduled price change']
   scheduled_price_id uuid
   scheduled_change_at timestamptz
 }
@@ -242,7 +242,7 @@ Table subscriptions {
 Table usage_records {
   id uuid [pk, not null]
   user_id uuid [not null, note: 'Relationships']
-  type usageTypes [not null, note: 'Metadata']
+  type usage_types [not null, note: 'Metadata']
   timestamp timestamptz [not null]
   trace_id varchar
   indexes {
@@ -251,7 +251,7 @@ Table usage_records {
   }
 }
 
-Table users {
+Table auth.users {
   id uuid [pk, not null]
   email text [not null]
   email_confirmed_at timestamp
@@ -283,7 +283,7 @@ Table user_projects {
   user_id uuid [not null]
   project_id uuid [not null]
   created_at timestamptz
-  role projectRole [not null]
+  role project_role [not null]
   indexes {
     (user_id, project_id) [pk]
   }
@@ -364,4 +364,4 @@ Ref user_projects_user_id_users_id_fk: user_projects.user_id > users.id [delete:
 
 Ref user_projects_project_id_projects_id_fk: user_projects.project_id > projects.id [delete: cascade, update: cascade]
 
-// Ref users_id_users_id_fk: users.id - users.id [delete: cascade, update: cascade] (a key from a column to itself, which DBML cannot express)
+Ref users_id_users_id_fk: users.id - auth.users.id [delete: cascade, update: cascade]

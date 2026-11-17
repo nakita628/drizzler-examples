@@ -28,5 +28,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#45](https://github.com/nakita628/drizzler/issues/45): `auth.users` is written as `users`, so the DBML declares `Table users` twice and `pnpm check:dbml` fails with `Table 'users' already exists in schema 'public'`; the key from `users.id` to `auth.users.id` is commented out as a key to itself.
-- [nakita628/drizzler#46](https://github.com/nakita628/drizzler/issues/46): the 12 enums built from TypeScript enums are missing from the docs' enum list, and their columns have the variable name as their type (`projectRole` instead of `project_role`).
+None.

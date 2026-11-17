@@ -37,8 +37,8 @@ Table account {
   account_id text [not null]
   provider_id text [not null]
   user_id text [not null]
-  account sealedText
-  account sealedText
+  access_token text
+  refresh_token text
   id_token text
   access_token_expires_at timestamp
   refresh_token_expires_at timestamp

@@ -16,8 +16,8 @@ catalogs:
       specifier: 1.0.0-rc.5
       version: 1.0.0-rc.5
     drizzler:
-      specifier: 0.4.3
-      version: 0.4.3
+      specifier: 0.4.4
+      version: 0.4.4
     next-auth:
       specifier: 5.0.0-beta.25
       version: 5.0.0-beta.25
@@ -49,7 +49,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -70,7 +70,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       next-auth:
         specifier: 'catalog:'
         version: 5.0.0-beta.25(next@16.4.6(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
@@ -94,7 +94,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -115,7 +115,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       next-auth:
         specifier: 'catalog:'
         version: 5.0.0-beta.25(next@16.4.6(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
@@ -139,7 +139,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       next-auth:
         specifier: 'catalog:'
         version: 5.0.0-beta.25(next@16.4.6(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
@@ -166,7 +166,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       nanoid:
         specifier: 3.3.18
         version: 3.3.18
@@ -193,7 +193,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -214,7 +214,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -238,7 +238,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -259,7 +259,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -283,7 +283,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -304,7 +304,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -325,7 +325,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -352,7 +352,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -376,7 +376,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -397,7 +397,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -418,7 +418,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -442,7 +442,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -466,7 +466,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -487,7 +487,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -508,7 +508,7 @@ importers:
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@3.25.76)
       drizzler:
         specifier: 'catalog:'
-        version: 0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@3.25.76))(redis@6.3.1(@opentelemetry/api@1.10.0))
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@3.25.76))(redis@6.3.1(@opentelemetry/api@1.10.0))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -1418,8 +1418,8 @@ packages:
       zod:
         optional: true
 
-  drizzler@0.4.3:
-    resolution: {integrity: sha512-VTxd9B02ZoOTQouzb8ujBoa5vKU0dMt7nDpDPAykf6HRkpAmd7Nr3bmQS3GGQaUpm6IuRDFIcdncuknMcOJIQA==}
+  drizzler@0.4.4:
+    resolution: {integrity: sha512-nh5KQPaARhZb5Lfp79avYL0IAV2HPqnYOTezvdeZorRD0mHyqf+BOqHbnsw4pE52f6u423oZgfFNUqZYhfoSuQ==}
     hasBin: true
     peerDependencies:
       drizzle-orm: '>=1.0.0-rc.5'
@@ -2144,7 +2144,7 @@ snapshots:
       effect: 4.1.4
       zod: 4.6.7
 
-  drizzler@0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@3.25.76))(redis@6.3.1(@opentelemetry/api@1.10.0)):
+  drizzler@0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@3.25.76))(redis@6.3.1(@opentelemetry/api@1.10.0)):
     dependencies:
       '@dagrejs/dagre': 3.1.3
       '@effect/platform-node': 4.1.4(effect@4.1.4)(redis@6.3.1(@opentelemetry/api@1.10.0))
@@ -2167,7 +2167,7 @@ snapshots:
       - utf-8-validate
       - vite-plus
 
-  drizzler@0.4.3(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0)):
+  drizzler@0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0)):
     dependencies:
       '@dagrejs/dagre': 3.1.3
       '@effect/platform-node': 4.1.4(effect@4.1.4)(redis@6.3.1(@opentelemetry/api@1.10.0))

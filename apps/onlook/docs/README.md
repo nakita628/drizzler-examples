@@ -471,15 +471,27 @@ ALTER TABLE "users" ADD CONSTRAINT "users_id_users_id_fkey" FOREIGN KEY ("id") R
 | [rateLimits](#table-rateLimits)                             | `rate_limits`                |             |
 | [subscriptions](#table-subscriptions)                       | `subscriptions`              |             |
 | [usageRecords](#table-usageRecords)                         | `usage_records`              |             |
-| [authUsers](#table-authUsers)                               | `users`                      |             |
+| [authUsers](#table-authUsers)                               | `auth.users`                 |             |
 | [userSettings](#table-userSettings)                         | `user_settings`              |             |
 | [userCanvases](#table-userCanvases)                         | `user_canvases`              |             |
 | [userProjects](#table-userProjects)                         | `user_projects`              |             |
 | [users](#table-users)                                       | `users`                      |             |
 
-| Enum                             | Name in the database | Description |
-| -------------------------------- | -------------------- | ----------- |
-| [messageRole](#enum-messageRole) | `message_role`       |             |
+| Enum                                                                 | Name in the database            | Description |
+| -------------------------------------------------------------------- | ------------------------------- | ----------- |
+| [agentType](#enum-agentType)                                         | `agent_type`                    |             |
+| [messageRole](#enum-messageRole)                                     | `message_role`                  |             |
+| [projectCustomDomainStatusEnum](#enum-projectCustomDomainStatusEnum) | `project_custom_domain_status`  |             |
+| [verificationRequestStatus](#enum-verificationRequestStatus)         | `verification_request_status`   |             |
+| [deploymentStatus](#enum-deploymentStatus)                           | `deployment_status`             |             |
+| [deploymentType](#enum-deploymentType)                               | `deployment_type`               |             |
+| [projectCreateStatus](#enum-projectCreateStatus)                     | `project_create_status`         |             |
+| [priceKeys](#enum-priceKeys)                                         | `price_keys`                    |             |
+| [productType](#enum-productType)                                     | `product_type`                  |             |
+| [subscriptionStatusEnum](#enum-subscriptionStatusEnum)               | `subscription_status`           |             |
+| [scheduledSubscriptionAction](#enum-scheduledSubscriptionAction)     | `scheduled_subscription_action` |             |
+| [usageTypes](#enum-usageTypes)                                       | `usage_types`                   |             |
+| [projectRole](#enum-projectRole)                                     | `project_role`                  |             |
 
 ## Tables
 
@@ -758,15 +770,15 @@ where "frames"."id" = $1
 
 ![conversations and the tables it relates to](tables/conversations.svg)
 
-| Column                         | Type        | Constraints                               | Default                    | Description |
-| ------------------------------ | ----------- | ----------------------------------------- | -------------------------- | ----------- |
-| `id`                           | `uuid`      | PK NOT NULL                               | `.defaultRandom()`         |             |
-| `agentType` (`agent_type`)     | `agentType` | NULL                                      | `.default(AgentType.ROOT)` |             |
-| `projectId` (`project_id`)     | `uuid`      | NOT NULL → [projects.id](#table-projects) |                            |             |
-| `displayName` (`display_name`) | `varchar`   | NULL                                      |                            |             |
-| `createdAt` (`created_at`)     | `timestamp` | NOT NULL                                  | `.defaultNow()`            |             |
-| `updatedAt` (`updated_at`)     | `timestamp` | NOT NULL                                  | `.defaultNow()`            |             |
-| `suggestions`                  | `jsonb`     | NULL                                      | `.default([])`             |             |
+| Column                         | Type                           | Constraints                               | Default                    | Description |
+| ------------------------------ | ------------------------------ | ----------------------------------------- | -------------------------- | ----------- |
+| `id`                           | `uuid`                         | PK NOT NULL                               | `.defaultRandom()`         |             |
+| `agentType` (`agent_type`)     | [`agentType`](#enum-agentType) | NULL                                      | `.default(AgentType.ROOT)` |             |
+| `projectId` (`project_id`)     | `uuid`                         | NOT NULL → [projects.id](#table-projects) |                            |             |
+| `displayName` (`display_name`) | `varchar`                      | NULL                                      |                            |             |
+| `createdAt` (`created_at`)     | `timestamp`                    | NOT NULL                                  | `.defaultNow()`            |             |
+| `updatedAt` (`updated_at`)     | `timestamp`                    | NOT NULL                                  | `.defaultNow()`            |             |
+| `suggestions`                  | `jsonb`                        | NULL                                      | `.default([])`             |             |
 
 #### Definition
 
@@ -860,7 +872,7 @@ values (default, default, $1, default, default, default, default)
 
 ```ts
 db.update(conversations)
-  .set({ agentType: "agentType" })
+  .set({ agentType: "root" })
   .where(eq(conversations.id, "00000000-0000-0000-0000-000000000000"));
 ```
 
@@ -868,7 +880,7 @@ db.update(conversations)
 update "conversations"
 set "agent_type" = $1
 where "conversations"."id" = $2
--- params: ["agentType","00000000-0000-0000-0000-000000000000"]
+-- params: ["root","00000000-0000-0000-0000-000000000000"]
 ```
 
 **Delete**: Deletes a row of conversations, found by its primary key.
@@ -1162,14 +1174,14 @@ Table `project_custom_domains`.
 
 ![projectCustomDomains and the tables it relates to](tables/projectCustomDomains.svg)
 
-| Column                                | Type                            | Constraints                                            | Default                                      | Description |
-| ------------------------------------- | ------------------------------- | ------------------------------------------------------ | -------------------------------------------- | ----------- |
-| `fullDomain` (`full_domain`)          | `text`                          | NOT NULL                                               |                                              |             |
-| `customDomainId` (`custom_domain_id`) | `uuid`                          | PK NOT NULL → [customDomains.id](#table-customDomains) |                                              |             |
-| `projectId` (`project_id`)            | `uuid`                          | PK NOT NULL → [projects.id](#table-projects)           |                                              |             |
-| `createdAt` (`created_at`)            | `timestamp`                     | NOT NULL                                               | `.defaultNow()`                              |             |
-| `updatedAt` (`updated_at`)            | `timestamp`                     | NOT NULL                                               | `.defaultNow()`                              |             |
-| `status`                              | `projectCustomDomainStatusEnum` | NOT NULL                                               | `.default(ProjectCustomDomainStatus.ACTIVE)` |             |
+| Column                                | Type                                                                   | Constraints                                            | Default                                      | Description |
+| ------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------- | ----------- |
+| `fullDomain` (`full_domain`)          | `text`                                                                 | NOT NULL                                               |                                              |             |
+| `customDomainId` (`custom_domain_id`) | `uuid`                                                                 | PK NOT NULL → [customDomains.id](#table-customDomains) |                                              |             |
+| `projectId` (`project_id`)            | `uuid`                                                                 | PK NOT NULL → [projects.id](#table-projects)           |                                              |             |
+| `createdAt` (`created_at`)            | `timestamp`                                                            | NOT NULL                                               | `.defaultNow()`                              |             |
+| `updatedAt` (`updated_at`)            | `timestamp`                                                            | NOT NULL                                               | `.defaultNow()`                              |             |
+| `status`                              | [`projectCustomDomainStatusEnum`](#enum-projectCustomDomainStatusEnum) | NOT NULL                                               | `.default(ProjectCustomDomainStatus.ACTIVE)` |             |
 
 #### Definition
 
@@ -1318,18 +1330,18 @@ Table `custom_domain_verification`.
 
 ![customDomainVerification and the tables it relates to](tables/customDomainVerification.svg)
 
-| Column                                                  | Type                        | Constraints                                         | Default                                       | Description |
-| ------------------------------------------------------- | --------------------------- | --------------------------------------------------- | --------------------------------------------- | ----------- |
-| `id`                                                    | `uuid`                      | PK NOT NULL                                         | `.defaultRandom()`                            |             |
-| `customDomainId` (`custom_domain_id`)                   | `uuid`                      | NOT NULL → [customDomains.id](#table-customDomains) |                                               |             |
-| `projectId` (`project_id`)                              | `uuid`                      | NOT NULL → [projects.id](#table-projects)           |                                               |             |
-| `createdAt` (`created_at`)                              | `timestamp`                 | NOT NULL                                            | `.defaultNow()`                               |             |
-| `updatedAt` (`updated_at`)                              | `timestamp`                 | NOT NULL                                            | `.defaultNow()`                               |             |
-| `fullDomain` (`full_domain`)                            | `text`                      | NOT NULL                                            |                                               |             |
-| `freestyleVerificationId` (`freestyle_verification_id`) | `text`                      | NOT NULL                                            |                                               |             |
-| `txtRecord` (`txt_record`)                              | `jsonb`                     | NOT NULL                                            |                                               |             |
-| `aRecords` (`a_records`)                                | `jsonb`                     | NOT NULL                                            | `.default([])`                                |             |
-| `status`                                                | `verificationRequestStatus` | NOT NULL                                            | `.default(VerificationRequestStatus.PENDING)` |             |
+| Column                                                  | Type                                                           | Constraints                                         | Default                                       | Description |
+| ------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------- | ----------- |
+| `id`                                                    | `uuid`                                                         | PK NOT NULL                                         | `.defaultRandom()`                            |             |
+| `customDomainId` (`custom_domain_id`)                   | `uuid`                                                         | NOT NULL → [customDomains.id](#table-customDomains) |                                               |             |
+| `projectId` (`project_id`)                              | `uuid`                                                         | NOT NULL → [projects.id](#table-projects)           |                                               |             |
+| `createdAt` (`created_at`)                              | `timestamp`                                                    | NOT NULL                                            | `.defaultNow()`                               |             |
+| `updatedAt` (`updated_at`)                              | `timestamp`                                                    | NOT NULL                                            | `.defaultNow()`                               |             |
+| `fullDomain` (`full_domain`)                            | `text`                                                         | NOT NULL                                            |                                               |             |
+| `freestyleVerificationId` (`freestyle_verification_id`) | `text`                                                         | NOT NULL                                            |                                               |             |
+| `txtRecord` (`txt_record`)                              | `jsonb`                                                        | NOT NULL                                            |                                               |             |
+| `aRecords` (`a_records`)                                | `jsonb`                                                        | NOT NULL                                            | `.default([])`                                |             |
+| `status`                                                | [`verificationRequestStatus`](#enum-verificationRequestStatus) | NOT NULL                                            | `.default(VerificationRequestStatus.PENDING)` |             |
 
 #### Definition
 
@@ -1466,24 +1478,24 @@ where "custom_domain_verification"."id" = $1
 
 ![deployments and the tables it relates to](tables/deployments.svg)
 
-| Column                         | Type               | Constraints                               | Default         | Description                |
-| ------------------------------ | ------------------ | ----------------------------------------- | --------------- | -------------------------- |
-| `id`                           | `uuid`             | PK NOT NULL                               |                 |                            |
-| `requestedBy` (`requested_by`) | `uuid`             | NOT NULL → [users.id](#table-users)       |                 |                            |
-| `projectId` (`project_id`)     | `uuid`             | NOT NULL → [projects.id](#table-projects) |                 |                            |
-| `sandboxId` (`sandbox_id`)     | `text`             | NULL                                      |                 |                            |
-| `urls`                         | `text[]`           | NULL                                      |                 |                            |
-| `type`                         | `deploymentType`   | NOT NULL                                  |                 |                            |
-| `status`                       | `deploymentStatus` | NOT NULL                                  |                 |                            |
-| `message`                      | `text`             | NULL                                      |                 | Deployment progress        |
-| `buildLog` (`build_log`)       | `text`             | NULL                                      |                 |                            |
-| `error`                        | `text`             | NULL                                      |                 |                            |
-| `progress`                     | `integer`          | NULL                                      |                 |                            |
-| `buildScript` (`build_script`) | `text`             | NULL                                      |                 | Custom deployment settings |
-| `buildFlags` (`build_flags`)   | `text`             | NULL                                      |                 |                            |
-| `envVars` (`env_vars`)         | `jsonb`            | NULL                                      |                 |                            |
-| `createdAt` (`created_at`)     | `timestamp`        | NOT NULL                                  | `.defaultNow()` |                            |
-| `updatedAt` (`updated_at`)     | `timestamp`        | NOT NULL                                  | `.defaultNow()` |                            |
+| Column                         | Type                                         | Constraints                               | Default         | Description                |
+| ------------------------------ | -------------------------------------------- | ----------------------------------------- | --------------- | -------------------------- |
+| `id`                           | `uuid`                                       | PK NOT NULL                               |                 |                            |
+| `requestedBy` (`requested_by`) | `uuid`                                       | NOT NULL → [users.id](#table-users)       |                 |                            |
+| `projectId` (`project_id`)     | `uuid`                                       | NOT NULL → [projects.id](#table-projects) |                 |                            |
+| `sandboxId` (`sandbox_id`)     | `text`                                       | NULL                                      |                 |                            |
+| `urls`                         | `text[]`                                     | NULL                                      |                 |                            |
+| `type`                         | [`deploymentType`](#enum-deploymentType)     | NOT NULL                                  |                 |                            |
+| `status`                       | [`deploymentStatus`](#enum-deploymentStatus) | NOT NULL                                  |                 |                            |
+| `message`                      | `text`                                       | NULL                                      |                 | Deployment progress        |
+| `buildLog` (`build_log`)       | `text`                                       | NULL                                      |                 |                            |
+| `error`                        | `text`                                       | NULL                                      |                 |                            |
+| `progress`                     | `integer`                                    | NULL                                      |                 |                            |
+| `buildScript` (`build_script`) | `text`                                       | NULL                                      |                 | Custom deployment settings |
+| `buildFlags` (`build_flags`)   | `text`                                       | NULL                                      |                 |                            |
+| `envVars` (`env_vars`)         | `jsonb`                                      | NULL                                      |                 |                            |
+| `createdAt` (`created_at`)     | `timestamp`                                  | NOT NULL                                  | `.defaultNow()` |                            |
+| `updatedAt` (`updated_at`)     | `timestamp`                                  | NOT NULL                                  | `.defaultNow()` |                            |
 
 #### Definition
 
@@ -1576,15 +1588,15 @@ db.insert(deployments).values({
   id: "00000000-0000-0000-0000-000000000000",
   requestedBy: "00000000-0000-0000-0000-000000000000",
   projectId: "00000000-0000-0000-0000-000000000000",
-  type: "type",
-  status: "status",
+  type: "preview",
+  status: "pending",
 });
 ```
 
 ```sql
 insert into "deployments" ("id", "requested_by", "project_id", "sandbox_id", "urls", "type", "status", "message", "build_log", "error", "progress", "build_script", "build_flags", "env_vars", "created_at", "updated_at")
 values ($1, $2, $3, default, default, $4, $5, default, default, default, default, default, default, default, default, default)
--- params: ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","type","status"]
+-- params: ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","preview","pending"]
 ```
 
 **Update**: Changes a row of deployments, found by its primary key.
@@ -2043,14 +2055,14 @@ Table `project_create_requests`.
 
 ![projectCreateRequests and the tables it relates to](tables/projectCreateRequests.svg)
 
-| Column                     | Type                  | Constraints                                      | Default                                        | Description |
-| -------------------------- | --------------------- | ------------------------------------------------ | ---------------------------------------------- | ----------- |
-| `id`                       | `uuid`                | PK NOT NULL                                      | `.defaultRandom()`                             |             |
-| `projectId` (`project_id`) | `uuid`                | UNIQUE NOT NULL → [projects.id](#table-projects) |                                                |             |
-| `context`                  | `jsonb`               | NOT NULL                                         |                                                |             |
-| `createdAt` (`created_at`) | `timestamp`           | NOT NULL                                         | `.defaultNow()`                                |             |
-| `updatedAt` (`updated_at`) | `timestamp`           | NOT NULL                                         | `.defaultNow()`                                |             |
-| `status`                   | `projectCreateStatus` | NOT NULL                                         | `.default(ProjectCreateRequestStatus.PENDING)` |             |
+| Column                     | Type                                               | Constraints                                      | Default                                        | Description |
+| -------------------------- | -------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------- | ----------- |
+| `id`                       | `uuid`                                             | PK NOT NULL                                      | `.defaultRandom()`                             |             |
+| `projectId` (`project_id`) | `uuid`                                             | UNIQUE NOT NULL → [projects.id](#table-projects) |                                                |             |
+| `context`                  | `jsonb`                                            | NOT NULL                                         |                                                |             |
+| `createdAt` (`created_at`) | `timestamp`                                        | NOT NULL                                         | `.defaultNow()`                                |             |
+| `updatedAt` (`updated_at`) | `timestamp`                                        | NOT NULL                                         | `.defaultNow()`                                |             |
+| `status`                   | [`projectCreateStatus`](#enum-projectCreateStatus) | NOT NULL                                         | `.default(ProjectCreateRequestStatus.PENDING)` |             |
 
 #### Definition
 
@@ -2177,17 +2189,17 @@ Table `project_invitations`.
 
 ![projectInvitations and the tables it relates to](tables/projectInvitations.svg)
 
-| Column                           | Type          | Constraints                               | Default            | Description |
-| -------------------------------- | ------------- | ----------------------------------------- | ------------------ | ----------- |
-| `id`                             | `uuid`        | PK NOT NULL                               | `.defaultRandom()` |             |
-| `projectId` (`project_id`)       | `uuid`        | NOT NULL → [projects.id](#table-projects) |                    |             |
-| `inviterId` (`inviter_id`)       | `uuid`        | NOT NULL → [users.id](#table-users)       |                    |             |
-| `inviteeEmail` (`invitee_email`) | `varchar`     | NOT NULL                                  |                    |             |
-| `token`                          | `varchar`     | UNIQUE NOT NULL                           |                    |             |
-| `role`                           | `projectRole` | NOT NULL                                  |                    |             |
-| `expiresAt` (`expires_at`)       | `timestamp`   | NOT NULL                                  |                    |             |
-| `createdAt` (`created_at`)       | `timestamp`   | NOT NULL                                  | `.defaultNow()`    |             |
-| `updatedAt` (`updated_at`)       | `timestamp`   | NOT NULL                                  | `.defaultNow()`    |             |
+| Column                           | Type                               | Constraints                               | Default            | Description |
+| -------------------------------- | ---------------------------------- | ----------------------------------------- | ------------------ | ----------- |
+| `id`                             | `uuid`                             | PK NOT NULL                               | `.defaultRandom()` |             |
+| `projectId` (`project_id`)       | `uuid`                             | NOT NULL → [projects.id](#table-projects) |                    |             |
+| `inviterId` (`inviter_id`)       | `uuid`                             | NOT NULL → [users.id](#table-users)       |                    |             |
+| `inviteeEmail` (`invitee_email`) | `varchar`                          | NOT NULL                                  |                    |             |
+| `token`                          | `varchar`                          | UNIQUE NOT NULL                           |                    |             |
+| `role`                           | [`projectRole`](#enum-projectRole) | NOT NULL                                  |                    |             |
+| `expiresAt` (`expires_at`)       | `timestamp`                        | NOT NULL                                  |                    |             |
+| `createdAt` (`created_at`)       | `timestamp`                        | NOT NULL                                  | `.defaultNow()`    |             |
+| `updatedAt` (`updated_at`)       | `timestamp`                        | NOT NULL                                  | `.defaultNow()`    |             |
 
 #### Definition
 
@@ -2280,7 +2292,7 @@ db.insert(projectInvitations).values({
   inviterId: "00000000-0000-0000-0000-000000000000",
   inviteeEmail: "inviteeEmail",
   token: "token",
-  role: "role",
+  role: "owner",
   expiresAt: new Date("2026-01-01T00:00:00.000Z"),
 });
 ```
@@ -2288,7 +2300,7 @@ db.insert(projectInvitations).values({
 ```sql
 insert into "project_invitations" ("id", "project_id", "inviter_id", "invitee_email", "token", "role", "expires_at", "created_at", "updated_at")
 values (default, $1, $2, $3, $4, $5, $6, default, default)
--- params: ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","inviteeEmail","token","role","2026-01-01T00:00:00.000Z"]
+-- params: ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","inviteeEmail","token","owner","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of projectInvitations, found by its primary key.
@@ -2687,13 +2699,13 @@ where "legacy_subscriptions"."email" = $1
 
 ![prices and the tables it relates to](tables/prices.svg)
 
-| Column                                          | Type        | Constraints                               | Default            | Description   |
-| ----------------------------------------------- | ----------- | ----------------------------------------- | ------------------ | ------------- |
-| `id`                                            | `uuid`      | PK NOT NULL                               | `.defaultRandom()` |               |
-| `productId` (`product_id`)                      | `uuid`      | NOT NULL → [products.id](#table-products) |                    | Relationships |
-| `key` (`price_key`)                             | `priceKeys` | NOT NULL                                  |                    | Metadata      |
-| `monthlyMessageLimit` (`monthly_message_limit`) | `integer`   | NOT NULL                                  |                    |               |
-| `stripePriceId` (`stripe_price_id`)             | `text`      | UNIQUE NOT NULL                           |                    | Stripe        |
+| Column                                          | Type                           | Constraints                               | Default            | Description   |
+| ----------------------------------------------- | ------------------------------ | ----------------------------------------- | ------------------ | ------------- |
+| `id`                                            | `uuid`                         | PK NOT NULL                               | `.defaultRandom()` |               |
+| `productId` (`product_id`)                      | `uuid`                         | NOT NULL → [products.id](#table-products) |                    | Relationships |
+| `key` (`price_key`)                             | [`priceKeys`](#enum-priceKeys) | NOT NULL                                  |                    | Metadata      |
+| `monthlyMessageLimit` (`monthly_message_limit`) | `integer`                      | NOT NULL                                  |                    |               |
+| `stripePriceId` (`stripe_price_id`)             | `text`                         | UNIQUE NOT NULL                           |                    | Stripe        |
 
 #### Definition
 
@@ -2775,7 +2787,7 @@ limit $2
 ```ts
 db.insert(prices).values({
   productId: "00000000-0000-0000-0000-000000000000",
-  key: "key",
+  key: "PRO_MONTHLY_TIER_1",
   monthlyMessageLimit: 1,
   stripePriceId: "stripePriceId",
 });
@@ -2784,7 +2796,7 @@ db.insert(prices).values({
 ```sql
 insert into "prices" ("id", "product_id", "price_key", "monthly_message_limit", "stripe_price_id")
 values (default, $1, $2, $3, $4)
--- params: ["00000000-0000-0000-0000-000000000000","key",1,"stripePriceId"]
+-- params: ["00000000-0000-0000-0000-000000000000","PRO_MONTHLY_TIER_1",1,"stripePriceId"]
 ```
 
 **Update**: Changes a row of prices, found by its primary key.
@@ -2822,12 +2834,12 @@ where "prices"."id" = $1
 
 ![products and the tables it relates to](tables/products.svg)
 
-| Column                                  | Type          | Constraints     | Default            | Description |
-| --------------------------------------- | ------------- | --------------- | ------------------ | ----------- |
-| `id`                                    | `uuid`        | PK NOT NULL     | `.defaultRandom()` |             |
-| `name`                                  | `text`        | NOT NULL        |                    |             |
-| `type`                                  | `productType` | NOT NULL        |                    |             |
-| `stripeProductId` (`stripe_product_id`) | `text`        | UNIQUE NOT NULL |                    | Stripe      |
+| Column                                  | Type                               | Constraints     | Default            | Description |
+| --------------------------------------- | ---------------------------------- | --------------- | ------------------ | ----------- |
+| `id`                                    | `uuid`                             | PK NOT NULL     | `.defaultRandom()` |             |
+| `name`                                  | `text`                             | NOT NULL        |                    |             |
+| `type`                                  | [`productType`](#enum-productType) | NOT NULL        |                    |             |
+| `stripeProductId` (`stripe_product_id`) | `text`                             | UNIQUE NOT NULL |                    | Stripe      |
 
 #### Definition
 
@@ -2900,13 +2912,13 @@ limit $2
 **Insert**: Adds a row to products, giving the columns that have no default.
 
 ```ts
-db.insert(products).values({ name: "name", type: "type", stripeProductId: "stripeProductId" });
+db.insert(products).values({ name: "name", type: "free", stripeProductId: "stripeProductId" });
 ```
 
 ```sql
 insert into "products" ("id", "name", "type", "stripe_product_id")
 values (default, $1, $2, $3)
--- params: ["name","type","stripeProductId"]
+-- params: ["name","free","stripeProductId"]
 ```
 
 **Update**: Changes a row of products, found by its primary key.
@@ -3100,25 +3112,25 @@ where "rate_limits"."id" = $1
 
 ![subscriptions and the tables it relates to](tables/subscriptions.svg)
 
-| Column                                                             | Type                          | Constraints                               | Default                               | Description                                                                            |
-| ------------------------------------------------------------------ | ----------------------------- | ----------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------- |
-| `id`                                                               | `uuid`                        | PK NOT NULL                               | `.defaultRandom()`                    |                                                                                        |
-| `userId` (`user_id`)                                               | `uuid`                        | NOT NULL → [users.id](#table-users)       |                                       | Relationships                                                                          |
-| `productId` (`product_id`)                                         | `uuid`                        | NOT NULL → [products.id](#table-products) |                                       |                                                                                        |
-| `priceId` (`price_id`)                                             | `uuid`                        | NOT NULL → [prices.id](#table-prices)     |                                       |                                                                                        |
-| `startedAt` (`started_at`)                                         | `timestamp`                   | NOT NULL                                  | `.defaultNow()`                       | Metadata                                                                               |
-| `updatedAt` (`updated_at`)                                         | `timestamp`                   | NOT NULL                                  | `.defaultNow()`                       |                                                                                        |
-| `endedAt` (`ended_at`)                                             | `timestamp`                   | NULL                                      |                                       |                                                                                        |
-| `status`                                                           | `subscriptionStatusEnum`      | NOT NULL                                  | `.default(SubscriptionStatus.ACTIVE)` |                                                                                        |
-| `stripeCustomerId` (`stripe_customer_id`)                          | `text`                        | NOT NULL                                  |                                       | Stripe                                                                                 |
-| `stripeSubscriptionId` (`stripe_subscription_id`)                  | `text`                        | UNIQUE NOT NULL                           |                                       |                                                                                        |
-| `stripeSubscriptionItemId` (`stripe_subscription_item_id`)         | `text`                        | UNIQUE NOT NULL                           |                                       |                                                                                        |
-| `stripeSubscriptionScheduleId` (`stripe_subscription_schedule_id`) | `text`                        | NULL                                      |                                       |                                                                                        |
-| `stripeCurrentPeriodStart` (`stripe_current_period_start`)         | `timestamp`                   | NOT NULL                                  |                                       | The current period start and end is used to determine if the subscription has renewed. |
-| `stripeCurrentPeriodEnd` (`stripe_current_period_end`)             | `timestamp`                   | NOT NULL                                  |                                       |                                                                                        |
-| `scheduledAction` (`scheduled_action`)                             | `scheduledSubscriptionAction` | NULL                                      |                                       | Scheduled price change                                                                 |
-| `scheduledPriceId` (`scheduled_price_id`)                          | `uuid`                        | NULL → [prices.id](#table-prices)         |                                       |                                                                                        |
-| `scheduledChangeAt` (`scheduled_change_at`)                        | `timestamp`                   | NULL                                      |                                       |                                                                                        |
+| Column                                                             | Type                                                               | Constraints                               | Default                               | Description                                                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------ | ----------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------- |
+| `id`                                                               | `uuid`                                                             | PK NOT NULL                               | `.defaultRandom()`                    |                                                                                        |
+| `userId` (`user_id`)                                               | `uuid`                                                             | NOT NULL → [users.id](#table-users)       |                                       | Relationships                                                                          |
+| `productId` (`product_id`)                                         | `uuid`                                                             | NOT NULL → [products.id](#table-products) |                                       |                                                                                        |
+| `priceId` (`price_id`)                                             | `uuid`                                                             | NOT NULL → [prices.id](#table-prices)     |                                       |                                                                                        |
+| `startedAt` (`started_at`)                                         | `timestamp`                                                        | NOT NULL                                  | `.defaultNow()`                       | Metadata                                                                               |
+| `updatedAt` (`updated_at`)                                         | `timestamp`                                                        | NOT NULL                                  | `.defaultNow()`                       |                                                                                        |
+| `endedAt` (`ended_at`)                                             | `timestamp`                                                        | NULL                                      |                                       |                                                                                        |
+| `status`                                                           | [`subscriptionStatusEnum`](#enum-subscriptionStatusEnum)           | NOT NULL                                  | `.default(SubscriptionStatus.ACTIVE)` |                                                                                        |
+| `stripeCustomerId` (`stripe_customer_id`)                          | `text`                                                             | NOT NULL                                  |                                       | Stripe                                                                                 |
+| `stripeSubscriptionId` (`stripe_subscription_id`)                  | `text`                                                             | UNIQUE NOT NULL                           |                                       |                                                                                        |
+| `stripeSubscriptionItemId` (`stripe_subscription_item_id`)         | `text`                                                             | UNIQUE NOT NULL                           |                                       |                                                                                        |
+| `stripeSubscriptionScheduleId` (`stripe_subscription_schedule_id`) | `text`                                                             | NULL                                      |                                       |                                                                                        |
+| `stripeCurrentPeriodStart` (`stripe_current_period_start`)         | `timestamp`                                                        | NOT NULL                                  |                                       | The current period start and end is used to determine if the subscription has renewed. |
+| `stripeCurrentPeriodEnd` (`stripe_current_period_end`)             | `timestamp`                                                        | NOT NULL                                  |                                       |                                                                                        |
+| `scheduledAction` (`scheduled_action`)                             | [`scheduledSubscriptionAction`](#enum-scheduledSubscriptionAction) | NULL                                      |                                       | Scheduled price change                                                                 |
+| `scheduledPriceId` (`scheduled_price_id`)                          | `uuid`                                                             | NULL → [prices.id](#table-prices)         |                                       |                                                                                        |
+| `scheduledChangeAt` (`scheduled_change_at`)                        | `timestamp`                                                        | NULL                                      |                                       |                                                                                        |
 
 #### Definition
 
@@ -3273,13 +3285,13 @@ Table `usage_records`.
 
 ![usageRecords and the tables it relates to](tables/usageRecords.svg)
 
-| Column                 | Type         | Constraints                         | Default                       | Description   |
-| ---------------------- | ------------ | ----------------------------------- | ----------------------------- | ------------- |
-| `id`                   | `uuid`       | PK NOT NULL                         | `.defaultRandom()`            |               |
-| `userId` (`user_id`)   | `uuid`       | NOT NULL → [users.id](#table-users) |                               | Relationships |
-| `type`                 | `usageTypes` | NOT NULL                            | `.default(UsageType.MESSAGE)` | Metadata      |
-| `timestamp`            | `timestamp`  | NOT NULL                            |                               |               |
-| `traceId` (`trace_id`) | `varchar`    | NULL                                |                               |               |
+| Column                 | Type                             | Constraints                         | Default                       | Description   |
+| ---------------------- | -------------------------------- | ----------------------------------- | ----------------------------- | ------------- |
+| `id`                   | `uuid`                           | PK NOT NULL                         | `.defaultRandom()`            |               |
+| `userId` (`user_id`)   | `uuid`                           | NOT NULL → [users.id](#table-users) |                               | Relationships |
+| `type`                 | [`usageTypes`](#enum-usageTypes) | NOT NULL                            | `.default(UsageType.MESSAGE)` | Metadata      |
+| `timestamp`            | `timestamp`                      | NOT NULL                            |                               |               |
+| `traceId` (`trace_id`) | `varchar`                        | NULL                                |                               |               |
 
 #### Definition
 
@@ -3407,7 +3419,7 @@ where "usage_records"."id" = $1
 
 ### authUsers
 
-Table `users`.
+Table `auth.users`.
 
 ![authUsers and the tables it relates to](tables/authUsers.svg)
 
@@ -3417,34 +3429,6 @@ Table `users`.
 | `email`                                   | `text`      | NOT NULL    |         |             |
 | `emailConfirmedAt` (`email_confirmed_at`) | `timestamp` | NULL        |         |             |
 | `rawUserMetaData` (`raw_user_meta_data`)  | `jsonb`     | NULL        |         |             |
-
-#### Definition
-
-```sql
-CREATE TABLE "auth"."users" (
-	"id" uuid PRIMARY KEY,
-	"email" text NOT NULL,
-	"email_confirmed_at" timestamp,
-	"raw_user_meta_data" jsonb
-);
-
-CREATE TABLE "users" (
-	"id" uuid PRIMARY KEY,
-	"first_name" text,
-	"last_name" text,
-	"display_name" text,
-	"avatar_url" text,
-	"email" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"stripe_customer_id" text,
-	"github_installation_id" text
-);
-
-ALTER TABLE "users" ENABLE ROW LEVEL SECURITY;
-
-ALTER TABLE "users" ADD CONSTRAINT "users_id_users_id_fkey" FOREIGN KEY ("id") REFERENCES "auth"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-```
 
 #### Referenced by
 
@@ -3839,12 +3823,12 @@ Table `user_projects`.
 
 ![userProjects and the tables it relates to](tables/userProjects.svg)
 
-| Column                     | Type          | Constraints                                  | Default         | Description |
-| -------------------------- | ------------- | -------------------------------------------- | --------------- | ----------- |
-| `userId` (`user_id`)       | `uuid`        | PK NOT NULL → [users.id](#table-users)       |                 |             |
-| `projectId` (`project_id`) | `uuid`        | PK NOT NULL → [projects.id](#table-projects) |                 |             |
-| `createdAt` (`created_at`) | `timestamp`   | NULL                                         | `.defaultNow()` |             |
-| `role`                     | `projectRole` | NOT NULL                                     |                 |             |
+| Column                     | Type                               | Constraints                                  | Default         | Description |
+| -------------------------- | ---------------------------------- | -------------------------------------------- | --------------- | ----------- |
+| `userId` (`user_id`)       | `uuid`                             | PK NOT NULL → [users.id](#table-users)       |                 |             |
+| `projectId` (`project_id`) | `uuid`                             | PK NOT NULL → [projects.id](#table-projects) |                 |             |
+| `createdAt` (`created_at`) | `timestamp`                        | NULL                                         | `.defaultNow()` |             |
+| `role`                     | [`projectRole`](#enum-projectRole) | NOT NULL                                     |                 |             |
 
 #### Definition
 
@@ -3934,14 +3918,14 @@ limit $3
 db.insert(userProjects).values({
   userId: "00000000-0000-0000-0000-000000000000",
   projectId: "00000000-0000-0000-0000-000000000000",
-  role: "role",
+  role: "owner",
 });
 ```
 
 ```sql
 insert into "user_projects" ("user_id", "project_id", "created_at", "role")
 values ($1, $2, default, $3)
--- params: ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","role"]
+-- params: ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000","owner"]
 ```
 
 **Update**: Changes a row of userProjects, found by its primary key.
@@ -4139,6 +4123,21 @@ where "users"."id" = $1
 
 ## Enums
 
+<a id="enum-agentType"></a>
+
+### agentType
+
+Type `agent_type`.
+
+- `root`
+- `user`
+
+#### Definition
+
+```sql
+CREATE TYPE "agent_type" AS ENUM('root', 'user');
+```
+
 <a id="enum-messageRole"></a>
 
 ### messageRole
@@ -4153,4 +4152,185 @@ Type `message_role`.
 
 ```sql
 CREATE TYPE "message_role" AS ENUM('user', 'assistant', 'system');
+```
+
+<a id="enum-projectCustomDomainStatusEnum"></a>
+
+### projectCustomDomainStatusEnum
+
+Type `project_custom_domain_status`.
+
+- `active`
+- `cancelled`
+
+#### Definition
+
+```sql
+CREATE TYPE "project_custom_domain_status" AS ENUM('active', 'cancelled');
+```
+
+<a id="enum-verificationRequestStatus"></a>
+
+### verificationRequestStatus
+
+Type `verification_request_status`.
+
+- `pending`
+- `verified`
+- `cancelled`
+
+#### Definition
+
+```sql
+CREATE TYPE "verification_request_status" AS ENUM('pending', 'verified', 'cancelled');
+```
+
+<a id="enum-deploymentStatus"></a>
+
+### deploymentStatus
+
+Type `deployment_status`.
+
+- `pending`
+- `in_progress`
+- `completed`
+- `failed`
+- `cancelled`
+
+#### Definition
+
+```sql
+CREATE TYPE "deployment_status" AS ENUM('pending', 'in_progress', 'completed', 'failed', 'cancelled');
+```
+
+<a id="enum-deploymentType"></a>
+
+### deploymentType
+
+Type `deployment_type`.
+
+- `preview`
+- `custom`
+- `unpublish_preview`
+- `unpublish_custom`
+
+#### Definition
+
+```sql
+CREATE TYPE "deployment_type" AS ENUM('preview', 'custom', 'unpublish_preview', 'unpublish_custom');
+```
+
+<a id="enum-projectCreateStatus"></a>
+
+### projectCreateStatus
+
+Type `project_create_status`.
+
+- `pending`
+- `completed`
+- `failed`
+
+#### Definition
+
+```sql
+CREATE TYPE "project_create_status" AS ENUM('pending', 'completed', 'failed');
+```
+
+<a id="enum-priceKeys"></a>
+
+### priceKeys
+
+Type `price_keys`.
+
+- `PRO_MONTHLY_TIER_1`
+- `PRO_MONTHLY_TIER_2`
+- `PRO_MONTHLY_TIER_3`
+- `PRO_MONTHLY_TIER_4`
+- `PRO_MONTHLY_TIER_5`
+- `PRO_MONTHLY_TIER_6`
+- `PRO_MONTHLY_TIER_7`
+- `PRO_MONTHLY_TIER_8`
+- `PRO_MONTHLY_TIER_9`
+- `PRO_MONTHLY_TIER_10`
+- `PRO_MONTHLY_TIER_11`
+
+#### Definition
+
+```sql
+CREATE TYPE "price_keys" AS ENUM('PRO_MONTHLY_TIER_1', 'PRO_MONTHLY_TIER_2', 'PRO_MONTHLY_TIER_3', 'PRO_MONTHLY_TIER_4', 'PRO_MONTHLY_TIER_5', 'PRO_MONTHLY_TIER_6', 'PRO_MONTHLY_TIER_7', 'PRO_MONTHLY_TIER_8', 'PRO_MONTHLY_TIER_9', 'PRO_MONTHLY_TIER_10', 'PRO_MONTHLY_TIER_11');
+```
+
+<a id="enum-productType"></a>
+
+### productType
+
+Type `product_type`.
+
+- `free`
+- `pro`
+
+#### Definition
+
+```sql
+CREATE TYPE "product_type" AS ENUM('free', 'pro');
+```
+
+<a id="enum-subscriptionStatusEnum"></a>
+
+### subscriptionStatusEnum
+
+Type `subscription_status`.
+
+- `active`
+- `canceled`
+
+#### Definition
+
+```sql
+CREATE TYPE "subscription_status" AS ENUM('active', 'canceled');
+```
+
+<a id="enum-scheduledSubscriptionAction"></a>
+
+### scheduledSubscriptionAction
+
+Type `scheduled_subscription_action`.
+
+- `price_change`
+- `cancellation`
+
+#### Definition
+
+```sql
+CREATE TYPE "scheduled_subscription_action" AS ENUM('price_change', 'cancellation');
+```
+
+<a id="enum-usageTypes"></a>
+
+### usageTypes
+
+Type `usage_types`.
+
+- `message`
+- `deployment`
+
+#### Definition
+
+```sql
+CREATE TYPE "usage_types" AS ENUM('message', 'deployment');
+```
+
+<a id="enum-projectRole"></a>
+
+### projectRole
+
+Type `project_role`.
+
+- `owner`
+- `admin`
+
+#### Definition
+
+```sql
+CREATE TYPE "project_role" AS ENUM('owner', 'admin');
 ```

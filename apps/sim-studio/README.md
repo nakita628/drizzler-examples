@@ -26,5 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#42](https://github.com/nakita628/drizzler/issues/42): `account.access_token` and `account.refresh_token` (`sealedText('account', ...)`) are written as two columns named `account` of type `sealedText`, so `pnpm check:dbml` fails with `Duplicate column 'account'`. The SQL is right.
-- [nakita628/drizzler#43](https://github.com/nakita628/drizzler/issues/43): each PNG takes about four minutes on a machine with a CJK font installed, so `pnpm generate` for this app takes about ten.
+None.

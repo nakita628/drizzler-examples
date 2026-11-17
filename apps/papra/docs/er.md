@@ -47,6 +47,9 @@ erDiagram
     webhooks ||--o{ webhook_events : "(id) - (webhook_id)"
     webhooks ||--o{ webhook_deliveries : "(id) - (webhook_id)"
     custom_property_definitions {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text name
         text key
@@ -56,6 +59,9 @@ erDiagram
         integer display_order
     }
     document_custom_property_values {
+        text id PK
+        integer created_at
+        integer updated_at
         text document_id FK
         text property_definition_id FK
         text text_value
@@ -67,12 +73,18 @@ erDiagram
         text related_document_id FK
     }
     custom_property_select_options {
+        text id PK
+        integer created_at
+        integer updated_at
         text property_definition_id FK
         text name
         text key
         integer display_order
     }
     document_share_links {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text document_id FK
         text created_by FK
@@ -83,12 +95,17 @@ erDiagram
         integer last_accessed_at
     }
     document_views {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text name
         text query
         text description
     }
     document_activity_log {
+        text id PK
+        integer created_at
         text document_id FK
         text event
         text event_data
@@ -96,6 +113,9 @@ erDiagram
         text tag_id FK
     }
     documents {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text created_by FK
         text original_name
@@ -120,6 +140,9 @@ erDiagram
         integer expires_at "Expiry as epoch milliseconds; null means the entry never expires."
     }
     organizations {
+        text id PK
+        integer created_at
+        integer updated_at
         text name
         text customer_id
         integer deleted_at
@@ -127,11 +150,17 @@ erDiagram
         integer scheduled_purge_at "When the organization is soft-deleted, we schedule a purge date some days in the future for hard deletion"
     }
     organization_members {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text user_id FK
         text role
     }
     organization_invitations {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text email
         text role
@@ -140,10 +169,16 @@ erDiagram
         text inviter_id FK
     }
     user_roles {
+        text id PK
+        integer created_at
+        integer updated_at
         text user_id FK
         text role
     }
     tags {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text name
         text normalized_name
@@ -155,6 +190,9 @@ erDiagram
         text tag_id PK, FK
     }
     users {
+        text id PK
+        integer created_at
+        integer updated_at
         text email
         integer email_verified
         text name
@@ -163,12 +201,18 @@ erDiagram
         integer two_factor_enabled
     }
     organization_ai_credits_usage {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         integer credits_consumed
         text usage
         text source
     }
     api_keys {
+        text id PK
+        integer created_at
+        integer updated_at
         text name
         text key_hash
         text prefix "the prefix is used to identify the key, it is the"
@@ -183,6 +227,9 @@ erDiagram
         text organization_member_id FK
     }
     auth_sessions {
+        text id PK
+        integer created_at
+        integer updated_at
         text token
         text user_id FK
         integer expires_at
@@ -191,6 +238,9 @@ erDiagram
         text active_organization_id FK
     }
     auth_accounts {
+        text id PK
+        integer created_at
+        integer updated_at
         text user_id FK
         text account_id
         text provider_id
@@ -203,11 +253,17 @@ erDiagram
         text password
     }
     auth_verifications {
+        text id PK
+        integer created_at
+        integer updated_at
         text identifier
         text value
         integer expires_at
     }
     auth_two_factor {
+        text id PK
+        integer created_at
+        integer updated_at
         text user_id FK
         text secret
         text backup_codes
@@ -220,12 +276,18 @@ erDiagram
         text content
     }
     intake_emails {
+        text id PK
+        integer created_at
+        integer updated_at
         text email_address
         text organization_id FK
         text allowed_origins
         integer is_enabled
     }
     organization_settings {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK "One settings row per organization"
         integer ai_auto_tagging_enabled "AI auto-tagging settings"
         integer ai_auto_tagging_can_create_new_tags
@@ -233,6 +295,9 @@ erDiagram
         text ai_auto_tagging_model_id
     }
     user_plan_entitlements {
+        text id PK
+        integer created_at
+        integer updated_at
         integer granted_at
         integer expires_at
         integer last_verified_at
@@ -250,8 +315,13 @@ erDiagram
         integer current_period_end
         integer current_period_start
         integer cancel_at_period_end
+        integer created_at
+        integer updated_at
     }
     tagging_rules {
+        text id PK
+        integer created_at
+        integer updated_at
         text organization_id FK
         text name
         text description
@@ -259,6 +329,9 @@ erDiagram
         text condition_match_mode
     }
     tagging_rule_conditions {
+        text id PK
+        integer created_at
+        integer updated_at
         text tagging_rule_id FK
         text field
         text operator
@@ -266,10 +339,16 @@ erDiagram
         integer is_case_sensitive
     }
     tagging_rule_actions {
+        text id PK
+        integer created_at
+        integer updated_at
         text tagging_rule_id FK
         text tag_id FK
     }
     webhooks {
+        text id PK
+        integer created_at
+        integer updated_at
         text name
         text url
         text secret
@@ -278,10 +357,16 @@ erDiagram
         text organization_id FK
     }
     webhook_events {
+        text id PK
+        integer created_at
+        integer updated_at
         text webhook_id FK
         text event_name
     }
     webhook_deliveries {
+        text id PK
+        integer created_at
+        integer updated_at
         text webhook_id FK
         text event_name
         text request_payload

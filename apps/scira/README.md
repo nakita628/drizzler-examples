@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-None.
+- [nakita628/drizzler#48](https://github.com/nakita628/drizzler/issues/48): the `$defaultFn(() => uuidv7())` id in the insert examples of `docs/README.md` change on every run, so each regeneration gives a diff.

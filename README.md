@@ -23,12 +23,12 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | — |
 | [dyad](apps/dyad) | dyad-sh/dyad | SQLite | — |
 | [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
-| [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | — |
-| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#42](https://github.com/nakita628/drizzler/issues/42), [#43](https://github.com/nakita628/drizzler/issues/43) |
+| [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
+| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | — |
 | [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
-| [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | — |
-| [papra](apps/papra) | papra-hq/papra | SQLite | [#44](https://github.com/nakita628/drizzler/issues/44) |
-| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | [#45](https://github.com/nakita628/drizzler/issues/45), [#46](https://github.com/nakita628/drizzler/issues/46) |
+| [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
+| [papra](apps/papra) | papra-hq/papra | SQLite | — |
+| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | — |
 
 ## Output
 

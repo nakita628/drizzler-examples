@@ -411,8 +411,8 @@ erDiagram
         text account_id
         text provider_id
         text user_id FK
-        sealedText account
-        sealedText account
+        text access_token
+        text refresh_token
         text id_token
         timestamp access_token_expires_at
         timestamp refresh_token_expires_at

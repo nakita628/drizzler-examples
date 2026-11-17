@@ -72,8 +72,8 @@ Table board {
   deletedBy uuid
   importId bigint
   workspaceId bigint [not null]
-  visibility boardVisibilityEnum [not null]
-  type boardTypeEnum [not null]
+  visibility board_visibility [not null]
+  type board_type [not null]
   isArchived boolean [not null]
   sourceBoardId bigint
   indexes {
@@ -99,7 +99,7 @@ Table user_board_favorites {
 Table board_members {
   boardId bigint [not null]
   workspaceMemberId bigint [not null]
-  role boardMemberRoleEnum [not null]
+  role board_member_role [not null]
   createdBy uuid
   createdAt timestamp [not null]
   indexes {
@@ -131,7 +131,7 @@ Table card {
 Table card_activity {
   id bigserial [pk, increment, not null]
   publicId varchar [not null, unique]
-  type activityTypeEnum [not null]
+  type card_activity_type [not null]
   cardId bigint [not null]
   fromIndex integer
   toIndex integer
@@ -301,7 +301,7 @@ Table list {
 Table notification {
   id bigserial [pk, increment, not null]
   publicId varchar [not null, unique]
-  type notificationTypeEnum [not null]
+  type notification_type [not null]
   userId uuid [not null]
   cardId bigint
   commentId bigint
@@ -418,7 +418,7 @@ Table workspace_invite_links {
   publicId varchar [not null, unique]
   workspaceId bigint [not null]
   code varchar [not null, unique]
-  status inviteLinkStatusEnum [not null]
+  status invite_link_status [not null]
   expiresAt timestamp
   createdAt timestamp [not null]
   createdBy uuid
@@ -432,7 +432,7 @@ Table workspace {
   name varchar [not null]
   description text
   slug varchar [not null, unique]
-  plan workspacePlanEnum [not null]
+  plan workspace_plan [not null]
   showEmailsToMembers boolean [not null]
   weekStartDay integer [not null]
   cardPrefix varchar [not null]
@@ -458,14 +458,14 @@ Table workspace_members {
   updatedAt timestamp
   deletedAt timestamp
   deletedBy uuid
-  role memberRoleEnum [not null, note: 'Legacy role enum']
+  role role [not null, note: 'Legacy role enum']
   roleId bigint
-  status memberStatusEnum [not null]
+  status member_status [not null]
 }
 
 Table workspace_slugs {
   slug varchar [not null, unique]
-  type slugTypeEnum [not null]
+  type slug_type [not null]
 }
 
 Table workspace_slug_checks {
