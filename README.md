@@ -24,6 +24,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [dyad](apps/dyad) | dyad-sh/dyad | SQLite | — |
 | [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
 | [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | — |
+| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#42](https://github.com/nakita628/drizzler/issues/42), [#43](https://github.com/nakita628/drizzler/issues/43) |
 
 ## Output
 
