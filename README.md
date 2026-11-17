@@ -41,6 +41,11 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [alchemy-d1](apps/alchemy-d1) | alchemy-run/alchemy (cloudflare-d1-drizzle) | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [alchemy-planetscale-mysql](apps/alchemy-planetscale-mysql) | alchemy-run/alchemy (cloudflare-planetscale-mysql-drizzle) | MySQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [alchemy-dsql](apps/alchemy-dsql) | alchemy-run/alchemy (aws-dsql-drizzle) | PostgreSQL | — |
+| [justship](apps/justship) | ocluf/justship | SQLite | — |
+| [cove](apps/cove) | mugnavo/cove | PostgreSQL | — |
+| [t4-app](apps/t4-app) | timothymiller/t4-app | SQLite | — |
+| [duolingo-clone](apps/duolingo-clone) | sanidhyy/duolingo-clone | PostgreSQL | — |
+| [canva-clone](apps/canva-clone) | Davronov-Alimardon/canva-clone | PostgreSQL | — |
 
 ## Output
 
