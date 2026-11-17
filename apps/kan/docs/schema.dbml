@@ -1,0 +1,19 @@
+Table user_board_favorites {
+  userId uuid [not null]
+  boardId bigint [not null]
+  createdAt timestamp [not null]
+  indexes {
+    (userId, boardId) [pk]
+    (userId) [name: 'user_board_favorite_user_idx']
+    (boardId) [name: 'user_board_favorite_board_idx']
+  }
+}
+
+Table workspace_slugs {
+  slug varchar [not null, unique]
+  type slugTypeEnum [not null]
+}
+
+Ref user_board_favorites_userId_users_id_fk: user_board_favorites.userId > users.id [delete: cascade]
+
+Ref user_board_favorites_boardId_boards_id_fk: user_board_favorites.boardId > boards.id [delete: cascade]
