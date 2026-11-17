@@ -4,7 +4,7 @@ The local SQLite schema of Dyad, a local, open-source AI app builder: apps, chat
 
 - Source: [dyad-sh/dyad `src/db/schema.ts`](https://github.com/dyad-sh/dyad/blob/63d28b887c1b62b8509373ba58d4b03573bb714a/src/db/schema.ts), [`src/shared/inference_source.ts`](https://github.com/dyad-sh/dyad/blob/63d28b887c1b62b8509373ba58d4b03573bb714a/src/shared/inference_source.ts) and [`src/shared/chat_turn_outcome.ts`](https://github.com/dyad-sh/dyad/blob/63d28b887c1b62b8509373ba58d4b03573bb714a/src/shared/chat_turn_outcome.ts) (Apache-2.0)
 - Dialect: SQLite
-- Covers: imports through a tsconfig `paths` alias (`@/shared/...`), `text({ enum })` built from imported `as const` arrays, `integer` with `mode: "timestamp"` and `.default(sql\`(unixepoch())\`)`, `primaryKey({ autoIncrement: true })`, `unique` and `uniqueIndex`, long comments between columns, and v1 `relations`
+- Covers: imports through a tsconfig `paths` alias (`@/shared/...`), `text({ enum })` built from imported `as const` arrays, `integer` with `mode: "timestamp"` and `` .default(sql`(unixepoch())`) ``, `primaryKey({ autoIncrement: true })`, `unique` and `uniqueIndex`, long comments between columns, and v1 `relations`
 
 ## Changes from upstream
 
@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-None.
+- [nakita628/drizzler#51](https://github.com/nakita628/drizzler/issues/51): the DBML does not mark the 15 `autoIncrement: true` keys as `increment`.

@@ -10,12 +10,12 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | --- | --- | --- | --- |
 | [northwind](apps/northwind) | drizzle-team/drizzle-northwind-benchmarks-pg | PostgreSQL | — |
 | [drizzle-benchmarks-pg](apps/drizzle-benchmarks-pg) | drizzle-team/drizzle-benchmarks | PostgreSQL | [#50](https://github.com/nakita628/drizzler/issues/50) |
-| [drizzle-benchmarks-sqlite](apps/drizzle-benchmarks-sqlite) | drizzle-team/drizzle-benchmarks | SQLite | — |
+| [drizzle-benchmarks-sqlite](apps/drizzle-benchmarks-sqlite) | drizzle-team/drizzle-benchmarks | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [realworld](apps/realworld) | bedstack/elysia-drizzle-realworld-example | PostgreSQL | — |
-| [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | — |
-| [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | — |
-| [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | — |
-| [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
+| [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | — |
 | [authjs-drizzle-sqlite](apps/authjs-drizzle-sqlite) | nextauthjs/next-auth (Drizzle adapter) | SQLite | — |
 | [authjs-drizzle-pg](apps/authjs-drizzle-pg) | nextauthjs/next-auth (Drizzle adapter) | PostgreSQL | — |
@@ -25,10 +25,10 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [midday](apps/midday) | midday-ai/midday | PostgreSQL | — |
 | [kan](apps/kan) | kanbn/kan | PostgreSQL | — |
 | [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | — |
-| [dyad](apps/dyad) | dyad-sh/dyad | SQLite | — |
+| [dyad](apps/dyad) | dyad-sh/dyad | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
 | [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
-| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | — |
+| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
 | [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
 | [papra](apps/papra) | papra-hq/papra | SQLite | — |
@@ -37,6 +37,10 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [pages-cms](apps/pages-cms) | pages-cms/pages-cms | PostgreSQL | — |
 | [turborepo-elysia](apps/turborepo-elysia) | vercel/turborepo (with-nextjs-elysia) | PostgreSQL | [#49](https://github.com/nakita628/drizzler/issues/49) |
 | [sigle](apps/sigle) | sigle/sigle | PostgreSQL | — |
+| [create-t3-turbo](apps/create-t3-turbo) | t3-oss/create-t3-turbo | PostgreSQL | — |
+| [alchemy-d1](apps/alchemy-d1) | alchemy-run/alchemy (cloudflare-d1-drizzle) | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [alchemy-planetscale-mysql](apps/alchemy-planetscale-mysql) | alchemy-run/alchemy (cloudflare-planetscale-mysql-drizzle) | MySQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [alchemy-dsql](apps/alchemy-dsql) | alchemy-run/alchemy (aws-dsql-drizzle) | PostgreSQL | — |
 
 ## Output
 

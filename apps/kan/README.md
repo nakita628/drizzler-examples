@@ -4,7 +4,7 @@ The schema of Kan, an open-source Trello alternative: workspaces, boards, lists,
 
 - Source: [kanbn/kan `packages/db/src/schema`](https://github.com/kanbn/kan/tree/49a6179591148d36faff5355088664b9ca703fc1/packages/db/src/schema) and [`packages/shared/src/utils/workspacePlans.ts`](https://github.com/kanbn/kan/blob/49a6179591148d36faff5355088664b9ca703fc1/packages/shared/src/utils/workspacePlans.ts) (AGPL-3.0)
 - Dialect: PostgreSQL
-- Covers: a directory `schema` with an `index.ts` that re-exports every file, `.enableRLS()` on almost every table, `pgEnum` built from an imported `as const` array, `bigserial`/`bigint` keys, `uuid` defaults from `sql\`uuid_generate_v4()\``, many named v1 relations (`relationName`), and the legacy object-style extra config
+- Covers: a directory `schema` with an `index.ts` that re-exports every file, `.enableRLS()` on almost every table, `pgEnum` built from an imported `as const` array, `bigserial`/`bigint` keys, `uuid` defaults from `` sql`uuid_generate_v4()` ``, many named v1 relations (`relationName`), and the legacy object-style extra config
 
 ## Changes from upstream
 
