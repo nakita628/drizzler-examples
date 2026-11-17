@@ -16,6 +16,8 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
 | [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | — |
 | [authjs-drizzle-sqlite](apps/authjs-drizzle-sqlite) | nextauthjs/next-auth (Drizzle adapter) | SQLite | — |
+| [vercel-ai-chatbot](apps/vercel-ai-chatbot) | vercel/ai-chatbot | PostgreSQL | [#33](https://github.com/nakita628/drizzler/issues/33) |
+| [saas-starter](apps/saas-starter) | nextjs/saas-starter | PostgreSQL | [#34](https://github.com/nakita628/drizzler/issues/34) |
 
 ## Output
 
@@ -62,4 +64,4 @@ To regenerate one app, run `pnpm -F @drizzler-examples/northwind generate`.
 
 ## License
 
-Each schema keeps the license of its source repository, linked from the app's README. drizzle-team/drizzle-northwind-benchmarks-pg does not declare a license.
+Each schema keeps the license of its source repository, linked from the app's README. drizzle-team/drizzle-northwind-benchmarks-pg and nextjs/saas-starter do not declare a license.

@@ -1,0 +1,28 @@
+# saas-starter
+
+The schema of the Next.js SaaS Starter: users, teams, team members, activity logs and invitations.
+
+- Source: [nextjs/saas-starter `lib/db/schema.ts`](https://github.com/nextjs/saas-starter/blob/6e33e58b1e553a41fe22e6b941a7229a002de361/lib/db/schema.ts) (no license declared)
+- Dialect: PostgreSQL
+- Covers: `serial` primary keys, snake_case SQL names, v1 `relations` with a renamed `one()` (`invitedBy`), a nullable foreign key, and a TypeScript `enum` exported next to the tables
+
+## Changes from upstream
+
+- `relations` is imported from `drizzle-orm/_relations` instead of `drizzle-orm`, because drizzle-orm 1.0 moved the v1 relational API there.
+
+## Generate
+
+```bash
+pnpm generate
+```
+
+The output is written to [`docs/`](docs/):
+
+- [`README.md`](docs/README.md): table docs with the SQL
+- [`er.svg`](docs/er.svg), [`er.png`](docs/er.png), [`er-dark.png`](docs/er-dark.png) and `tables/*.svg`: ER diagrams
+- [`schema.dbml`](docs/schema.dbml): DBML
+- [`er.md`](docs/er.md): Mermaid `erDiagram`
+
+## Known issues
+
+- [nakita628/drizzler#34](https://github.com/nakita628/drizzler/issues/34): the docs have no SQL. drizzler loads the schema with Node's strip-only type stripping, which rejects the `export enum ActivityType` at the bottom of the file (`TypeScript enum is not supported in strip-only mode`). `drizzle-kit export` loads the same file.
