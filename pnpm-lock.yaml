@@ -54,6 +54,30 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  apps/cap:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      nanoid:
+        specifier: ^5.0.4
+        version: 5.1.16
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   apps/create-t3-app:
     devDependencies:
       '@drizzler-examples/tsconfig':
@@ -333,6 +357,27 @@ importers:
         specifier: ^4.6.6
         version: 4.6.7
 
+  apps/pages-cms:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   apps/papra:
     devDependencies:
       '@drizzler-examples/tsconfig':
@@ -451,6 +496,27 @@ importers:
         version: 13.0.2
 
   apps/sim-studio:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(effect@4.1.4)(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  apps/turborepo-elysia:
     devDependencies:
       '@drizzler-examples/tsconfig':
         specifier: workspace:*
@@ -1462,6 +1528,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.16:
+    resolution: {integrity: sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   next-auth@5.0.0-beta.25:
     resolution: {integrity: sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog==}
     peerDependencies:
@@ -2209,6 +2280,8 @@ snapshots:
   luxon@3.7.2: {}
 
   nanoid@3.3.18: {}
+
+  nanoid@5.1.16: {}
 
   next-auth@5.0.0-beta.25(next@16.4.6(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1):
     dependencies:

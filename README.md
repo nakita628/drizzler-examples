@@ -29,6 +29,9 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
 | [papra](apps/papra) | papra-hq/papra | SQLite | — |
 | [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | — |
+| [cap](apps/cap) | CapSoftware/Cap | MySQL | — |
+| [pages-cms](apps/pages-cms) | pages-cms/pages-cms | PostgreSQL | — |
+| [turborepo-elysia](apps/turborepo-elysia) | vercel/turborepo (with-nextjs-elysia) | PostgreSQL | [#49](https://github.com/nakita628/drizzler/issues/49) |
 
 ## Output
 
