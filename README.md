@@ -9,6 +9,8 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | App | Source | Dialect | Known issues |
 | --- | --- | --- | --- |
 | [northwind](apps/northwind) | drizzle-team/drizzle-northwind-benchmarks-pg | PostgreSQL | — |
+| [drizzle-benchmarks-pg](apps/drizzle-benchmarks-pg) | drizzle-team/drizzle-benchmarks | PostgreSQL | [#50](https://github.com/nakita628/drizzler/issues/50) |
+| [drizzle-benchmarks-sqlite](apps/drizzle-benchmarks-sqlite) | drizzle-team/drizzle-benchmarks | SQLite | — |
 | [realworld](apps/realworld) | bedstack/elysia-drizzle-realworld-example | PostgreSQL | — |
 | [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | — |
 | [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | — |
@@ -16,6 +18,8 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
 | [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | — |
 | [authjs-drizzle-sqlite](apps/authjs-drizzle-sqlite) | nextauthjs/next-auth (Drizzle adapter) | SQLite | — |
+| [authjs-drizzle-pg](apps/authjs-drizzle-pg) | nextauthjs/next-auth (Drizzle adapter) | PostgreSQL | — |
+| [authjs-drizzle-mysql](apps/authjs-drizzle-mysql) | nextauthjs/next-auth (Drizzle adapter) | MySQL | — |
 | [vercel-ai-chatbot](apps/vercel-ai-chatbot) | vercel/ai-chatbot | PostgreSQL | — |
 | [saas-starter](apps/saas-starter) | nextjs/saas-starter | PostgreSQL | — |
 | [midday](apps/midday) | midday-ai/midday | PostgreSQL | — |
@@ -79,4 +83,4 @@ To regenerate one app, run `pnpm -F @drizzler-examples/northwind generate`.
 
 ## License
 
-Each schema keeps the license of its source repository, linked from the app's README. drizzle-team/drizzle-northwind-benchmarks-pg and nextjs/saas-starter do not declare a license.
+Each schema keeps the license of its source repository, linked from the app's README. drizzle-team/drizzle-northwind-benchmarks-pg, drizzle-team/drizzle-benchmarks and nextjs/saas-starter do not declare a license.

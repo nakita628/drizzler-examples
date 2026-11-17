@@ -1,0 +1,100 @@
+Table customers {
+  id serial [pk, increment, not null]
+  companyName text [not null]
+  contactName varchar [not null]
+  contactTitle varchar [not null]
+  address varchar [not null]
+  city varchar [not null]
+  postalCode varchar
+  region varchar
+  country varchar [not null]
+  phone varchar [not null]
+  fax varchar
+}
+
+Table employees {
+  id serial [pk, increment, not null]
+  lastName varchar [not null]
+  firstName varchar
+  title varchar [not null]
+  titleOfCourtesy varchar [not null]
+  birthDate date [not null]
+  hireDate date [not null]
+  address varchar [not null]
+  city varchar [not null]
+  postalCode varchar [not null]
+  country varchar [not null]
+  homePhone varchar [not null]
+  extension integer [not null]
+  notes text [not null]
+  recipientId integer
+  indexes {
+    (recipientId) [name: 'recepient_idx']
+  }
+}
+
+Table orders {
+  id serial [pk, increment, not null]
+  orderDate date [not null]
+  requiredDate date [not null]
+  shippedDate date
+  shipVia integer [not null]
+  freight "double precision" [not null]
+  shipName varchar [not null]
+  shipCity varchar [not null]
+  shipRegion varchar
+  shipPostalCode varchar
+  shipCountry varchar [not null]
+  customerId integer [not null]
+  employeeId integer [not null]
+}
+
+Table suppliers {
+  id serial [pk, increment, not null]
+  companyName varchar [not null]
+  contactName varchar [not null]
+  contactTitle varchar [not null]
+  address varchar [not null]
+  city varchar [not null]
+  region varchar
+  postalCode varchar [not null]
+  country varchar [not null]
+  phone varchar [not null]
+}
+
+Table products {
+  id serial [pk, increment, not null]
+  name text [not null]
+  quantityPerUnit varchar [not null]
+  unitPrice "double precision" [not null]
+  unitsInStock integer [not null]
+  unitsOnOrder integer [not null]
+  reorderLevel integer [not null]
+  discontinued integer [not null]
+  supplierId serial [increment, not null]
+  indexes {
+    (supplierId) [name: 'supplier_idx']
+  }
+}
+
+Table order_details {
+  unitPrice "double precision" [not null]
+  quantity integer [not null]
+  discount "double precision" [not null]
+  orderId integer [not null]
+  productId integer [not null]
+  indexes {
+    (orderId) [name: 'order_id_idx']
+    (productId) [name: 'product_id_idx']
+  }
+}
+
+Ref orders_customerId_customers_id_fk: orders.customerId > customers.id [delete: cascade]
+
+Ref orders_employeeId_employees_id_fk: orders.employeeId > employees.id [delete: cascade]
+
+Ref products_supplierId_suppliers_id_fk: products.supplierId > suppliers.id [delete: cascade]
+
+Ref order_details_orderId_orders_id_fk: order_details.orderId > orders.id [delete: cascade]
+
+Ref order_details_productId_products_id_fk: order_details.productId > products.id [delete: cascade]
