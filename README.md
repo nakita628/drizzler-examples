@@ -18,6 +18,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [authjs-drizzle-sqlite](apps/authjs-drizzle-sqlite) | nextauthjs/next-auth (Drizzle adapter) | SQLite | — |
 | [vercel-ai-chatbot](apps/vercel-ai-chatbot) | vercel/ai-chatbot | PostgreSQL | [#33](https://github.com/nakita628/drizzler/issues/33) |
 | [saas-starter](apps/saas-starter) | nextjs/saas-starter | PostgreSQL | [#34](https://github.com/nakita628/drizzler/issues/34) |
+| [midday](apps/midday) | midday-ai/midday | PostgreSQL | [#33](https://github.com/nakita628/drizzler/issues/33), [#35](https://github.com/nakita628/drizzler/issues/35), [#36](https://github.com/nakita628/drizzler/issues/36), [#37](https://github.com/nakita628/drizzler/issues/37) |
 
 ## Output
 
