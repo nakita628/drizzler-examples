@@ -27,6 +27,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#42](https://github.com/nakita628/drizzler/issues/42), [#43](https://github.com/nakita628/drizzler/issues/43) |
 | [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
 | [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | — |
+| [papra](apps/papra) | papra-hq/papra | SQLite | [#44](https://github.com/nakita628/drizzler/issues/44) |
 
 ## Output
 
