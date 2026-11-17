@@ -46,6 +46,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [t4-app](apps/t4-app) | timothymiller/t4-app | SQLite | — |
 | [duolingo-clone](apps/duolingo-clone) | sanidhyy/duolingo-clone | PostgreSQL | — |
 | [canva-clone](apps/canva-clone) | Davronov-Alimardon/canva-clone | PostgreSQL | — |
+| [refref](apps/refref) | amicalhq/refref | PostgreSQL | — |
 
 ## Output
 
