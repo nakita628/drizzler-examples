@@ -27,6 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#34](https://github.com/nakita628/drizzler/issues/34): the docs have no SQL. The `const enum`s (`AssetTypes`, `BookmarkTypes`) are rejected by Node's strip-only type stripping.
-- [nakita628/drizzler#39](https://github.com/nakita628/drizzler/issues/39): with the enums out of the way, the import of `AnySQLiteColumn` without `type` stops the schema from loading as well.
-- [nakita628/drizzler#40](https://github.com/nakita628/drizzler/issues/40): the 29 columns built by `createdAtField()`, `createdAtMsField()`, `modifiedAtField()` and `modifiedAtMsField()` have the helper's name as their type, are marked `NULL` and have no default; `dbCreatedAt: createdAtField()` keeps its TypeScript key instead of `createdAt`.
+None.

@@ -26,4 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#38](https://github.com/nakita628/drizzler/issues/38): the 32 tables that end in `.enableRLS()` are missing from the table list, the diagrams, the DBML and Mermaid; only `user_board_favorites` and `workspace_slugs` are there. The DBML refs still point at the missing tables, so `pnpm check:dbml` fails with `Table 'users' does not exist in Schema 'public'`.
+None.

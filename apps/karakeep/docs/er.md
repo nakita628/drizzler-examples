@@ -37,8 +37,11 @@ erDiagram
     user ||--o{ backups : "(id) - (userId)"
     assets |o--o{ backups : "(id) - (assetId)"
     user ||--o{ ruleEngineRules : "(id) - (userId)"
+    bookmarkTags |o--o{ ruleEngineRules : "(userId, id) - (userId, tagId)"
     user ||--o{ ruleEngineActions : "(id) - (userId)"
     ruleEngineRules ||--o{ ruleEngineActions : "(id) - (ruleId)"
+    bookmarkTags |o--o{ ruleEngineActions : "(userId, id) - (userId, tagId)"
+    bookmarkLists |o--o{ ruleEngineActions : "(userId, id) - (userId, listId)"
     user ||--o{ invites : "(id) - (invitedBy)"
     user ||--o| subscriptions : "(id) - (userId)"
     user ||--o| inAppSubscriptions : "(id) - (userId)"
@@ -88,7 +91,7 @@ erDiagram
         integer refreshTokenExpiresAt
         text scope
         text password
-        createdAtMsField createdAt
+        integer createdAt
         integer updatedAt
     }
     session {
@@ -98,7 +101,7 @@ erDiagram
         integer expiresAt
         text ipAddress
         text userAgent
-        createdAtMsField createdAt
+        integer createdAt
         integer updatedAt
     }
     verificationToken {
@@ -106,13 +109,13 @@ erDiagram
         text identifier
         text value
         integer expiresAt
-        createdAtMsField createdAt
+        integer createdAt
         integer updatedAt
     }
     apiKey {
         text id PK
         text name
-        createdAtField createdAt
+        integer createdAt
         integer lastUsedAt
         text keyId
         text keyHash
@@ -121,9 +124,9 @@ erDiagram
     }
     bookmarks {
         text id PK
-        createdAtField dbCreatedAt "The `createdAt` field and the `createdAt` column intentionally don't match. Re-saving an existing bookmark bumps it back to the top of the list, so the timestamp everything sorts and filters on is now 'when was this last saved' and lives in the `lastSavedAt` column. It keeps the `createdAt` field name because that's what the API has always exposed and what every query already orders by. The immutable 'when did this row first appear' timestamp stays in the original `createdAt` column, and is exposed to clients as `firstCreatedAt`."
-        createdAtField lastSavedAt
-        modifiedAtField modifiedAt
+        integer createdAt "The `createdAt` field and the `createdAt` column intentionally don't match. Re-saving an existing bookmark bumps it back to the top of the list, so the timestamp everything sorts and filters on is now 'when was this last saved' and lives in the `lastSavedAt` column. It keeps the `createdAt` field name because that's what the API has always exposed and what every query already orders by. The immutable 'when did this row first appear' timestamp stays in the original `createdAt` column, and is exposed to clients as `firstCreatedAt`."
+        integer lastSavedAt
+        integer modifiedAt
         text title
         integer archived
         integer favourited
@@ -178,7 +181,7 @@ erDiagram
         text prefix
         text suffix
         text note
-        createdAtField createdAt
+        integer createdAt
     }
     userReadingProgress {
         text id PK
@@ -187,7 +190,7 @@ erDiagram
         integer readingProgressOffset
         text readingProgressAnchor
         integer readingProgressPercent
-        modifiedAtField modifiedAt
+        integer modifiedAt
     }
     bookmarkTexts {
         text id PK, FK
@@ -207,7 +210,7 @@ erDiagram
         text id PK
         text name
         text normalizedName
-        createdAtField createdAt
+        integer createdAt
         text userId FK
     }
     tagsOnBookmarks {
@@ -221,7 +224,7 @@ erDiagram
         text name
         text description
         text icon
-        createdAtField createdAt
+        integer createdAt
         text userId FK
         text type
         text query "Only applicable for smart lists"
@@ -240,7 +243,7 @@ erDiagram
         text listId FK
         text userId FK
         text role
-        createdAtField addedAt
+        integer createdAt
         text addedBy FK
     }
     listInvitations {
@@ -258,15 +261,15 @@ erDiagram
         text text
         integer enabled
         text appliesTo
-        createdAtField createdAt
+        integer createdAt
         text userId FK
     }
     chatSessions {
         text id PK
         text title
         text userId FK
-        createdAtMsField createdAt
-        modifiedAtMsField modifiedAt
+        integer createdAt
+        integer modifiedAt
     }
     chatMessages {
         text id PK
@@ -274,7 +277,7 @@ erDiagram
         text role
         text content
         text metadata
-        createdAtMsField createdAt
+        integer createdAt
     }
     rssFeeds {
         text id PK
@@ -282,7 +285,7 @@ erDiagram
         text url
         integer enabled
         integer importTags
-        createdAtField createdAt
+        integer createdAt
         integer lastFetchedAt
         integer lastSuccessfulFetchAt
         text lastFetchedStatus
@@ -290,7 +293,7 @@ erDiagram
     }
     webhooks {
         text id PK
-        createdAtField createdAt
+        integer createdAt
         text url
         text userId FK
         text events
@@ -298,7 +301,7 @@ erDiagram
     }
     rssFeedImports {
         text id PK
-        createdAtField createdAt
+        integer createdAt
         text entryId
         text rssFeedId FK
         text bookmarkId FK
@@ -307,7 +310,7 @@ erDiagram
         text id PK
         text userId FK
         text assetId FK
-        createdAtField createdAt
+        integer createdAt
         integer size
         integer bookmarkCount
         text status
@@ -325,21 +328,21 @@ erDiagram
         text event
         text condition
         text userId FK "References"
-        text tagId
+        text tagId FK
     }
     ruleEngineActions {
         text id PK
         text userId FK
         text ruleId FK
         text action
-        text listId "References"
-        text tagId
+        text listId FK "References"
+        text tagId FK
     }
     invites {
         text id PK
         text email
         text token
-        createdAtField createdAt
+        integer createdAt
         integer usedAt
         text invitedBy FK
     }
@@ -354,8 +357,8 @@ erDiagram
         integer cancelAtPeriodEnd
         integer startDate
         integer endDate
-        createdAtField createdAt
-        modifiedAtField modifiedAt
+        integer createdAt
+        integer modifiedAt
     }
     inAppSubscriptions {
         text id PK
@@ -368,8 +371,8 @@ erDiagram
         integer isSandbox
         integer startDate
         integer endDate
-        createdAtField createdAt
-        modifiedAtField modifiedAt
+        integer createdAt
+        integer modifiedAt
     }
     importSessions {
         text id PK
@@ -385,14 +388,14 @@ erDiagram
         integer failedBookmarks
         integer pendingBookmarks
         integer processingBookmarks
-        createdAtField createdAt
-        modifiedAtField modifiedAt
+        integer createdAt
+        integer modifiedAt
     }
     importSessionBookmarks {
         text id PK
         text importSessionId FK
         text bookmarkId FK
-        createdAtField createdAt
+        integer createdAt
     }
     importStagingBookmarks {
         text id PK
@@ -411,7 +414,7 @@ erDiagram
         text result "Result (for observability)"
         text resultReason
         text resultBookmarkId FK
-        createdAtField createdAt
+        integer createdAt
         integer completedAt
     }
 ```

@@ -20,7 +20,7 @@ Table transactions {
   date date [not null]
   name text [not null]
   method transactionMethods [not null]
-  amount numericCasted [not null]
+  amount numeric(10,2) [not null]
   currency text [not null]
   team_id uuid [not null]
   assigned_id uuid
@@ -28,17 +28,17 @@ Table transactions {
   bank_account_id uuid
   internal_id text [not null]
   status transactionStatus
-  balance numericCasted
+  balance numeric(10,2)
   manual boolean
   notified boolean
   internal boolean
   description text
   category_slug text
-  baseAmount numericCasted
+  baseAmount numeric(10,2)
   counterparty_name text
   base_currency text
-  tax_amount numericCasted
-  tax_rate numericCasted
+  tax_amount numeric(10,2)
+  tax_rate numeric(10,2)
   tax_type text
   recurring boolean
   frequency transaction_frequency
@@ -60,7 +60,7 @@ Table tracker_entries {
   assigned_id uuid
   team_id uuid
   description text
-  rate numericCasted
+  rate numeric(10,2)
   currency text
   billed boolean
   date date
@@ -110,11 +110,11 @@ Table bank_accounts {
   bank_connection_id uuid
   enabled boolean [not null]
   account_id text [not null]
-  balance numericCasted
+  balance numeric(10,2)
   manual boolean
   type account_type
   base_currency text
-  baseBalance numericCasted
+  baseBalance numeric(10,2)
   error_details text
   error_retries smallint
   account_reference text
@@ -125,8 +125,8 @@ Table bank_accounts {
   wire_routing_number text
   account_number text
   sort_code text
-  availableBalance numericCasted [note: 'Credit account balances']
-  creditLimit numericCasted
+  availableBalance numeric(10,2) [note: 'Credit account balances']
+  creditLimit numeric(10,2)
 }
 
 Table invoice_recurring {
@@ -150,7 +150,7 @@ Table invoice_recurring {
   last_generated_at timestamptz
   timezone text [not null]
   due_date_offset integer [not null, note: 'Invoice template data']
-  amount numericCasted
+  amount numeric(10,2)
   currency text
   line_items jsonb
   template jsonb
@@ -158,10 +158,10 @@ Table invoice_recurring {
   from_details jsonb
   note_details jsonb
   customer_name text
-  vat numericCasted
-  tax numericCasted
-  discount numericCasted
-  subtotal numericCasted
+  vat numeric(10,2)
+  tax numeric(10,2)
+  discount numeric(10,2)
+  subtotal numeric(10,2)
   top_block jsonb
   bottom_block jsonb
   template_id uuid
@@ -175,7 +175,7 @@ Table invoices {
   due_date timestamptz
   invoice_number text
   customer_id uuid
-  amount numericCasted
+  amount numeric(10,2)
   currency text
   line_items jsonb
   payment_details jsonb
@@ -186,8 +186,8 @@ Table invoices {
   team_id uuid [not null]
   paid_at timestamptz
   fts tsvector [not null]
-  vat numericCasted
-  tax numericCasted
+  vat numeric(10,2)
+  tax numeric(10,2)
   url text
   file_path text
   status invoice_status [not null]
@@ -200,10 +200,10 @@ Table invoices {
   token text [not null]
   sent_to text
   reminder_sent_at timestamptz
-  discount numericCasted
+  discount numeric(10,2)
   file_size bigint
   user_id uuid
-  subtotal numericCasted
+  subtotal numeric(10,2)
   top_block jsonb
   bottom_block jsonb
   sent_at timestamptz
@@ -292,7 +292,7 @@ Table customers {
 Table exchange_rates {
   id uuid [pk, not null]
   base text
-  rate numericCasted
+  rate numeric(10,2)
   target text
   updated_at timestamptz
   indexes {
@@ -587,7 +587,7 @@ Table invoice_templates {
   date_format text
   include_vat boolean
   include_tax boolean
-  tax_rate numericCasted
+  tax_rate numeric(10,2)
   delivery_type invoice_delivery_type [not null]
   discount_label text
   include_discount boolean
@@ -595,7 +595,7 @@ Table invoice_templates {
   include_qr boolean
   total_summary_label text
   title text
-  vat_rate numericCasted
+  vat_rate numeric(10,2)
   include_units boolean
   subtotal_label text
   include_pdf boolean
@@ -621,10 +621,10 @@ Table invoice_products {
   created_by uuid
   name text [not null]
   description text
-  price numericCasted
+  price numeric(10,2)
   currency text
   unit text
-  tax_rate numericCasted
+  tax_rate numeric(10,2)
   isActive boolean [not null]
   usage_count integer [not null]
   last_used_at timestamptz
@@ -663,7 +663,7 @@ Table users {
   week_starts_on_monday boolean
   timezone text
   timezone_auto_sync boolean
-  time_format numericCasted
+  time_format numeric
   date_format text
 }
 
@@ -671,7 +671,7 @@ Table tracker_projects {
   id uuid [pk, not null]
   created_at timestamptz [not null]
   team_id uuid
-  rate numericCasted
+  rate numeric(10,2)
   currency text
   status trackerStatus [not null]
   description text
@@ -689,7 +689,7 @@ Table inbox {
   file_path text
   file_name text
   transaction_id uuid
-  amount numericCasted
+  amount numeric(10,2)
   currency text
   content_type text
   size bigint [note: 'You can use { mode: "bigint" } if numbers are exceeding js number limitations']
@@ -705,10 +705,10 @@ Table inbox {
   fts tsvector [not null]
   type inbox_type
   description text
-  base_amount numericCasted
+  base_amount numeric(10,2)
   base_currency text
-  tax_amount numericCasted
-  tax_rate numericCasted
+  tax_amount numeric(10,2)
+  tax_rate numeric(10,2)
   tax_type text
   inbox_account_id uuid
   invoice_number text
@@ -737,11 +737,11 @@ Table transaction_match_suggestions {
   team_id uuid [not null, note: 'Core relationship']
   inbox_id uuid [not null]
   transaction_id uuid [not null]
-  confidence_score numericCasted [not null, note: 'Match scores for transparency']
-  amount_score numericCasted
-  currency_score numericCasted
-  date_score numericCasted
-  name_score numericCasted
+  confidence_score numeric(4,3) [not null, note: 'Match scores for transparency']
+  amount_score numeric(4,3)
+  currency_score numeric(4,3)
+  date_score numeric(4,3)
+  name_score numeric(4,3)
   match_type text [not null, note: 'Match context']
   match_details jsonb
   status text [not null, note: 'User interaction tracking']
@@ -781,7 +781,7 @@ Table transaction_categories {
   created_at timestamptz
   system boolean
   slug text [not null]
-  tax_rate numericCasted
+  tax_rate numeric(10,2)
   tax_type text
   tax_reporting_code text
   excluded boolean
@@ -849,7 +849,7 @@ Table short_links {
   short_id text [not null]
   url text [not null]
   type text
-  size numericCasted
+  size numeric(10,2)
   mime_type text
   file_name text
   team_id uuid [not null]
@@ -1042,6 +1042,8 @@ Ref transactions_team_id_teams_id_fk: transactions.team_id > teams.id
 
 Ref transactions_bank_account_id_bank_accounts_id_fk: transactions.bank_account_id > bank_accounts.id [delete: cascade]
 
+Ref transactions_team_id_category_slug_transaction_categories_team_id_slug_fk: transactions.(team_id, category_slug) > transaction_categories.(team_id, slug)
+
 Ref tracker_entries_assigned_id_users_id_fk: tracker_entries.assigned_id > users.id [delete: set null]
 
 Ref tracker_entries_project_id_tracker_projects_id_fk: tracker_entries.project_id > tracker_projects.id [delete: cascade]
@@ -1146,9 +1148,11 @@ Ref invoice_products_team_id_teams_id_fk: invoice_products.team_id > teams.id [d
 
 Ref invoice_products_created_by_users_id_fk: invoice_products.created_by > users.id [delete: set null]
 
+Ref transaction_enrichments_team_id_category_slug_transaction_categories_team_id_slug_fk: transaction_enrichments.(team_id, category_slug) > transaction_categories.(team_id, slug) [delete: cascade]
+
 Ref transaction_enrichments_team_id_teams_id_fk: transaction_enrichments.team_id > teams.id [delete: cascade]
 
-Ref users_id_users_id_fk: users.id - users.id [delete: cascade]
+// Ref users_id_users_id_fk: users.id - users.id [delete: cascade] (a key from a column to itself, which DBML cannot express)
 
 Ref users_team_id_teams_id_fk: users.team_id > teams.id [delete: set null]
 

@@ -3,6 +3,7 @@ erDiagram
     users |o--o{ transactions : "(id) - (assigned_id)"
     teams ||--o{ transactions : "(id) - (team_id)"
     bank_accounts |o--o{ transactions : "(id) - (bank_account_id)"
+    transaction_categories |o--o{ transactions : "(team_id, slug) - (team_id, category_slug)"
     users |o--o{ tracker_entries : "(id) - (assigned_id)"
     tracker_projects |o--o{ tracker_entries : "(id) - (project_id)"
     teams |o--o{ tracker_entries : "(id) - (team_id)"
@@ -55,6 +56,7 @@ erDiagram
     teams ||--o{ invoice_templates : "(id) - (team_id)"
     teams ||--o{ invoice_products : "(id) - (team_id)"
     users |o--o{ invoice_products : "(id) - (created_by)"
+    transaction_categories |o--o{ transaction_enrichments : "(team_id, slug) - (team_id, category_slug)"
     teams |o--o{ transaction_enrichments : "(id) - (team_id)"
     users ||--o| users : "(id) - (id)"
     teams |o--o{ users : "(id) - (team_id)"
@@ -117,7 +119,7 @@ erDiagram
         date date
         text name
         transactionMethods method
-        numericCasted amount
+        numeric amount
         text currency
         uuid team_id FK
         uuid assigned_id FK
@@ -125,17 +127,17 @@ erDiagram
         uuid bank_account_id FK
         text internal_id
         transactionStatus status
-        numericCasted balance
+        numeric balance
         boolean manual
         boolean notified
         boolean internal
         text description
-        text category_slug
-        numericCasted baseAmount
+        text category_slug FK
+        numeric baseAmount
         text counterparty_name
         text base_currency
-        numericCasted tax_amount
-        numericCasted tax_rate
+        numeric tax_amount
+        numeric tax_rate
         text tax_type
         boolean recurring
         transaction_frequency frequency
@@ -153,7 +155,7 @@ erDiagram
         uuid assigned_id FK
         uuid team_id FK
         text description
-        numericCasted rate
+        numeric rate
         text currency
         boolean billed
         date date
@@ -190,11 +192,11 @@ erDiagram
         uuid bank_connection_id FK
         boolean enabled
         text account_id
-        numericCasted balance
+        numeric balance
         boolean manual
         account_type type
         text base_currency
-        numericCasted baseBalance
+        numeric baseBalance
         text error_details
         smallint error_retries
         text account_reference
@@ -205,8 +207,8 @@ erDiagram
         text wire_routing_number
         text account_number
         text sort_code
-        numericCasted availableBalance "Credit account balances"
-        numericCasted creditLimit
+        numeric availableBalance "Credit account balances"
+        numeric creditLimit
     }
     invoice_recurring {
         uuid id PK
@@ -229,7 +231,7 @@ erDiagram
         timestamptz last_generated_at
         text timezone
         integer due_date_offset "Invoice template data"
-        numericCasted amount
+        numeric amount
         text currency
         jsonb line_items
         jsonb template
@@ -237,10 +239,10 @@ erDiagram
         jsonb from_details
         jsonb note_details
         text customer_name
-        numericCasted vat
-        numericCasted tax
-        numericCasted discount
-        numericCasted subtotal
+        numeric vat
+        numeric tax
+        numeric discount
+        numeric subtotal
         jsonb top_block
         jsonb bottom_block
         uuid template_id FK
@@ -253,7 +255,7 @@ erDiagram
         timestamptz due_date
         text invoice_number
         uuid customer_id FK
-        numericCasted amount
+        numeric amount
         text currency
         jsonb line_items
         jsonb payment_details
@@ -264,8 +266,8 @@ erDiagram
         uuid team_id FK
         timestamptz paid_at
         tsvector fts
-        numericCasted vat
-        numericCasted tax
+        numeric vat
+        numeric tax
         text url
         text file_path
         invoice_status status
@@ -278,10 +280,10 @@ erDiagram
         text token
         text sent_to
         timestamptz reminder_sent_at
-        numericCasted discount
+        numeric discount
         bigint file_size
         uuid user_id FK
-        numericCasted subtotal
+        numeric subtotal
         jsonb top_block
         jsonb bottom_block
         timestamptz sent_at
@@ -348,7 +350,7 @@ erDiagram
     exchange_rates {
         uuid id PK
         text base
-        numericCasted rate
+        numeric rate
         text target
         timestamptz updated_at
     }
@@ -576,7 +578,7 @@ erDiagram
         text date_format
         boolean include_vat
         boolean include_tax
-        numericCasted tax_rate
+        numeric tax_rate
         invoice_delivery_type delivery_type
         text discount_label
         boolean include_discount
@@ -584,7 +586,7 @@ erDiagram
         boolean include_qr
         text total_summary_label
         text title
-        numericCasted vat_rate
+        numeric vat_rate
         boolean include_units
         text subtotal_label
         boolean include_pdf
@@ -606,10 +608,10 @@ erDiagram
         uuid created_by FK
         text name
         text description
-        numericCasted price
+        numeric price
         text currency
         text unit
-        numericCasted tax_rate
+        numeric tax_rate
         boolean isActive
         integer usage_count
         timestamptz last_used_at
@@ -620,7 +622,7 @@ erDiagram
         timestamptz created_at
         text name
         uuid team_id FK
-        text category_slug
+        text category_slug FK
         boolean system
     }
     users {
@@ -634,14 +636,14 @@ erDiagram
         boolean week_starts_on_monday
         text timezone
         boolean timezone_auto_sync
-        numericCasted time_format
+        numeric time_format
         text date_format
     }
     tracker_projects {
         uuid id PK
         timestamptz created_at
         uuid team_id FK
-        numericCasted rate
+        numeric rate
         text currency
         trackerStatus status
         text description
@@ -658,7 +660,7 @@ erDiagram
         text file_path
         text file_name
         uuid transaction_id FK
-        numericCasted amount
+        numeric amount
         text currency
         text content_type
         bigint size "You can use { mode: 'bigint' } if numbers are exceeding js number limitations"
@@ -674,10 +676,10 @@ erDiagram
         tsvector fts
         inbox_type type
         text description
-        numericCasted base_amount
+        numeric base_amount
         text base_currency
-        numericCasted tax_amount
-        numericCasted tax_rate
+        numeric tax_amount
+        numeric tax_rate
         text tax_type
         uuid inbox_account_id FK
         text invoice_number
@@ -697,11 +699,11 @@ erDiagram
         uuid team_id FK "Core relationship"
         uuid inbox_id FK
         uuid transaction_id FK
-        numericCasted confidence_score "Match scores for transparency"
-        numericCasted amount_score
-        numericCasted currency_score
-        numericCasted date_score
-        numericCasted name_score
+        numeric confidence_score "Match scores for transparency"
+        numeric amount_score
+        numeric currency_score
+        numeric date_score
+        numeric name_score
         text match_type "Match context"
         jsonb match_details
         text status "User interaction tracking"
@@ -728,7 +730,7 @@ erDiagram
         timestamptz created_at
         boolean system
         text slug PK
-        numericCasted tax_rate
+        numeric tax_rate
         text tax_type
         text tax_reporting_code
         boolean excluded
@@ -777,7 +779,7 @@ erDiagram
         text short_id
         text url
         text type
-        numericCasted size
+        numeric size
         text mime_type
         text file_name
         uuid team_id FK

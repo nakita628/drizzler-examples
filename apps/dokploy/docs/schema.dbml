@@ -159,11 +159,11 @@ Table application {
   name text [not null]
   appName text [not null, unique]
   description text
-  env encryptedText
-  previewEnv encryptedText
+  env text
+  previewEnv text
   watchPaths text
-  previewBuildArgs encryptedText
-  previewBuildSecrets encryptedText
+  previewBuildArgs text
+  previewBuildSecrets text
   previewLabels text
   previewWildcard text
   previewPort integer
@@ -176,8 +176,8 @@ Table application {
   isPreviewDeploymentsActive boolean
   previewRequireCollaboratorPermissions boolean [note: 'Security: Require collaborator permissions for preview deployments']
   rollbackActive boolean
-  buildArgs encryptedText
-  buildSecrets encryptedText
+  buildArgs text
+  buildSecrets text
   memoryReservation text
   memoryLimit text
   cpuReservation text
@@ -328,7 +328,7 @@ Table compose {
   name text [not null]
   appName text [not null]
   description text
-  env encryptedText
+  env text
   composeFile text [not null]
   refreshToken text
   sourceType sourceTypeCompose [not null]
@@ -452,7 +452,7 @@ Table environment {
   name text [not null]
   description text
   createdAt text [not null]
-  env encryptedText [not null]
+  env text [not null]
   projectId text [not null]
   isDefault boolean [not null]
 }
@@ -533,7 +533,7 @@ Table libsql {
   enableNamespaces boolean [not null]
   dockerImage text [not null]
   command text
-  env encryptedText
+  env text
   memoryReservation text [note: 'RESOURCES']
   memoryLimit text
   cpuReservation text
@@ -572,7 +572,7 @@ Table mariadb {
   dockerImage text [not null]
   command text
   args text
-  env encryptedText
+  env text
   memoryReservation text [note: 'RESOURCES']
   memoryLimit text
   cpuReservation text
@@ -608,7 +608,7 @@ Table mongo {
   dockerImage text [not null]
   command text
   args text
-  env encryptedText
+  env text
   memoryReservation text
   memoryLimit text
   cpuReservation text
@@ -666,7 +666,7 @@ Table mysql {
   dockerImage text [not null]
   command text
   args text
-  env encryptedText
+  env text
   memoryReservation text
   memoryLimit text
   cpuReservation text
@@ -856,7 +856,7 @@ Table postgres {
   dockerImage text [not null]
   command text
   args text
-  env encryptedText
+  env text
   memoryReservation text
   externalPort integer
   memoryLimit text
@@ -904,7 +904,7 @@ Table project {
   description text
   createdAt text [not null]
   organizationId text [not null]
-  env encryptedText [not null]
+  env text [not null]
 }
 
 Table redirect {
@@ -926,7 +926,7 @@ Table redis {
   dockerImage text [not null]
   command text
   args text
-  env encryptedText
+  env text
   memoryReservation text
   memoryLimit text
   cpuReservation text
@@ -990,7 +990,7 @@ Table sandbox {
   deadlineAt timestamptz [not null]
   lastActivityAt timestamptz
   networkMode sandboxNetworkMode [not null]
-  envVars encryptedText
+  envVars text
   workdir text [not null]
   user text
   runtime text
@@ -1119,9 +1119,9 @@ Table telemetryProvider {
   name text [not null]
   providerType TelemetryProviderType [not null]
   signals text [not null]
-  endpoint encryptedText
-  apiKey encryptedText
-  apiSecret encryptedText
+  endpoint text
+  apiKey text
+  apiSecret text
   extraConfig jsonb
   enabled boolean [not null]
   createdAt text [not null]

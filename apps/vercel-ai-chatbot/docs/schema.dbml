@@ -84,4 +84,6 @@ Ref Document_userId_User_id_fk: Document.userId > User.id
 
 Ref Suggestion_userId_User_id_fk: Suggestion.userId > User.id
 
+Ref Suggestion_documentId_documentCreatedAt_Document_id_createdAt_fk: Suggestion.(documentId, documentCreatedAt) > Document.(id, createdAt)
+
 Ref Stream_chatId_Chat_id_fk: Stream.chatId > Chat.id

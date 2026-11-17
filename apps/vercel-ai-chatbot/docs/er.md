@@ -6,6 +6,7 @@ erDiagram
     Message_v2 ||--o{ Vote_v2 : "(id) - (messageId)"
     User ||--o{ Document : "(id) - (userId)"
     User ||--o{ Suggestion : "(id) - (userId)"
+    Document ||--o{ Suggestion : "(id, createdAt) - (documentId, documentCreatedAt)"
     Chat ||--o{ Stream : "(id) - (chatId)"
     User {
         timestamp createdAt
@@ -49,8 +50,8 @@ erDiagram
     Suggestion {
         timestamp createdAt
         text description
-        timestamp documentCreatedAt
-        uuid documentId
+        timestamp documentCreatedAt FK
+        uuid documentId FK
         uuid id PK
         boolean isResolved
         text originalText

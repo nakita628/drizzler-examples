@@ -697,6 +697,10 @@ ALTER TABLE "Document" ADD CONSTRAINT "Document_userId_User_id_fkey" FOREIGN KEY
 
 - `userId` → [user.id](#table-user) (many to one)
 
+#### Referenced by
+
+- `id` → [suggestion.documentId](#table-suggestion) (one to many)
+
 <details>
 <summary>Queries and their SQL</summary>
 
@@ -815,17 +819,17 @@ Table `Suggestion`.
 
 ![suggestion and the tables it relates to](tables/suggestion.svg)
 
-| Column              | Type        | Constraints                       | Default            | Description |
-| ------------------- | ----------- | --------------------------------- | ------------------ | ----------- |
-| `createdAt`         | `timestamp` | NOT NULL                          |                    |             |
-| `description`       | `text`      | NULL                              |                    |             |
-| `documentCreatedAt` | `timestamp` | NOT NULL                          |                    |             |
-| `documentId`        | `uuid`      | NOT NULL                          |                    |             |
-| `id`                | `uuid`      | PK NOT NULL                       | `.defaultRandom()` |             |
-| `isResolved`        | `boolean`   | NOT NULL                          | `.default(false)`  |             |
-| `originalText`      | `text`      | NOT NULL                          |                    |             |
-| `suggestedText`     | `text`      | NOT NULL                          |                    |             |
-| `userId`            | `uuid`      | NOT NULL → [user.id](#table-user) |                    |             |
+| Column              | Type        | Constraints                               | Default            | Description |
+| ------------------- | ----------- | ----------------------------------------- | ------------------ | ----------- |
+| `createdAt`         | `timestamp` | NOT NULL                                  |                    |             |
+| `description`       | `text`      | NULL                                      |                    |             |
+| `documentCreatedAt` | `timestamp` | NOT NULL                                  |                    |             |
+| `documentId`        | `uuid`      | NOT NULL → [document.id](#table-document) |                    |             |
+| `id`                | `uuid`      | PK NOT NULL                               | `.defaultRandom()` |             |
+| `isResolved`        | `boolean`   | NOT NULL                                  | `.default(false)`  |             |
+| `originalText`      | `text`      | NOT NULL                                  |                    |             |
+| `suggestedText`     | `text`      | NOT NULL                                  |                    |             |
+| `userId`            | `uuid`      | NOT NULL → [user.id](#table-user)         |                    |             |
 
 #### Definition
 
@@ -850,6 +854,7 @@ ALTER TABLE "Suggestion" ADD CONSTRAINT "Suggestion_0xmkr3D4oqj8_fkey" FOREIGN K
 #### References
 
 - `userId` → [user.id](#table-user) (many to one)
+- `documentId` → [document.id](#table-document) (many to one)
 
 <details>
 <summary>Queries and their SQL</summary>

@@ -280,11 +280,11 @@ erDiagram
         text name
         text appName
         text description
-        encryptedText env
-        encryptedText previewEnv
+        text env
+        text previewEnv
         text watchPaths
-        encryptedText previewBuildArgs
-        encryptedText previewBuildSecrets
+        text previewBuildArgs
+        text previewBuildSecrets
         text previewLabels
         text previewWildcard
         integer previewPort
@@ -297,8 +297,8 @@ erDiagram
         boolean isPreviewDeploymentsActive
         boolean previewRequireCollaboratorPermissions "Security: Require collaborator permissions for preview deployments"
         boolean rollbackActive
-        encryptedText buildArgs
-        encryptedText buildSecrets
+        text buildArgs
+        text buildSecrets
         text memoryReservation
         text memoryLimit
         text cpuReservation
@@ -439,7 +439,7 @@ erDiagram
         text name
         text appName
         text description
-        encryptedText env
+        text env
         text composeFile
         text refreshToken
         sourceTypeCompose sourceType
@@ -555,7 +555,7 @@ erDiagram
         text name
         text description
         text createdAt
-        encryptedText env
+        text env
         text projectId FK
         boolean isDefault
     }
@@ -630,7 +630,7 @@ erDiagram
         boolean enableNamespaces
         text dockerImage
         text command
-        encryptedText env
+        text env
         text memoryReservation "RESOURCES"
         text memoryLimit
         text cpuReservation
@@ -668,7 +668,7 @@ erDiagram
         text dockerImage
         text command
         text args
-        encryptedText env
+        text env
         text memoryReservation "RESOURCES"
         text memoryLimit
         text cpuReservation
@@ -703,7 +703,7 @@ erDiagram
         text dockerImage
         text command
         text args
-        encryptedText env
+        text env
         text memoryReservation
         text memoryLimit
         text cpuReservation
@@ -759,7 +759,7 @@ erDiagram
         text dockerImage
         text command
         text args
-        encryptedText env
+        text env
         text memoryReservation
         text memoryLimit
         text cpuReservation
@@ -928,7 +928,7 @@ erDiagram
         text dockerImage
         text command
         text args
-        encryptedText env
+        text env
         text memoryReservation
         integer externalPort
         text memoryLimit
@@ -974,7 +974,7 @@ erDiagram
         text description
         text createdAt
         text organizationId FK
-        encryptedText env
+        text env
     }
     redirect {
         text redirectId PK
@@ -994,7 +994,7 @@ erDiagram
         text dockerImage
         text command
         text args
-        encryptedText env
+        text env
         text memoryReservation
         text memoryLimit
         text cpuReservation
@@ -1055,7 +1055,7 @@ erDiagram
         timestamptz deadlineAt
         timestamptz lastActivityAt
         sandboxNetworkMode networkMode
-        encryptedText envVars
+        text envVars
         text workdir
         text user
         text runtime
@@ -1164,9 +1164,9 @@ erDiagram
         text name
         TelemetryProviderType providerType
         text signals
-        encryptedText endpoint
-        encryptedText apiKey
-        encryptedText apiSecret
+        text endpoint
+        text apiKey
+        text apiSecret
         jsonb extraConfig
         boolean enabled
         text createdAt

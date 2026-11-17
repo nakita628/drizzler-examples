@@ -1792,7 +1792,7 @@ db.insert(account).values({
 ```sql
 insert into "account" ("id", "account_id", "provider_id", "user_id", "access_token", "refresh_token", "id_token", "access_token_expires_at", "refresh_token_expires_at", "scope", "password", "is2FAEnabled", "created_at", "updated_at", "resetPasswordToken", "resetPasswordExpiresAt", "confirmationToken", "confirmationExpiresAt")
 values ($1, $2, $3, $4, default, default, default, default, default, default, default, default, $5, $6, default, default, default, default)
--- params: ["ClwupGhtj0L6n2pnACCX2","L_yGO15Dm4cZglPf1MyxF","providerId","userId","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z"]
+-- params: ["HySffaaETNggFNOsiiLeh","hXYAdJs3BIjzWBS95Wog3","providerId","userId","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of account, found by its primary key.
@@ -2071,7 +2071,7 @@ db.insert(organization).values({
 ```sql
 insert into "organization" ("id", "name", "slug", "logo", "created_at", "metadata", "default_role", "owner_id")
 values ($1, $2, default, default, $3, default, default, $4)
--- params: ["SMSPca0B2gEAD8kOmhFeY","name","2026-01-01T00:00:00.000Z","ownerId"]
+-- params: ["1qD415nK-S4pNzS93QU0G","name","2026-01-01T00:00:00.000Z","ownerId"]
 ```
 
 **Update**: Changes a row of organization, found by its primary key.
@@ -2209,7 +2209,7 @@ db.insert(organizationRole).values({
 ```sql
 insert into "organization_role" ("id", "organization_id", "role", "permission", "created_at", "updated_at")
 values ($1, $2, $3, $4, default, $5)
--- params: ["S_uMGQLFuQlg5rn7nxncp","organizationId","role","permission","2026-01-01T00:00:00.000Z"]
+-- params: ["WO2kWtISM5zCCQ8okgbMX","organizationId","role","permission","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of organizationRole, found by its primary key.
@@ -2376,7 +2376,7 @@ db.insert(member).values({
 ```sql
 insert into "member" ("id", "organization_id", "user_id", "role", "created_at", "team_id", "is_default", "canCreateProjects", "canAccessToSSHKeys", "canCreateServices", "canDeleteProjects", "canDeleteServices", "canAccessToDocker", "canAccessToAPI", "canAccessToGitProviders", "canAccessToTraefikFiles", "canDeleteEnvironments", "canCreateEnvironments", "accesedProjects", "accessedEnvironments", "accesedServices", "accessedGitProviders", "accessedServers")
 values ($1, $2, $3, $4, $5, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default)
--- params: ["hnozubrXfD-PE9X4kz5jV","organizationId","userId","role","2026-01-01T00:00:00.000Z"]
+-- params: ["49DuhhZ1L_siuvfEr-fMy","organizationId","userId","role","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of member, found by its primary key.
@@ -3091,7 +3091,7 @@ db.insert(ai).values({
 ```sql
 insert into "ai" ("aiId", "name", "apiUrl", "apiKey", "model", "isEnabled", "organizationId", "createdAt")
 values ($1, $2, $3, $4, $5, default, $6, $7)
--- params: ["xYrppixy_qEobpFzzhqJy","name","apiUrl","apiKey","model","organizationId","2026-01-01T00:00:00.000Z"]
+-- params: ["JYfqNpOKlIJgScBkPHXut","name","apiUrl","apiKey","model","organizationId","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of ai, found by its primary key.
@@ -3135,11 +3135,11 @@ Table `application`.
 | `name`                                       | `text`                                         | NOT NULL                                                     |                          |                                                                    |
 | `appName`                                    | `text`                                         | UNIQUE NOT NULL                                              | `.$defaultFn()`          |                                                                    |
 | `description`                                | `text`                                         | NULL                                                         |                          |                                                                    |
-| `env`                                        | `encryptedText`                                | NULL                                                         |                          |                                                                    |
-| `previewEnv`                                 | `encryptedText`                                | NULL                                                         |                          |                                                                    |
+| `env`                                        | `text`                                         | NULL                                                         |                          |                                                                    |
+| `previewEnv`                                 | `text`                                         | NULL                                                         |                          |                                                                    |
 | `watchPaths`                                 | `text[]`                                       | NULL                                                         |                          |                                                                    |
-| `previewBuildArgs`                           | `encryptedText`                                | NULL                                                         |                          |                                                                    |
-| `previewBuildSecrets`                        | `encryptedText`                                | NULL                                                         |                          |                                                                    |
+| `previewBuildArgs`                           | `text`                                         | NULL                                                         |                          |                                                                    |
+| `previewBuildSecrets`                        | `text`                                         | NULL                                                         |                          |                                                                    |
 | `previewLabels`                              | `text[]`                                       | NULL                                                         |                          |                                                                    |
 | `previewWildcard`                            | `text`                                         | NULL                                                         |                          |                                                                    |
 | `previewPort`                                | `integer`                                      | NULL                                                         | `.default(3000)`         |                                                                    |
@@ -3152,8 +3152,8 @@ Table `application`.
 | `isPreviewDeploymentsActive`                 | `boolean`                                      | NULL                                                         | `.default(false)`        |                                                                    |
 | `previewRequireCollaboratorPermissions`      | `boolean`                                      | NULL                                                         | `.default(true)`         | Security: Require collaborator permissions for preview deployments |
 | `rollbackActive`                             | `boolean`                                      | NULL                                                         | `.default(false)`        |                                                                    |
-| `buildArgs`                                  | `encryptedText`                                | NULL                                                         |                          |                                                                    |
-| `buildSecrets`                               | `encryptedText`                                | NULL                                                         |                          |                                                                    |
+| `buildArgs`                                  | `text`                                         | NULL                                                         |                          |                                                                    |
+| `buildSecrets`                               | `text`                                         | NULL                                                         |                          |                                                                    |
 | `memoryReservation`                          | `text`                                         | NULL                                                         |                          |                                                                    |
 | `memoryLimit`                                | `text`                                         | NULL                                                         |                          |                                                                    |
 | `cpuReservation`                             | `text`                                         | NULL                                                         |                          |                                                                    |
@@ -3451,7 +3451,7 @@ db.insert(applications).values({ name: "name", environmentId: "environmentId" })
 ```sql
 insert into "application" ("applicationId", "name", "appName", "description", "env", "previewEnv", "watchPaths", "previewBuildArgs", "previewBuildSecrets", "previewLabels", "previewWildcard", "previewPort", "previewHttps", "previewPath", "certificateType", "previewCustomCertResolver", "previewLimit", "previewForwardAuthEnabled", "isPreviewDeploymentsActive", "previewRequireCollaboratorPermissions", "rollbackActive", "buildArgs", "buildSecrets", "memoryReservation", "memoryLimit", "cpuReservation", "cpuLimit", "title", "enabled", "subtitle", "command", "args", "icon", "refreshToken", "sourceType", "cleanCache", "repository", "owner", "branch", "buildPath", "triggerType", "autoDeploy", "gitlabProjectId", "gitlabRepository", "gitlabOwner", "gitlabBranch", "gitlabBuildPath", "gitlabPathNamespace", "giteaRepository", "giteaOwner", "giteaBranch", "giteaBuildPath", "bitbucketRepository", "bitbucketRepositorySlug", "bitbucketOwner", "bitbucketBranch", "bitbucketBuildPath", "username", "password", "dockerImage", "registryUrl", "customGitUrl", "customGitBranch", "customGitBuildPath", "customGitSSHKeyId", "enableSubmodules", "dockerfile", "dockerContextPath", "dockerBuildStage", "dropBuildPath", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "ulimitsSwarm", "replicas", "applicationStatus", "buildType", "railpackVersion", "herokuVersion", "publishDirectory", "isStaticSpa", "createEnvFile", "createdAt", "registryId", "rollbackRegistryId", "environmentId", "githubId", "gitlabId", "giteaId", "bitbucketId", "serverId", "buildServerId", "buildRegistryId", "networkIds", "detachDokployNetwork")
 values ($1, $2, $3, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $4, default, default, default, default, default, default, default, $5, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $6, default, default, $7, default, default, default, default, default, default, default, default, default)
--- params: ["Ua-piIuoIpSe8nWM6P4lR","name","app-transmit-redundant-card-ipgvfd","-Tu_ixfqcApRbfQx0lFna",true,"2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["4LKKmTDMWXX9dYEj-TV-E","name","app-transmit-back-end-program-9ccfc8","VHUtDh1WJHMmqQrLQ_baw",true,"2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of applications, found by its primary key.
@@ -3608,7 +3608,7 @@ db.insert(auditLog).values({
 ```sql
 insert into "audit_log" ("id", "organization_id", "user_id", "user_email", "user_role", "action", "resource_type", "resource_id", "resource_name", "metadata", "created_at")
 values ($1, default, default, $2, $3, $4, $5, default, default, default, default)
--- params: ["SS_cdzjC19s5vStMt141O","userEmail","userRole","action","resourceType"]
+-- params: ["zHVjEpeIJ-I6HodVi0JWL","userEmail","userRole","action","resourceType"]
 ```
 
 **Update**: Changes a row of auditLog, found by its primary key.
@@ -3794,7 +3794,7 @@ db.insert(backups).values({
 ```sql
 insert into "backup" ("backupId", "appName", "schedule", "enabled", "database", "prefix", "customName", "serviceName", "destinationId", "keepLatestCount", "includeEncryptionKey", "backupType", "databaseType", "composeId", "postgresId", "mariadbId", "mysqlId", "mongoId", "libsqlId", "userId", "metadata")
 values ($1, $2, $3, default, $4, $5, default, default, $6, default, default, default, $7, default, default, default, default, default, default, default, default)
--- params: ["5DmHPk1PZmMWUHJbYJ7zP","backup-synthesize-online-panel-d58m1w","schedule","database","prefix","destinationId","postgres"]
+-- params: ["ty28Xlv08AqBxycnEnuJO","backup-input-digital-array-t4k6ow","schedule","database","prefix","destinationId","postgres"]
 ```
 
 **Update**: Changes a row of backups, found by its primary key.
@@ -3924,7 +3924,7 @@ db.insert(bitbucket).values({ gitProviderId: "gitProviderId" });
 ```sql
 insert into "bitbucket" ("bitbucketId", "bitbucketUsername", "bitbucketEmail", "appPassword", "apiToken", "bitbucketWorkspaceName", "gitProviderId")
 values ($1, default, default, default, default, default, $2)
--- params: ["SHRYIswLk-w2CMScdchD4","gitProviderId"]
+-- params: ["2EhmQwwpRBRhTuJ49ou-I","gitProviderId"]
 ```
 
 **Update**: Changes a row of bitbucket, found by its primary key.
@@ -4063,7 +4063,7 @@ db.insert(certificates).values({
 ```sql
 insert into "certificate" ("certificateId", "name", "certificateData", "privateKey", "certificatePath", "autoRenew", "organizationId", "serverId")
 values ($1, $2, $3, $4, $5, default, $6, default)
--- params: ["RIoPH8oHiIw5x0K9TprTg","name","certificateData","privateKey","certificate-back-up-cross-platform-feed-9f2dbr","organizationId"]
+-- params: ["9TvG8OyHmY5mSeUVg0D7p","name","certificateData","privateKey","certificate-back-up-back-end-matrix-xs4ik2","organizationId"]
 ```
 
 **Update**: Changes a row of certificates, found by its primary key.
@@ -4107,7 +4107,7 @@ where "certificate"."certificateId" = $1
 | `name`                      | `text`                                         | NOT NULL                                                     |                                    |                                                                                          |
 | `appName`                   | `text`                                         | NOT NULL                                                     | `.$defaultFn()`                    |                                                                                          |
 | `description`               | `text`                                         | NULL                                                         |                                    |                                                                                          |
-| `env`                       | `encryptedText`                                | NULL                                                         |                                    |                                                                                          |
+| `env`                       | `text`                                         | NULL                                                         |                                    |                                                                                          |
 | `composeFile`               | `text`                                         | NOT NULL                                                     | `.default("")`                     |                                                                                          |
 | `refreshToken`              | `text`                                         | NULL                                                         | `.$defaultFn()`                    |                                                                                          |
 | `sourceType`                | [`sourceTypeCompose`](#enum-sourceTypeCompose) | NOT NULL                                                     | `.default("github")`               |                                                                                          |
@@ -4302,7 +4302,7 @@ db.insert(compose).values({ name: "name", environmentId: "environmentId" });
 ```sql
 insert into "compose" ("composeId", "name", "appName", "description", "env", "composeFile", "refreshToken", "sourceType", "composeType", "repository", "owner", "branch", "autoDeploy", "gitlabProjectId", "gitlabRepository", "gitlabOwner", "gitlabBranch", "gitlabPathNamespace", "bitbucketRepository", "bitbucketRepositorySlug", "bitbucketOwner", "bitbucketBranch", "giteaRepository", "giteaOwner", "giteaBranch", "customGitUrl", "customGitBranch", "customGitSSHKeyId", "command", "createEnvFile", "enableSubmodules", "composePath", "suffix", "randomize", "isolatedDeployment", "isolatedDeploymentsVolume", "pullImages", "triggerType", "composeStatus", "icon", "environmentId", "createdAt", "watchPaths", "githubId", "gitlabId", "bitbucketId", "giteaId", "serverId", "serviceNetworks")
 values ($1, $2, $3, default, default, default, $4, default, default, default, default, default, $5, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $6, $7, default, default, default, default, default, default, default)
--- params: ["hrN10r5dhru3olBR8344V","name","compose-override-back-end-monitor-sovdfh","eewpNpXoMeUTiRllrrNJW",true,"environmentId","2026-01-01T00:00:00.000Z"]
+-- params: ["dG2nY0aeM22qJlv3mdABz","name","compose-transmit-digital-application-ycp91s","Ue0GHIpe0QpNDssBICCmU",true,"environmentId","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of compose, found by its primary key.
@@ -4483,7 +4483,7 @@ db.insert(deployments).values({ title: "title", logPath: "logPath" });
 ```sql
 insert into "deployment" ("deploymentId", "title", "description", "status", "logPath", "pid", "applicationId", "composeId", "serverId", "isPreviewDeployment", "previewDeploymentId", "createdAt", "startedAt", "finishedAt", "errorMessage", "scheduleId", "backupId", "rollbackId", "volumeBackupId", "buildServerId")
 values ($1, $2, default, default, $3, default, default, default, default, default, default, $4, default, default, default, default, default, default, default, default)
--- params: ["pzUj8dMvzozia3RZR4foU","title","logPath","2026-01-01T00:00:00.000Z"]
+-- params: ["tQEP0yczvh4QFqkKBrY-j","title","logPath","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of deployments, found by its primary key.
@@ -4631,7 +4631,7 @@ db.insert(destinations).values({
 ```sql
 insert into "destination" ("destinationId", "name", "provider", "accessKey", "secretAccessKey", "bucket", "region", "endpoint", "additionalFlags", "organizationId", "createdAt")
 values ($1, $2, default, $3, $4, $5, $6, $7, default, $8, default)
--- params: ["p0ixO8jR9J-MjC2YEBqFe","name","accessKey","secretAccessKey","bucket","region","endpoint","organizationId"]
+-- params: ["3w2uBXJLv7nCD89ZU0Q7P","name","accessKey","secretAccessKey","bucket","region","endpoint","organizationId"]
 ```
 
 **Update**: Changes a row of destinations, found by its primary key.
@@ -4769,7 +4769,7 @@ db.insert(dnsProvider).values({
 ```sql
 insert into "dns_provider" ("dnsProviderId", "name", "providerType", "config", "organizationId", "createdAt")
 values ($1, $2, $3, $4, $5, $6)
--- params: ["hh1K5_T_tg0Xf1TvEa279","name","cloudflare",{},"organizationId","2026-01-01T00:00:00.000Z"]
+-- params: ["7-AG1utLR3jjf_KQY6a2x","name","cloudflare",{},"organizationId","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of dnsProvider, found by its primary key.
@@ -4932,7 +4932,7 @@ db.insert(domains).values({ host: "host" });
 ```sql
 insert into "domain" ("domainId", "host", "https", "port", "customEntrypoint", "path", "serviceName", "domainType", "uniqueConfigKey", "createdAt", "composeId", "customCertResolver", "applicationId", "previewDeploymentId", "certificateType", "internalPath", "stripPath", "middlewares", "forwardAuthEnabled", "enabled")
 values ($1, $2, default, default, default, default, default, default, default, $3, default, default, default, default, default, default, default, default, default, default)
--- params: ["9PmUIO4wWhz0QP8FAK-G_","host","2026-01-01T00:00:00.000Z"]
+-- params: ["4hAnypsM5IEBrdNAye7Ez","host","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of domains, found by its primary key.
@@ -4970,15 +4970,15 @@ Table `environment`.
 
 ![environments and the tables it relates to](tables/environments.svg)
 
-| Column          | Type            | Constraints                                      | Default           | Description |
-| --------------- | --------------- | ------------------------------------------------ | ----------------- | ----------- |
-| `environmentId` | `text`          | PK NOT NULL                                      | `.$defaultFn()`   |             |
-| `name`          | `text`          | NOT NULL                                         |                   |             |
-| `description`   | `text`          | NULL                                             |                   |             |
-| `createdAt`     | `text`          | NOT NULL                                         | `.$defaultFn()`   |             |
-| `env`           | `encryptedText` | NOT NULL                                         | `.default("")`    |             |
-| `projectId`     | `text`          | NOT NULL → [projects.projectId](#table-projects) |                   |             |
-| `isDefault`     | `boolean`       | NOT NULL                                         | `.default(false)` |             |
+| Column          | Type      | Constraints                                      | Default           | Description |
+| --------------- | --------- | ------------------------------------------------ | ----------------- | ----------- |
+| `environmentId` | `text`    | PK NOT NULL                                      | `.$defaultFn()`   |             |
+| `name`          | `text`    | NOT NULL                                         |                   |             |
+| `description`   | `text`    | NULL                                             |                   |             |
+| `createdAt`     | `text`    | NOT NULL                                         | `.$defaultFn()`   |             |
+| `env`           | `text`    | NOT NULL                                         | `.default("")`    |             |
+| `projectId`     | `text`    | NOT NULL → [projects.projectId](#table-projects) |                   |             |
+| `isDefault`     | `boolean` | NOT NULL                                         | `.default(false)` |             |
 
 #### Definition
 
@@ -5070,7 +5070,7 @@ db.insert(environments).values({ name: "name", projectId: "projectId" });
 ```sql
 insert into "environment" ("environmentId", "name", "description", "createdAt", "env", "projectId", "isDefault")
 values ($1, $2, default, $3, default, $4, default)
--- params: ["zqbNOpoQzvdX0fMSCo4gF","name","2026-01-01T00:00:00.000Z","projectId"]
+-- params: ["jACOWIJGMTRdbuikpt59K","name","2026-01-01T00:00:00.000Z","projectId"]
 ```
 
 **Update**: Changes a row of environments, found by its primary key.
@@ -5208,7 +5208,7 @@ db.insert(forwardAuthSettings).values({ authDomain: "authDomain", baseDomain: "b
 ```sql
 insert into "forward_auth_settings" ("forwardAuthSettingsId", "authDomain", "baseDomain", "https", "certificateType", "customCertResolver", "providerId", "serverId", "createdAt")
 values ($1, $2, $3, default, default, default, default, default, $4)
--- params: ["5aKs0_IqVbHl9_24McmOX","authDomain","baseDomain","2026-01-01T00:00:00.000Z"]
+-- params: ["b68wdtTBFr9GNxYp28k32","authDomain","baseDomain","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of forwardAuthSettings, found by its primary key.
@@ -5349,7 +5349,7 @@ db.insert(gitProvider).values({ name: "name", organizationId: "organizationId", 
 ```sql
 insert into "git_provider" ("gitProviderId", "name", "providerType", "createdAt", "organizationId", "userId", "sharedWithOrganization")
 values ($1, $2, default, $3, $4, $5, default)
--- params: ["aYLg8XtOY868CT1lBO2bh","name","2026-01-01T00:00:00.000Z","organizationId","userId"]
+-- params: ["aJfgK-uHMy4fHjDoBDbDM","name","2026-01-01T00:00:00.000Z","organizationId","userId"]
 ```
 
 **Update**: Changes a row of gitProvider, found by its primary key.
@@ -5489,7 +5489,7 @@ db.insert(gitea).values({ gitProviderId: "gitProviderId" });
 ```sql
 insert into "gitea" ("giteaId", "giteaUrl", "giteaInternalUrl", "redirect_uri", "client_id", "client_secret", "gitProviderId", "access_token", "refresh_token", "expires_at", "scopes", "last_authenticated_at")
 values ($1, default, default, default, default, default, $2, default, default, default, default, default)
--- params: ["VwEChxzBWmLHCmlOoA434","gitProviderId"]
+-- params: ["J6Gy0OPFUCsS6ZCyursQZ","gitProviderId"]
 ```
 
 **Update**: Changes a row of gitea, found by its primary key.
@@ -5625,7 +5625,7 @@ db.insert(github).values({ gitProviderId: "gitProviderId" });
 ```sql
 insert into "github" ("githubId", "githubAppName", "githubAppId", "githubClientId", "githubClientSecret", "githubInstallationId", "githubPrivateKey", "githubWebhookSecret", "githubUrl", "gitProviderId")
 values ($1, default, default, default, default, default, default, default, default, $2)
--- params: ["k5pt_92vtfdFfK3DMJQPN","gitProviderId"]
+-- params: ["X-FOuWvibm4DC2j8MKqz0","gitProviderId"]
 ```
 
 **Update**: Changes a row of github, found by its primary key.
@@ -5763,7 +5763,7 @@ db.insert(gitlab).values({ gitProviderId: "gitProviderId" });
 ```sql
 insert into "gitlab" ("gitlabId", "gitlabUrl", "gitlabInternalUrl", "application_id", "redirect_uri", "secret", "access_token", "refresh_token", "group_name", "expires_at", "gitProviderId")
 values ($1, default, default, default, default, default, default, default, default, default, $2)
--- params: ["SG3Lu0cgmAuhkTMacXn4_","gitProviderId"]
+-- params: ["6Co597K7etpSE9n-cazJ1","gitProviderId"]
 ```
 
 **Update**: Changes a row of gitlab, found by its primary key.
@@ -5812,7 +5812,7 @@ where "gitlab"."gitlabId" = $1
 | `enableNamespaces`     | `boolean`                                      | NOT NULL                                                     | `.default(false)`     |             |
 | `dockerImage`          | `text`                                         | NOT NULL                                                     |                       |             |
 | `command`              | `text`                                         | NULL                                                         |                       |             |
-| `env`                  | `encryptedText`                                | NULL                                                         |                       |             |
+| `env`                  | `text`                                         | NULL                                                         |                       |             |
 | `memoryReservation`    | `text`                                         | NULL                                                         |                       | RESOURCES   |
 | `memoryLimit`          | `text`                                         | NULL                                                         |                       |             |
 | `cpuReservation`       | `text`                                         | NULL                                                         |                       |             |
@@ -5961,7 +5961,7 @@ db.insert(libsql).values({
 ```sql
 insert into "libsql" ("libsqlId", "name", "appName", "description", "databaseUser", "databasePassword", "sqldNode", "sqldPrimaryUrl", "enableNamespaces", "dockerImage", "command", "env", "memoryReservation", "memoryLimit", "cpuReservation", "cpuLimit", "externalPort", "externalGRPCPort", "externalAdminPort", "applicationStatus", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "replicas", "networkIds", "detachDokployNetwork", "createdAt", "environmentId", "serverId")
 values ($1, $2, $3, default, $4, $5, default, default, default, $6, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $7, $8, default)
--- params: ["w_VbP5YOX12dZFrZRhgvd","name","libsql-quantify-bluetooth-port-uw94iv","databaseUser","databasePassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["j5c1kp8rCpln--tKNa3UP","name","libsql-reboot-solid-state-program-9tssg3","databaseUser","databasePassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of libsql, found by its primary key.
@@ -6010,7 +6010,7 @@ where "libsql"."libsqlId" = $1
 | `dockerImage`                           | `text`                                         | NOT NULL                                                     |                    |             |
 | `command`                               | `text`                                         | NULL                                                         |                    |             |
 | `args`                                  | `text[]`                                       | NULL                                                         |                    |             |
-| `env`                                   | `encryptedText`                                | NULL                                                         |                    |             |
+| `env`                                   | `text`                                         | NULL                                                         |                    |             |
 | `memoryReservation`                     | `text`                                         | NULL                                                         |                    | RESOURCES   |
 | `memoryLimit`                           | `text`                                         | NULL                                                         |                    |             |
 | `cpuReservation`                        | `text`                                         | NULL                                                         |                    |             |
@@ -6159,7 +6159,7 @@ db.insert(mariadb).values({
 ```sql
 insert into "mariadb" ("mariadbId", "name", "appName", "description", "databaseName", "databaseUser", "databasePassword", "rootPassword", "dockerImage", "command", "args", "env", "memoryReservation", "memoryLimit", "cpuReservation", "cpuLimit", "externalPort", "applicationStatus", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "ulimitsSwarm", "replicas", "createdAt", "environmentId", "serverId", "networkIds", "detachDokployNetwork")
 values ($1, $2, $3, default, $4, $5, $6, $7, $8, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $9, $10, default, default, default)
--- params: ["CSb0TxYMNzx1fccoLLYXB","name","mariadb-calculate-online-hard-drive-8f71k3","databaseName","databaseUser","databasePassword","databaseRootPassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["_HpijqNJLqLJnfOdgNa94","name","mariadb-reboot-mobile-bus-t8ycpw","databaseName","databaseUser","databasePassword","databaseRootPassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of mariadb, found by its primary key.
@@ -6206,7 +6206,7 @@ where "mariadb"."mariadbId" = $1
 | `dockerImage`          | `text`                                         | NOT NULL                                                     | `.default("mongo:8")` |             |
 | `command`              | `text`                                         | NULL                                                         |                       |             |
 | `args`                 | `text[]`                                       | NULL                                                         |                       |             |
-| `env`                  | `encryptedText`                                | NULL                                                         |                       |             |
+| `env`                  | `text`                                         | NULL                                                         |                       |             |
 | `memoryReservation`    | `text`                                         | NULL                                                         |                       |             |
 | `memoryLimit`          | `text`                                         | NULL                                                         |                       |             |
 | `cpuReservation`       | `text`                                         | NULL                                                         |                       |             |
@@ -6352,7 +6352,7 @@ db.insert(mongo).values({
 ```sql
 insert into "mongo" ("mongoId", "name", "appName", "description", "databaseUser", "databasePassword", "dockerImage", "command", "args", "env", "memoryReservation", "memoryLimit", "cpuReservation", "cpuLimit", "externalPort", "applicationStatus", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "ulimitsSwarm", "replicas", "createdAt", "environmentId", "serverId", "replicaSets", "networkIds", "detachDokployNetwork")
 values ($1, $2, $3, default, $4, $5, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $6, $7, default, default, default, default)
--- params: ["mzZBQNQ1emPUN0XXVnz1m","name","mongo-quantify-1080p-circuit-jdbed5","databaseUser","databasePassword","2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["xUTijfUucHK-dZ9BeO4fV","name","mongo-parse-online-pixel-46xsfn","databaseUser","databasePassword","2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of mongo, found by its primary key.
@@ -6518,7 +6518,7 @@ db.insert(mounts).values({ type: "bind", mountPath: "mountPath" });
 ```sql
 insert into "mount" ("mountId", "type", "hostPath", "volumeName", "filePath", "content", "serviceType", "mountPath", "applicationId", "composeId", "libsqlId", "mariadbId", "mongoId", "mysqlId", "postgresId", "redisId")
 values ($1, $2, default, default, default, default, default, $3, default, default, default, default, default, default, default, default)
--- params: ["BT4STsayWjrP9JyRRAAbf","bind","mountPath"]
+-- params: ["jVYih3h5jOCCUVrwgci3a","bind","mountPath"]
 ```
 
 **Update**: Changes a row of mounts, found by its primary key.
@@ -6567,7 +6567,7 @@ where "mount"."mountId" = $1
 | `dockerImage`                           | `text`                                         | NOT NULL                                                     |                    |             |
 | `command`                               | `text`                                         | NULL                                                         |                    |             |
 | `args`                                  | `text[]`                                       | NULL                                                         |                    |             |
-| `env`                                   | `encryptedText`                                | NULL                                                         |                    |             |
+| `env`                                   | `text`                                         | NULL                                                         |                    |             |
 | `memoryReservation`                     | `text`                                         | NULL                                                         |                    |             |
 | `memoryLimit`                           | `text`                                         | NULL                                                         |                    |             |
 | `cpuReservation`                        | `text`                                         | NULL                                                         |                    |             |
@@ -6716,7 +6716,7 @@ db.insert(mysql).values({
 ```sql
 insert into "mysql" ("mysqlId", "name", "appName", "description", "databaseName", "databaseUser", "databasePassword", "rootPassword", "dockerImage", "command", "args", "env", "memoryReservation", "memoryLimit", "cpuReservation", "cpuLimit", "externalPort", "applicationStatus", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "ulimitsSwarm", "replicas", "createdAt", "environmentId", "serverId", "networkIds", "detachDokployNetwork")
 values ($1, $2, $3, default, $4, $5, $6, $7, $8, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $9, $10, default, default, default)
--- params: ["Btkv_IvXt8fDtNRQVwXUo","name","mysql-navigate-1080p-application-jlsu34","databaseName","databaseUser","databasePassword","databaseRootPassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["LuJU9OjDK2BqM0XJfskQ-","name","mysql-synthesize-bluetooth-monitor-4qkqzl","databaseName","databaseUser","databasePassword","databaseRootPassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of mysql, found by its primary key.
@@ -6856,7 +6856,7 @@ db.insert(network).values({ name: "name", organizationId: "organizationId" });
 ```sql
 insert into "network" ("networkId", "name", "dockerId", "driver", "internal", "attachable", "enableIPv4", "enableIPv6", "mtu", "ipam", "createdAt", "organizationId", "serverId")
 values ($1, $2, default, default, default, default, default, default, default, default, $3, $4, default)
--- params: ["W_EokguLwaFK1BjNlrcUO","name","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["oNoUhPSeq0zT8lcCJHhGa","name","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of network, found by its primary key.
@@ -7059,7 +7059,7 @@ db.insert(notifications).values({
 ```sql
 insert into "notification" ("notificationId", "name", "appDeploy", "appBuildError", "databaseBackup", "volumeBackup", "dokployRestart", "dokployBackup", "dockerCleanup", "serverThreshold", "notificationType", "createdAt", "slackId", "telegramId", "discordId", "emailId", "resendId", "gotifyId", "ntfyId", "mattermostId", "customId", "larkId", "pushoverId", "teamsId", "organizationId")
 values ($1, $2, default, default, default, default, default, default, default, default, $3, $4, default, default, default, default, default, default, default, default, default, default, default, default, $5)
--- params: ["CybQLDPkKQq7gXsCNt9Bw","name","slack","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["ibf7xVFfgvhvlnL5ncVYe","name","slack","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of notifications, found by its primary key.
@@ -7176,7 +7176,7 @@ db.insert(slack).values({ webhookUrl: "webhookUrl" });
 ```sql
 insert into "slack" ("slackId", "webhookUrl", "channel")
 values ($1, $2, default)
--- params: ["ACdLbrAhdi1TRxvESuPIJ","webhookUrl"]
+-- params: ["1d9CPBRHbpak6B6kMCKRp","webhookUrl"]
 ```
 
 **Update**: Changes a row of slack, found by its primary key.
@@ -7293,7 +7293,7 @@ db.insert(telegram).values({ botToken: "botToken", chatId: "chatId" });
 ```sql
 insert into "telegram" ("telegramId", "botToken", "chatId", "messageThreadId")
 values ($1, $2, $3, default)
--- params: ["9yfafcJl4Q-1ai500zkqX","botToken","chatId"]
+-- params: ["S2QLkFQ49W7OPOy8Xmdbe","botToken","chatId"]
 ```
 
 **Update**: Changes a row of telegram, found by its primary key.
@@ -7408,7 +7408,7 @@ db.insert(discord).values({ webhookUrl: "webhookUrl" });
 ```sql
 insert into "discord" ("discordId", "webhookUrl", "decoration")
 values ($1, $2, default)
--- params: ["U15hDKmcX2FzyxdHkAG6y","webhookUrl"]
+-- params: ["1oux6NoX5Uvxsb-NoNOD8","webhookUrl"]
 ```
 
 **Update**: Changes a row of discord, found by its primary key.
@@ -7538,7 +7538,7 @@ db.insert(email).values({
 ```sql
 insert into "email" ("emailId", "smtpServer", "smtpPort", "username", "password", "fromAddress", "toAddress")
 values ($1, $2, $3, $4, $5, $6, $7)
--- params: ["F1K5CNzSBwGgugfpI1Gqm","smtpServer",1,"username","password","fromAddress","toAddresses"]
+-- params: ["CaamigNzzduJprxKyMrvZ","smtpServer",1,"username","password","fromAddress","toAddresses"]
 ```
 
 **Update**: Changes a row of email, found by its primary key.
@@ -7659,7 +7659,7 @@ db.insert(resend).values({
 ```sql
 insert into "resend" ("resendId", "apiKey", "fromAddress", "toAddress")
 values ($1, $2, $3, $4)
--- params: ["51z2TuvTMpEbe0jiut2_R","apiKey","fromAddress","toAddresses"]
+-- params: ["KaSKmYElkoizgZpJInUBT","apiKey","fromAddress","toAddresses"]
 ```
 
 **Update**: Changes a row of resend, found by its primary key.
@@ -7778,7 +7778,7 @@ db.insert(gotify).values({ serverUrl: "serverUrl", appToken: "appToken" });
 ```sql
 insert into "gotify" ("gotifyId", "serverUrl", "appToken", "priority", "decoration")
 values ($1, $2, $3, default, default)
--- params: ["G-FENGBRV3Dc-ubhD51W0","serverUrl","appToken"]
+-- params: ["fVqzUlfhqbedr0LLVrI84","serverUrl","appToken"]
 ```
 
 **Update**: Changes a row of gotify, found by its primary key.
@@ -7897,7 +7897,7 @@ db.insert(ntfy).values({ serverUrl: "serverUrl", topic: "topic" });
 ```sql
 insert into "ntfy" ("ntfyId", "serverUrl", "topic", "accessToken", "priority")
 values ($1, $2, $3, default, default)
--- params: ["_c9Q0KPpjCEmOGZjazW8i","serverUrl","topic"]
+-- params: ["4yqY7Lxn0NGPmBX4_IOHH","serverUrl","topic"]
 ```
 
 **Update**: Changes a row of ntfy, found by its primary key.
@@ -8014,7 +8014,7 @@ db.insert(mattermost).values({ webhookUrl: "webhookUrl" });
 ```sql
 insert into "mattermost" ("mattermostId", "webhookUrl", "channel", "username")
 values ($1, $2, default, default)
--- params: ["dquWpd0g-z7O3YUBYUFZ-","webhookUrl"]
+-- params: ["6ucKAvxvD2LlNZ1P_2XSY","webhookUrl"]
 ```
 
 **Update**: Changes a row of mattermost, found by its primary key.
@@ -8131,7 +8131,7 @@ db.insert(custom).values({ endpoint: "endpoint" });
 ```sql
 insert into "custom" ("customId", "endpoint", "headers")
 values ($1, $2, default)
--- params: ["JZE0MWVkW0OTzupnN1Vjv","endpoint"]
+-- params: ["VkVoFOeUryyLbgWRUSCt-","endpoint"]
 ```
 
 **Update**: Changes a row of custom, found by its primary key.
@@ -8244,7 +8244,7 @@ db.insert(lark).values({ webhookUrl: "webhookUrl" });
 ```sql
 insert into "lark" ("larkId", "webhookUrl")
 values ($1, $2)
--- params: ["IJ2AlvVr7_vUmgy9P8kw0","webhookUrl"]
+-- params: ["EEiDEcWAlXzGC4nI-FSCb","webhookUrl"]
 ```
 
 **Update**: Changes a row of lark, found by its primary key.
@@ -8365,7 +8365,7 @@ db.insert(pushover).values({ userKey: "userKey", apiToken: "apiToken" });
 ```sql
 insert into "pushover" ("pushoverId", "userKey", "apiToken", "priority", "retry", "expire")
 values ($1, $2, $3, default, default, default)
--- params: ["OhJPN3UFjR0mRxWpWGYM0","userKey","apiToken"]
+-- params: ["ovOwiAflKIqeTlEaE7Cmz","userKey","apiToken"]
 ```
 
 **Update**: Changes a row of pushover, found by its primary key.
@@ -8478,7 +8478,7 @@ db.insert(teams).values({ webhookUrl: "webhookUrl" });
 ```sql
 insert into "teams" ("teamsId", "webhookUrl")
 values ($1, $2)
--- params: ["nArCnQ3n26f0g2B_PctiJ","webhookUrl"]
+-- params: ["yqCXXp5lM13ONpj_qf0MF","webhookUrl"]
 ```
 
 **Update**: Changes a row of teams, found by its primary key.
@@ -8617,7 +8617,7 @@ db.insert(patch).values({ filePath: "filePath", content: "content" });
 ```sql
 insert into "patch" ("patchId", "type", "filePath", "enabled", "content", "createdAt", "updatedAt", "applicationId", "composeId")
 values ($1, default, $2, default, $3, $4, $5, default, default)
--- params: ["IqVCtIodj6aj5Vp15hChz","filePath","content","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z"]
+-- params: ["Ql7XBZatxPnCKyX5CmnaO","filePath","content","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of patch, found by its primary key.
@@ -8747,7 +8747,7 @@ db.insert(ports).values({
 ```sql
 insert into "port" ("portId", "publishedPort", "publishMode", "targetPort", "protocol", "applicationId")
 values ($1, $2, default, $3, $4, $5)
--- params: ["KGHnXZtQl-InVw3WYI10L",1,1,"tcp","applicationId"]
+-- params: ["JbdbpmLDnnJItkSfqEMbL",1,1,"tcp","applicationId"]
 ```
 
 **Update**: Changes a row of ports, found by its primary key.
@@ -8795,7 +8795,7 @@ where "port"."portId" = $1
 | `dockerImage`          | `text`                                         | NOT NULL                                                     |                    |             |
 | `command`              | `text`                                         | NULL                                                         |                    |             |
 | `args`                 | `text[]`                                       | NULL                                                         |                    |             |
-| `env`                  | `encryptedText`                                | NULL                                                         |                    |             |
+| `env`                  | `text`                                         | NULL                                                         |                    |             |
 | `memoryReservation`    | `text`                                         | NULL                                                         |                    |             |
 | `externalPort`         | `integer`                                      | NULL                                                         |                    |             |
 | `memoryLimit`          | `text`                                         | NULL                                                         |                    |             |
@@ -8942,7 +8942,7 @@ db.insert(postgres).values({
 ```sql
 insert into "postgres" ("postgresId", "name", "appName", "databaseName", "databaseUser", "databasePassword", "description", "dockerImage", "command", "args", "env", "memoryReservation", "externalPort", "memoryLimit", "cpuReservation", "cpuLimit", "applicationStatus", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "ulimitsSwarm", "replicas", "createdAt", "environmentId", "serverId", "networkIds", "detachDokployNetwork")
 values ($1, $2, $3, $4, $5, $6, default, $7, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, $8, $9, default, default, default)
--- params: ["GTYcFHBgyzcGUmHuB_Pem","name","postgres-bypass-mobile-system-sufycb","databaseName","databaseUser","databasePassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["oWBwVNAi7z3UVXtc0DRon","name","postgres-hack-primary-bandwidth-zsnnrn","databaseName","databaseUser","databasePassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of postgres, found by its primary key.
@@ -9097,7 +9097,7 @@ db.insert(previewDeployments).values({
 ```sql
 insert into "preview_deployments" ("previewDeploymentId", "branch", "pullRequestId", "pullRequestNumber", "pullRequestURL", "pullRequestTitle", "pullRequestCommentId", "previewStatus", "appName", "applicationId", "domainId", "createdAt", "expiresAt")
 values ($1, $2, $3, $4, $5, $6, $7, default, $8, $9, default, $10, default)
--- params: ["J814bJg-kzUREVtah3vHM","branch","pullRequestId","pullRequestNumber","pullRequestURL","pullRequestTitle","pullRequestCommentId","preview-program-neural-protocol-yqsod3","applicationId","2026-01-01T00:00:00.000Z"]
+-- params: ["HZfHA0cU6CG4kbVqMPSyn","branch","pullRequestId","pullRequestNumber","pullRequestURL","pullRequestTitle","pullRequestCommentId","preview-navigate-solid-state-microchip-wg94bm","applicationId","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of previewDeployments, found by its primary key.
@@ -9139,14 +9139,14 @@ Table `project`.
 
 ![projects and the tables it relates to](tables/projects.svg)
 
-| Column           | Type            | Constraints                                       | Default         | Description |
-| ---------------- | --------------- | ------------------------------------------------- | --------------- | ----------- |
-| `projectId`      | `text`          | PK NOT NULL                                       | `.$defaultFn()` |             |
-| `name`           | `text`          | NOT NULL                                          |                 |             |
-| `description`    | `text`          | NULL                                              |                 |             |
-| `createdAt`      | `text`          | NOT NULL                                          | `.$defaultFn()` |             |
-| `organizationId` | `text`          | NOT NULL → [organization.id](#table-organization) |                 |             |
-| `env`            | `encryptedText` | NOT NULL                                          | `.default("")`  |             |
+| Column           | Type   | Constraints                                       | Default         | Description |
+| ---------------- | ------ | ------------------------------------------------- | --------------- | ----------- |
+| `projectId`      | `text` | PK NOT NULL                                       | `.$defaultFn()` |             |
+| `name`           | `text` | NOT NULL                                          |                 |             |
+| `description`    | `text` | NULL                                              |                 |             |
+| `createdAt`      | `text` | NOT NULL                                          | `.$defaultFn()` |             |
+| `organizationId` | `text` | NOT NULL → [organization.id](#table-organization) |                 |             |
+| `env`            | `text` | NOT NULL                                          | `.default("")`  |             |
 
 #### Definition
 
@@ -9231,7 +9231,7 @@ db.insert(projects).values({ name: "name", organizationId: "organizationId" });
 ```sql
 insert into "project" ("projectId", "name", "description", "createdAt", "organizationId", "env")
 values ($1, $2, default, $3, $4, default)
--- params: ["6NEzjSQ2DnqntmzIBtavU","name","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["QWPWfOR46-5oXevsiJIof","name","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of projects, found by its primary key.
@@ -9362,7 +9362,7 @@ db.insert(redirects).values({
 ```sql
 insert into "redirect" ("redirectId", "regex", "replacement", "permanent", "uniqueConfigKey", "createdAt", "applicationId")
 values ($1, $2, $3, default, default, $4, $5)
--- params: ["2t_Nebq-DeoxxKhILUkpn","regex","replacement","2026-01-01T00:00:00.000Z","applicationId"]
+-- params: ["_uT8R_BwdN48zorNLTrur","regex","replacement","2026-01-01T00:00:00.000Z","applicationId"]
 ```
 
 **Update**: Changes a row of redirects, found by its primary key.
@@ -9408,7 +9408,7 @@ where "redirect"."redirectId" = $1
 | `dockerImage`                   | `text`                                         | NOT NULL                                                     |                    |             |
 | `command`                       | `text`                                         | NULL                                                         |                    |             |
 | `args`                          | `text[]`                                       | NULL                                                         |                    |             |
-| `env`                           | `encryptedText`                                | NULL                                                         |                    |             |
+| `env`                           | `text`                                         | NULL                                                         |                    |             |
 | `memoryReservation`             | `text`                                         | NULL                                                         |                    |             |
 | `memoryLimit`                   | `text`                                         | NULL                                                         |                    |             |
 | `cpuReservation`                | `text`                                         | NULL                                                         |                    |             |
@@ -9550,7 +9550,7 @@ db.insert(redis).values({
 ```sql
 insert into "redis" ("redisId", "name", "appName", "description", "password", "dockerImage", "command", "args", "env", "memoryReservation", "memoryLimit", "cpuReservation", "cpuLimit", "externalPort", "createdAt", "applicationStatus", "healthCheckSwarm", "restartPolicySwarm", "placementSwarm", "updateConfigSwarm", "rollbackConfigSwarm", "modeSwarm", "labelsSwarm", "networkSwarm", "stopGracePeriodSwarm", "endpointSpecSwarm", "ulimitsSwarm", "replicas", "environmentId", "serverId", "networkIds", "detachDokployNetwork")
 values ($1, $2, $3, default, $4, $5, default, default, default, default, default, default, default, default, $6, default, default, default, default, default, default, default, default, default, default, default, default, default, $7, default, default, default)
--- params: ["TttVMMYo-Hr1wTDQWo33E","name","redis-override-1080p-monitor-n3sypj","databasePassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
+-- params: ["-FI79HCnHygJQEa4tiYZv","name","redis-generate-cross-platform-bus-x4lp2f","databasePassword","dockerImage","2026-01-01T00:00:00.000Z","environmentId"]
 ```
 
 **Update**: Changes a row of redis, found by its primary key.
@@ -9690,7 +9690,7 @@ db.insert(registry).values({
 ```sql
 insert into "registry" ("registryId", "registryName", "imagePrefix", "username", "password", "registryUrl", "createdAt", "selfHosted", "organizationId")
 values ($1, $2, default, $3, $4, default, $5, default, $6)
--- params: ["-CdTx2ZVhNkQYxQfLlxPy","registryName","username","password","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["5rN9iCuu7JTjNRFGIkMeG","registryName","username","password","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of registry, found by its primary key.
@@ -9821,7 +9821,7 @@ db.insert(rollbacks).values({ deploymentId: "deploymentId" });
 ```sql
 insert into "rollback" ("rollbackId", "deploymentId", "version", "image", "createdAt", "fullContext")
 values ($1, $2, default, default, $3, default)
--- params: ["uDXLLZw070TuycuCK35w7","deploymentId","2026-01-01T00:00:00.000Z"]
+-- params: ["MLyjjbL8P5hqoGxteawl4","deploymentId","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of rollbacks, found by its primary key.
@@ -9879,7 +9879,7 @@ Table `sandbox`.
 | `deadlineAt`     | `timestamp`                                      | NOT NULL                                          |                                        |             |
 | `lastActivityAt` | `timestamp`                                      | NULL                                              |                                        |             |
 | `networkMode`    | [`sandboxNetworkMode`](#enum-sandboxNetworkMode) | NOT NULL                                          | `.default("isolated")`                 |             |
-| `envVars`        | `encryptedText`                                  | NULL                                              |                                        |             |
+| `envVars`        | `text`                                           | NULL                                              |                                        |             |
 | `workdir`        | `text`                                           | NOT NULL                                          | `.default(SANDBOX_DEFAULTS.workdir)`   |             |
 | `user`           | `text`                                           | NULL                                              |                                        |             |
 | `runtime`        | `text`                                           | NULL                                              |                                        |             |
@@ -9988,7 +9988,7 @@ db.insert(sandboxes).values({
 ```sql
 insert into "sandbox" ("sandboxId", "name", "organizationId", "serverId", "image", "template", "containerId", "status", "cpu", "memoryMb", "pidsLimit", "timeoutMs", "expiresAt", "deadlineAt", "lastActivityAt", "networkMode", "envVars", "workdir", "user", "runtime", "createdAt", "killedAt")
 values ($1, $2, $3, default, $4, default, default, default, default, default, default, default, default, $5, default, default, default, default, default, default, $6, default)
--- params: ["5GTP5bR_vKi7BdBIlOWTY","name","organizationId","image","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z"]
+-- params: ["dnSrVHhg1tNSzDFauuCZv","name","organizationId","image","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of sandboxes, found by its primary key.
@@ -10148,7 +10148,7 @@ db.insert(schedules).values({ name: "name", cronExpression: "cronExpression", co
 ```sql
 insert into "schedule" ("scheduleId", "name", "description", "cronExpression", "appName", "serviceName", "shellType", "scheduleType", "command", "script", "applicationId", "composeId", "serverId", "organizationId", "enabled", "timezone", "createdAt")
 values ($1, $2, default, $3, $4, default, default, default, $5, default, default, default, default, default, default, default, $6)
--- params: ["vvGOcpQpiu5F23v2CLPab","name","cronExpression","schedule-bypass-auxiliary-application-cnukbd","command","2026-01-01T00:00:00.000Z"]
+-- params: ["L4-W4qIWM7rh6LuczxhlK","name","cronExpression","schedule-reboot-redundant-port-s6g883","command","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of schedules, found by its primary key.
@@ -10269,7 +10269,7 @@ db.insert(scimProvider).values({ providerId: "providerId", scimToken: "scimToken
 ```sql
 insert into "scim_provider" ("id", "provider_id", "scim_token", "organization_id")
 values ($1, $2, $3, default)
--- params: ["qWg1oTNYCUZ-ctlR88VYP","providerId","scimToken"]
+-- params: ["7yvJd1D0c4dLi4dd16iQC","providerId","scimToken"]
 ```
 
 **Update**: Changes a row of scimProvider, found by its primary key.
@@ -10399,7 +10399,7 @@ db.insert(security).values({
 ```sql
 insert into "security" ("securityId", "username", "password", "createdAt", "applicationId")
 values ($1, $2, $3, $4, $5)
--- params: ["ilO2zrJHAqy8GgFGlAx5U","username","password","2026-01-01T00:00:00.000Z","applicationId"]
+-- params: ["o2M5H3fLAY9ftBXT3ymwZ","username","password","2026-01-01T00:00:00.000Z","applicationId"]
 ```
 
 **Update**: Changes a row of security, found by its primary key.
@@ -10572,7 +10572,7 @@ db.insert(server).values({
 ```sql
 insert into "server" ("serverId", "name", "description", "ipAddress", "port", "username", "appName", "enableDockerCleanup", "telemetryProviderIds", "buildsConcurrency", "createdAt", "organizationId", "serverStatus", "serverType", "command", "sshKeyId", "metricsConfig")
 values ($1, $2, default, $3, $4, default, $5, default, default, default, $6, $7, default, default, default, default, default)
--- params: ["K8WCl-NlOW8cjJ8ZSWfS2","name","ipAddress",1,"server-override-wireless-pixel-xdhato","createdAt","organizationId"]
+-- params: ["ZcpgYw5qFhmUjb69UxJ67","name","ipAddress",1,"server-bypass-virtual-transmitter-k3ut2h","createdAt","organizationId"]
 ```
 
 **Update**: Changes a row of server, found by its primary key.
@@ -10853,7 +10853,7 @@ db.insert(sshKeys).values({
 ```sql
 insert into "ssh-key" ("sshKeyId", "privateKey", "publicKey", "name", "description", "createdAt", "lastUsedAt", "organizationId")
 values ($1, default, $2, $3, default, $4, default, $5)
--- params: ["1o8DI6cCYRZs9OgE5xH31","publicKey","name","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["c4q7VUdgy8VwJB8_Akbpc","publicKey","name","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of sshKeys, found by its primary key.
@@ -11130,7 +11130,7 @@ db.insert(tags).values({ name: "name", organizationId: "organizationId" });
 ```sql
 insert into "tag" ("tagId", "name", "color", "createdAt", "organizationId")
 values ($1, $2, default, $3, $4)
--- params: ["2fv_D_X8q42x353uJEAnT","name","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["EucUmBXfGOp9H9FReCzAl","name","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of tags, found by its primary key.
@@ -11257,7 +11257,7 @@ db.insert(projectTags).values({ projectId: "projectId", tagId: "tagId" });
 ```sql
 insert into "project_tag" ("id", "projectId", "tagId")
 values ($1, $2, $3)
--- params: ["fBtaptfNDqOQUQsELVcmq","projectId","tagId"]
+-- params: ["EqCVykdTV5V1XeXviEX3m","projectId","tagId"]
 ```
 
 **Update**: Changes a row of projectTags, found by its primary key.
@@ -11299,9 +11299,9 @@ where "project_tag"."id" = $1
 | `name`                | `text`                                                 | NOT NULL                                          |                  |             |
 | `providerType`        | [`telemetryProviderType`](#enum-telemetryProviderType) | NOT NULL                                          |                  |             |
 | `signals`             | `text[]`                                               | NOT NULL                                          |                  |             |
-| `endpoint`            | `encryptedText`                                        | NULL                                              |                  |             |
-| `apiKey`              | `encryptedText`                                        | NULL                                              |                  |             |
-| `apiSecret`           | `encryptedText`                                        | NULL                                              |                  |             |
+| `endpoint`            | `text`                                                 | NULL                                              |                  |             |
+| `apiKey`              | `text`                                                 | NULL                                              |                  |             |
+| `apiSecret`           | `text`                                                 | NULL                                              |                  |             |
 | `extraConfig`         | `jsonb`                                                | NULL                                              |                  |             |
 | `enabled`             | `boolean`                                              | NOT NULL                                          | `.default(true)` |             |
 | `createdAt`           | `text`                                                 | NOT NULL                                          | `.$defaultFn()`  |             |
@@ -11395,7 +11395,7 @@ db.insert(telemetryProvider).values({
 ```sql
 insert into "telemetryProvider" ("telemetryProviderId", "name", "providerType", "signals", "endpoint", "apiKey", "apiSecret", "extraConfig", "enabled", "createdAt", "organizationId")
 values ($1, $2, $3, $4, default, default, default, default, default, $5, $6)
--- params: ["iPJTyAfk60HGtcSpNWWLX","name","loki","signals","2026-01-01T00:00:00.000Z","organizationId"]
+-- params: ["iu8tCvMrbasL966_p_261","name","loki","signals","2026-01-01T00:00:00.000Z","organizationId"]
 ```
 
 **Update**: Changes a row of telemetryProvider, found by its primary key.
@@ -11593,7 +11593,7 @@ db.insert(user).values({
 ```sql
 insert into "user" ("id", "firstName", "lastName", "isRegistered", "expirationDate", "createdAt", "created_at", "two_factor_enabled", "email", "email_verified", "image", "banned", "ban_reason", "ban_expires", "updated_at", "role", "enablePaidFeatures", "allowImpersonation", "enableEnterpriseFeatures", "licenseKey", "isValidEnterpriseLicense", "stripeCustomerId", "stripeSubscriptionId", "serversQuantity", "sendInvoiceNotifications", "isEnterpriseCloud", "trustedOrigins", "bookmarkedTemplates", "onboardingCompletedAt", "onboardingStep", "onboardingReturnEmails", "trialPlanPromptSubscriptionId", "serverSetupFailedEmailAt", "serverConnectFailure")
 values ($1, default, default, default, $2, $3, default, default, $4, $5, default, default, default, default, $6, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default)
--- params: ["pEWDRJVRQ81lv_Plj51FK","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z","email",true,"2026-01-01T00:00:00.000Z"]
+-- params: ["eiNApwpNvfdNzB-DVMKYI","2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z","email",true,"2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of user, found by its primary key.
@@ -11731,7 +11731,7 @@ db.insert(vaultProvider).values({
 ```sql
 insert into "vault_provider" ("vaultProviderId", "name", "providerType", "config", "assignments", "organizationId", "createdAt")
 values ($1, $2, $3, $4, default, $5, $6)
--- params: ["I-N64iiCXoY3_BbLURhfN","name","hashicorp",{},"organizationId","2026-01-01T00:00:00.000Z"]
+-- params: ["5xkItjDU2Pdb1OzR8-6y1","name","hashicorp",{},"organizationId","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of vaultProvider, found by its primary key.
@@ -11922,7 +11922,7 @@ db.insert(volumeBackups).values({
 ```sql
 insert into "volume_backup" ("volumeBackupId", "name", "volumeName", "prefix", "serviceType", "appName", "serviceName", "turnOff", "cronExpression", "keepLatestCount", "enabled", "applicationId", "postgresId", "mariadbId", "mongoId", "mysqlId", "redisId", "libsqlId", "composeId", "createdAt", "destinationId")
 values ($1, $2, $3, $4, default, $5, default, default, $6, default, default, default, default, default, default, default, default, default, default, $7, $8)
--- params: ["p0U-wpQL47oPf4SVrgk52","name","volumeName","prefix","volumeBackup-index-open-source-hard-drive-l4mjeo","cronExpression","2026-01-01T00:00:00.000Z","destinationId"]
+-- params: ["WtsO6EDvOkbPvJmj-ck4X","name","volumeName","prefix","volumeBackup-back-up-wireless-bus-azqhbb","cronExpression","2026-01-01T00:00:00.000Z","destinationId"]
 ```
 
 **Update**: Changes a row of volumeBackups, found by its primary key.
@@ -12077,7 +12077,7 @@ db.insert(webServerSettings).values({});
 ```sql
 insert into "webServerSettings" ("id", "serverIp", "certificateType", "https", "host", "letsEncryptEmail", "sshPrivateKey", "enableDockerCleanup", "logCleanupCron", "telemetryProviderIds", "vectorAgentOrganizationId", "metricsConfig", "whitelabelingConfig", "remoteServersOnly", "buildsConcurrency", "enforceSSO", "cleanupCacheApplications", "cleanupCacheOnPreviews", "cleanupCacheOnCompose", "created_at", "updated_at")
 values ($1, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default, default)
--- params: ["K_7i-tcu6UaMJHBhAqB0j"]
+-- params: ["5RZ8NzEcVEQwsct4XNRP5"]
 ```
 
 **Update**: Changes a row of webServerSettings, found by its primary key.

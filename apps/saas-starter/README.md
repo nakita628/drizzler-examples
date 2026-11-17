@@ -25,4 +25,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#34](https://github.com/nakita628/drizzler/issues/34): the docs have no SQL. drizzler loads the schema with Node's strip-only type stripping, which rejects the `export enum ActivityType` at the bottom of the file (`TypeScript enum is not supported in strip-only mode`). `drizzle-kit export` loads the same file.
+None.

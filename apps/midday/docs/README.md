@@ -2164,7 +2164,7 @@ where "transaction_category_embeddings"."name" = $1
 | `date`                                         | `date`                                                       | NOT NULL                                      |                        |             |
 | `name`                                         | `text`                                                       | NOT NULL                                      |                        |             |
 | `method`                                       | [`transactionMethodsEnum`](#enum-transactionMethodsEnum)     | NOT NULL                                      |                        |             |
-| `amount`                                       | `numericCasted`                                              | NOT NULL                                      |                        |             |
+| `amount`                                       | `numeric(10,2)`                                              | NOT NULL                                      |                        |             |
 | `currency`                                     | `text`                                                       | NOT NULL                                      |                        |             |
 | `teamId` (`team_id`)                           | `uuid`                                                       | NOT NULL → [teams.id](#table-teams)           |                        |             |
 | `assignedId` (`assigned_id`)                   | `uuid`                                                       | NULL → [users.id](#table-users)               |                        |             |
@@ -2172,17 +2172,17 @@ where "transaction_category_embeddings"."name" = $1
 | `bankAccountId` (`bank_account_id`)            | `uuid`                                                       | NULL → [bankAccounts.id](#table-bankAccounts) |                        |             |
 | `internalId` (`internal_id`)                   | `text`                                                       | NOT NULL                                      |                        |             |
 | `status`                                       | [`transactionStatusEnum`](#enum-transactionStatusEnum)       | NULL                                          | `.default("posted")`   |             |
-| `balance`                                      | `numericCasted`                                              | NULL                                          |                        |             |
+| `balance`                                      | `numeric(10,2)`                                              | NULL                                          |                        |             |
 | `manual`                                       | `boolean`                                                    | NULL                                          | `.default(false)`      |             |
 | `notified`                                     | `boolean`                                                    | NULL                                          | `.default(false)`      |             |
 | `internal`                                     | `boolean`                                                    | NULL                                          | `.default(false)`      |             |
 | `description`                                  | `text`                                                       | NULL                                          |                        |             |
 | `categorySlug` (`category_slug`)               | `text`                                                       | NULL                                          |                        |             |
-| `baseAmount`                                   | `numericCasted`                                              | NULL                                          |                        |             |
+| `baseAmount`                                   | `numeric(10,2)`                                              | NULL                                          |                        |             |
 | `counterpartyName` (`counterparty_name`)       | `text`                                                       | NULL                                          |                        |             |
 | `baseCurrency` (`base_currency`)               | `text`                                                       | NULL                                          |                        |             |
-| `taxAmount` (`tax_amount`)                     | `numericCasted`                                              | NULL                                          |                        |             |
-| `taxRate` (`tax_rate`)                         | `numericCasted`                                              | NULL                                          |                        |             |
+| `taxAmount` (`tax_amount`)                     | `numeric(10,2)`                                              | NULL                                          |                        |             |
+| `taxRate` (`tax_rate`)                         | `numeric(10,2)`                                              | NULL                                          |                        |             |
 | `taxType` (`tax_type`)                         | `text`                                                       | NULL                                          |                        |             |
 | `recurring`                                    | `boolean`                                                    | NULL                                          |                        |             |
 | `frequency`                                    | [`transactionFrequencyEnum`](#enum-transactionFrequencyEnum) | NULL                                          |                        |             |
@@ -2283,6 +2283,7 @@ ALTER TABLE "transactions" ADD CONSTRAINT "transactions_category_slug_team_id_fk
 - `assignedId` → [users.id](#table-users) (many to one, on delete set null)
 - `teamId` → [teams.id](#table-teams) (many to one)
 - `bankAccountId` → [bankAccounts.id](#table-bankAccounts) (many to one, on delete cascade)
+- `teamId` → [transactionCategories.teamId](#table-transactionCategories) (many to one)
 
 #### Referenced by
 
@@ -2410,7 +2411,7 @@ Table `tracker_entries`.
 | `assignedId` (`assigned_id`) | `uuid`          | NULL → [users.id](#table-users)                     |                    |                                                                               |
 | `teamId` (`team_id`)         | `uuid`          | NULL → [teams.id](#table-teams)                     |                    |                                                                               |
 | `description`                | `text`          | NULL                                                |                    |                                                                               |
-| `rate`                       | `numericCasted` | NULL                                                |                    |                                                                               |
+| `rate`                       | `numeric(10,2)` | NULL                                                |                    |                                                                               |
 | `currency`                   | `text`          | NULL                                                |                    |                                                                               |
 | `billed`                     | `boolean`       | NULL                                                | `.default(false)`  |                                                                               |
 | `date`                       | `date`          | NULL                                                | `.defaultNow()`    |                                                                               |
@@ -2869,11 +2870,11 @@ Table `bank_accounts`.
 | `bankConnectionId` (`bank_connection_id`)   | `uuid`                                     | NULL → [bankConnections.id](#table-bankConnections) |                    |                                                                 |
 | `enabled`                                   | `boolean`                                  | NOT NULL                                            | `.default(true)`   |                                                                 |
 | `accountId` (`account_id`)                  | `text`                                     | NOT NULL                                            |                    |                                                                 |
-| `balance`                                   | `numericCasted`                            | NULL                                                | `.default(0)`      |                                                                 |
+| `balance`                                   | `numeric(10,2)`                            | NULL                                                | `.default(0)`      |                                                                 |
 | `manual`                                    | `boolean`                                  | NULL                                                | `.default(false)`  |                                                                 |
 | `type`                                      | [`accountTypeEnum`](#enum-accountTypeEnum) | NULL                                                |                    |                                                                 |
 | `baseCurrency` (`base_currency`)            | `text`                                     | NULL                                                |                    |                                                                 |
-| `baseBalance`                               | `numericCasted`                            | NULL                                                |                    |                                                                 |
+| `baseBalance`                               | `numeric(10,2)`                            | NULL                                                |                    |                                                                 |
 | `errorDetails` (`error_details`)            | `text`                                     | NULL                                                |                    |                                                                 |
 | `errorRetries` (`error_retries`)            | `smallint`                                 | NULL                                                |                    |                                                                 |
 | `accountReference` (`account_reference`)    | `text`                                     | NULL                                                |                    |                                                                 |
@@ -2884,8 +2885,8 @@ Table `bank_accounts`.
 | `wireRoutingNumber` (`wire_routing_number`) | `text`                                     | NULL                                                |                    |                                                                 |
 | `accountNumber` (`account_number`)          | `text`                                     | NULL                                                |                    |                                                                 |
 | `sortCode` (`sort_code`)                    | `text`                                     | NULL                                                |                    |                                                                 |
-| `availableBalance`                          | `numericCasted`                            | NULL                                                |                    | Credit account balances                                         |
-| `creditLimit`                               | `numericCasted`                            | NULL                                                |                    |                                                                 |
+| `availableBalance`                          | `numeric(10,2)`                            | NULL                                                |                    | Credit account balances                                         |
+| `creditLimit`                               | `numeric(10,2)`                            | NULL                                                |                    |                                                                 |
 
 #### Definition
 
@@ -3069,7 +3070,7 @@ Table `invoice_recurring`.
 | `lastGeneratedAt` (`last_generated_at`)                        | `timestamp`                                                            | NULL                                                  |                      |                       |
 | `timezone`                                                     | `text`                                                                 | NOT NULL                                              |                      |                       |
 | `dueDateOffset` (`due_date_offset`)                            | `integer`                                                              | NOT NULL                                              | `.default(30)`       | Invoice template data |
-| `amount`                                                       | `numericCasted`                                                        | NULL                                                  |                      |                       |
+| `amount`                                                       | `numeric(10,2)`                                                        | NULL                                                  |                      |                       |
 | `currency`                                                     | `text`                                                                 | NULL                                                  |                      |                       |
 | `lineItems` (`line_items`)                                     | `jsonb`                                                                | NULL                                                  |                      |                       |
 | `template`                                                     | `jsonb`                                                                | NULL                                                  |                      |                       |
@@ -3077,10 +3078,10 @@ Table `invoice_recurring`.
 | `fromDetails` (`from_details`)                                 | `jsonb`                                                                | NULL                                                  |                      |                       |
 | `noteDetails` (`note_details`)                                 | `jsonb`                                                                | NULL                                                  |                      |                       |
 | `customerName` (`customer_name`)                               | `text`                                                                 | NULL                                                  |                      |                       |
-| `vat`                                                          | `numericCasted`                                                        | NULL                                                  |                      |                       |
-| `tax`                                                          | `numericCasted`                                                        | NULL                                                  |                      |                       |
-| `discount`                                                     | `numericCasted`                                                        | NULL                                                  |                      |                       |
-| `subtotal`                                                     | `numericCasted`                                                        | NULL                                                  |                      |                       |
+| `vat`                                                          | `numeric(10,2)`                                                        | NULL                                                  |                      |                       |
+| `tax`                                                          | `numeric(10,2)`                                                        | NULL                                                  |                      |                       |
+| `discount`                                                     | `numeric(10,2)`                                                        | NULL                                                  |                      |                       |
+| `subtotal`                                                     | `numeric(10,2)`                                                        | NULL                                                  |                      |                       |
 | `topBlock` (`top_block`)                                       | `jsonb`                                                                | NULL                                                  |                      |                       |
 | `bottomBlock` (`bottom_block`)                                 | `jsonb`                                                                | NULL                                                  |                      |                       |
 | `templateId` (`template_id`)                                   | `uuid`                                                                 | NULL → [invoiceTemplates.id](#table-invoiceTemplates) |                      |                       |
@@ -3269,7 +3270,7 @@ where "invoice_recurring"."id" = $1
 | `dueDate` (`due_date`)                        | `timestamp`                                    | NULL                                                  |                        |                          |
 | `invoiceNumber` (`invoice_number`)            | `text`                                         | NULL                                                  |                        |                          |
 | `customerId` (`customer_id`)                  | `uuid`                                         | NULL → [customers.id](#table-customers)               |                        |                          |
-| `amount`                                      | `numericCasted`                                | NULL                                                  |                        |                          |
+| `amount`                                      | `numeric(10,2)`                                | NULL                                                  |                        |                          |
 | `currency`                                    | `text`                                         | NULL                                                  |                        |                          |
 | `lineItems` (`line_items`)                    | `jsonb`                                        | NULL                                                  |                        |                          |
 | `paymentDetails` (`payment_details`)          | `jsonb`                                        | NULL                                                  |                        |                          |
@@ -3280,8 +3281,8 @@ where "invoice_recurring"."id" = $1
 | `teamId` (`team_id`)                          | `uuid`                                         | NOT NULL → [teams.id](#table-teams)                   |                        |                          |
 | `paidAt` (`paid_at`)                          | `timestamp`                                    | NULL                                                  |                        |                          |
 | `fts`                                         | `tsvector`                                     | NOT NULL                                              | `.generatedAlwaysAs()` |                          |
-| `vat`                                         | `numericCasted`                                | NULL                                                  |                        |                          |
-| `tax`                                         | `numericCasted`                                | NULL                                                  |                        |                          |
+| `vat`                                         | `numeric(10,2)`                                | NULL                                                  |                        |                          |
+| `tax`                                         | `numeric(10,2)`                                | NULL                                                  |                        |                          |
 | `url`                                         | `text`                                         | NULL                                                  |                        |                          |
 | `filePath` (`file_path`)                      | `text[]`                                       | NULL                                                  |                        |                          |
 | `status`                                      | [`invoiceStatusEnum`](#enum-invoiceStatusEnum) | NOT NULL                                              | `.default("draft")`    |                          |
@@ -3294,10 +3295,10 @@ where "invoice_recurring"."id" = $1
 | `token`                                       | `text`                                         | NOT NULL                                              | `.default("")`         |                          |
 | `sentTo` (`sent_to`)                          | `text`                                         | NULL                                                  |                        |                          |
 | `reminderSentAt` (`reminder_sent_at`)         | `timestamp`                                    | NULL                                                  |                        |                          |
-| `discount`                                    | `numericCasted`                                | NULL                                                  |                        |                          |
+| `discount`                                    | `numeric(10,2)`                                | NULL                                                  |                        |                          |
 | `fileSize` (`file_size`)                      | `bigint`                                       | NULL                                                  |                        |                          |
 | `userId` (`user_id`)                          | `uuid`                                         | NULL → [users.id](#table-users)                       |                        |                          |
-| `subtotal`                                    | `numericCasted`                                | NULL                                                  |                        |                          |
+| `subtotal`                                    | `numeric(10,2)`                                | NULL                                                  |                        |                          |
 | `topBlock` (`top_block`)                      | `jsonb`                                        | NULL                                                  |                        |                          |
 | `bottomBlock` (`bottom_block`)                | `jsonb`                                        | NULL                                                  |                        |                          |
 | `sentAt` (`sent_at`)                          | `timestamp`                                    | NULL                                                  |                        |                          |
@@ -3791,7 +3792,7 @@ Table `exchange_rates`.
 | -------------------------- | --------------- | ----------- | ------------------ | ----------- |
 | `id`                       | `uuid`          | PK NOT NULL | `.defaultRandom()` |             |
 | `base`                     | `text`          | NULL        |                    |             |
-| `rate`                     | `numericCasted` | NULL        |                    |             |
+| `rate`                     | `numeric(10,2)` | NULL        |                    |             |
 | `target`                   | `text`          | NULL        |                    |             |
 | `updatedAt` (`updated_at`) | `timestamp`     | NULL        |                    |             |
 
@@ -6521,7 +6522,7 @@ Table `invoice_templates`.
 | `dateFormat` (`date_format`)                   | `text`                                                     | NULL                                |                       |             |
 | `includeVat` (`include_vat`)                   | `boolean`                                                  | NULL                                |                       |             |
 | `includeTax` (`include_tax`)                   | `boolean`                                                  | NULL                                |                       |             |
-| `taxRate` (`tax_rate`)                         | `numericCasted`                                            | NULL                                |                       |             |
+| `taxRate` (`tax_rate`)                         | `numeric(10,2)`                                            | NULL                                |                       |             |
 | `deliveryType` (`delivery_type`)               | [`invoiceDeliveryTypeEnum`](#enum-invoiceDeliveryTypeEnum) | NOT NULL                            | `.default("create")`  |             |
 | `discountLabel` (`discount_label`)             | `text`                                                     | NULL                                |                       |             |
 | `includeDiscount` (`include_discount`)         | `boolean`                                                  | NULL                                |                       |             |
@@ -6529,7 +6530,7 @@ Table `invoice_templates`.
 | `includeQr` (`include_qr`)                     | `boolean`                                                  | NULL                                |                       |             |
 | `totalSummaryLabel` (`total_summary_label`)    | `text`                                                     | NULL                                |                       |             |
 | `title`                                        | `text`                                                     | NULL                                |                       |             |
-| `vatRate` (`vat_rate`)                         | `numericCasted`                                            | NULL                                |                       |             |
+| `vatRate` (`vat_rate`)                         | `numeric(10,2)`                                            | NULL                                |                       |             |
 | `includeUnits` (`include_units`)               | `boolean`                                                  | NULL                                |                       |             |
 | `subtotalLabel` (`subtotal_label`)             | `text`                                                     | NULL                                |                       |             |
 | `includePdf` (`include_pdf`)                   | `boolean`                                                  | NULL                                |                       |             |
@@ -6725,10 +6726,10 @@ Table `invoice_products`.
 | `createdBy` (`created_by`)    | `uuid`          | NULL → [users.id](#table-users)     |                        |                                                     |
 | `name`                        | `text`          | NOT NULL                            |                        |                                                     |
 | `description`                 | `text`          | NULL                                |                        |                                                     |
-| `price`                       | `numericCasted` | NULL                                |                        |                                                     |
+| `price`                       | `numeric(10,2)` | NULL                                |                        |                                                     |
 | `currency`                    | `text`          | NULL                                |                        |                                                     |
 | `unit`                        | `text`          | NULL                                |                        |                                                     |
-| `taxRate` (`tax_rate`)        | `numericCasted` | NULL                                |                        |                                                     |
+| `taxRate` (`tax_rate`)        | `numeric(10,2)` | NULL                                |                        |                                                     |
 | `isActive`                    | `boolean`       | NOT NULL                            | `.default(true)`       |                                                     |
 | `usageCount` (`usage_count`)  | `integer`       | NOT NULL                            | `.default(0)`          |                                                     |
 | `lastUsedAt` (`last_used_at`) | `timestamp`     | NULL                                |                        |                                                     |
@@ -6898,14 +6899,14 @@ Table `transaction_enrichments`.
 
 ![transactionEnrichments and the tables it relates to](tables/transactionEnrichments.svg)
 
-| Column                           | Type        | Constraints                     | Default            | Description |
-| -------------------------------- | ----------- | ------------------------------- | ------------------ | ----------- |
-| `id`                             | `uuid`      | PK NOT NULL                     | `.defaultRandom()` |             |
-| `createdAt` (`created_at`)       | `timestamp` | NOT NULL                        | `.defaultNow()`    |             |
-| `name`                           | `text`      | NULL                            |                    |             |
-| `teamId` (`team_id`)             | `uuid`      | NULL → [teams.id](#table-teams) |                    |             |
-| `categorySlug` (`category_slug`) | `text`      | NULL                            |                    |             |
-| `system`                         | `boolean`   | NULL                            | `.default(false)`  |             |
+| Column                           | Type        | Constraints                                                         | Default            | Description |
+| -------------------------------- | ----------- | ------------------------------------------------------------------- | ------------------ | ----------- |
+| `id`                             | `uuid`      | PK NOT NULL                                                         | `.defaultRandom()` |             |
+| `createdAt` (`created_at`)       | `timestamp` | NOT NULL                                                            | `.defaultNow()`    |             |
+| `name`                           | `text`      | NULL                                                                |                    |             |
+| `teamId` (`team_id`)             | `uuid`      | NULL → [transactionCategories.teamId](#table-transactionCategories) |                    |             |
+| `categorySlug` (`category_slug`) | `text`      | NULL                                                                |                    |             |
+| `system`                         | `boolean`   | NULL                                                                | `.default(false)`  |             |
 
 #### Definition
 
@@ -6935,6 +6936,7 @@ ALTER TABLE "transaction_enrichments" ADD CONSTRAINT "transaction_enrichments_te
 
 #### References
 
+- `teamId` → [transactionCategories.teamId](#table-transactionCategories) (many to one, on delete cascade)
 - `teamId` → [teams.id](#table-teams) (many to one, on delete cascade)
 
 <details>
@@ -7037,20 +7039,20 @@ where "transaction_enrichments"."id" = $1
 
 ![users and the tables it relates to](tables/users.svg)
 
-| Column                                         | Type            | Constraints                            | Default           | Description |
-| ---------------------------------------------- | --------------- | -------------------------------------- | ----------------- | ----------- |
-| `id`                                           | `uuid`          | PK NOT NULL → [users.id](#table-users) |                   |             |
-| `fullName` (`full_name`)                       | `text`          | NULL                                   |                   |             |
-| `avatarUrl` (`avatar_url`)                     | `text`          | NULL                                   |                   |             |
-| `email`                                        | `text`          | NULL                                   |                   |             |
-| `teamId` (`team_id`)                           | `uuid`          | NULL → [teams.id](#table-teams)        |                   |             |
-| `createdAt` (`created_at`)                     | `timestamp`     | NULL                                   | `.defaultNow()`   |             |
-| `locale`                                       | `text`          | NULL                                   | `.default("en")`  |             |
-| `weekStartsOnMonday` (`week_starts_on_monday`) | `boolean`       | NULL                                   | `.default(false)` |             |
-| `timezone`                                     | `text`          | NULL                                   |                   |             |
-| `timezoneAutoSync` (`timezone_auto_sync`)      | `boolean`       | NULL                                   | `.default(true)`  |             |
-| `timeFormat` (`time_format`)                   | `numericCasted` | NULL                                   | `.default(24)`    |             |
-| `dateFormat` (`date_format`)                   | `text`          | NULL                                   |                   |             |
+| Column                                         | Type        | Constraints                            | Default           | Description |
+| ---------------------------------------------- | ----------- | -------------------------------------- | ----------------- | ----------- |
+| `id`                                           | `uuid`      | PK NOT NULL → [users.id](#table-users) |                   |             |
+| `fullName` (`full_name`)                       | `text`      | NULL                                   |                   |             |
+| `avatarUrl` (`avatar_url`)                     | `text`      | NULL                                   |                   |             |
+| `email`                                        | `text`      | NULL                                   |                   |             |
+| `teamId` (`team_id`)                           | `uuid`      | NULL → [teams.id](#table-teams)        |                   |             |
+| `createdAt` (`created_at`)                     | `timestamp` | NULL                                   | `.defaultNow()`   |             |
+| `locale`                                       | `text`      | NULL                                   | `.default("en")`  |             |
+| `weekStartsOnMonday` (`week_starts_on_monday`) | `boolean`   | NULL                                   | `.default(false)` |             |
+| `timezone`                                     | `text`      | NULL                                   |                   |             |
+| `timezoneAutoSync` (`timezone_auto_sync`)      | `boolean`   | NULL                                   | `.default(true)`  |             |
+| `timeFormat` (`time_format`)                   | `numeric`   | NULL                                   | `.default(24)`    |             |
+| `dateFormat` (`date_format`)                   | `text`      | NULL                                   |                   |             |
 
 #### Definition
 
@@ -7216,7 +7218,7 @@ Table `tracker_projects`.
 | `id`                         | `uuid`                                         | PK NOT NULL                             | `.defaultRandom()`        |                                                                               |
 | `createdAt` (`created_at`)   | `timestamp`                                    | NOT NULL                                | `.defaultNow()`           |                                                                               |
 | `teamId` (`team_id`)         | `uuid`                                         | NULL → [teams.id](#table-teams)         |                           |                                                                               |
-| `rate`                       | `numericCasted`                                | NULL                                    |                           |                                                                               |
+| `rate`                       | `numeric(10,2)`                                | NULL                                    |                           |                                                                               |
 | `currency`                   | `text`                                         | NULL                                    |                           |                                                                               |
 | `status`                     | [`trackerStatusEnum`](#enum-trackerStatusEnum) | NOT NULL                                | `.default("in_progress")` |                                                                               |
 | `description`                | `text`                                         | NULL                                    |                           |                                                                               |
@@ -7378,7 +7380,7 @@ where "tracker_projects"."id" = $1
 | `filePath` (`file_path`)              | `text[]`                                   | NULL                                                              |                        |                                                                               |
 | `fileName` (`file_name`)              | `text`                                     | NULL                                                              |                        |                                                                               |
 | `transactionId` (`transaction_id`)    | `uuid`                                     | NULL → [transactions.id](#table-transactions)                     |                        |                                                                               |
-| `amount`                              | `numericCasted`                            | NULL                                                              |                        |                                                                               |
+| `amount`                              | `numeric(10,2)`                            | NULL                                                              |                        |                                                                               |
 | `currency`                            | `text`                                     | NULL                                                              |                        |                                                                               |
 | `contentType` (`content_type`)        | `text`                                     | NULL                                                              |                        |                                                                               |
 | `size`                                | `bigint`                                   | NULL                                                              |                        | You can use { mode: "bigint" } if numbers are exceeding js number limitations |
@@ -7394,10 +7396,10 @@ where "tracker_projects"."id" = $1
 | `fts`                                 | `tsvector`                                 | NOT NULL                                                          | `.generatedAlwaysAs()` |                                                                               |
 | `type`                                | [`inboxTypeEnum`](#enum-inboxTypeEnum)     | NULL                                                              |                        |                                                                               |
 | `description`                         | `text`                                     | NULL                                                              |                        |                                                                               |
-| `baseAmount` (`base_amount`)          | `numericCasted`                            | NULL                                                              |                        |                                                                               |
+| `baseAmount` (`base_amount`)          | `numeric(10,2)`                            | NULL                                                              |                        |                                                                               |
 | `baseCurrency` (`base_currency`)      | `text`                                     | NULL                                                              |                        |                                                                               |
-| `taxAmount` (`tax_amount`)            | `numericCasted`                            | NULL                                                              |                        |                                                                               |
-| `taxRate` (`tax_rate`)                | `numericCasted`                            | NULL                                                              |                        |                                                                               |
+| `taxAmount` (`tax_amount`)            | `numeric(10,2)`                            | NULL                                                              |                        |                                                                               |
+| `taxRate` (`tax_rate`)                | `numeric(10,2)`                            | NULL                                                              |                        |                                                                               |
 | `taxType` (`tax_type`)                | `text`                                     | NULL                                                              |                        |                                                                               |
 | `inboxAccountId` (`inbox_account_id`) | `uuid`                                     | NULL → [inboxAccounts.id](#table-inboxAccounts)                   |                        |                                                                               |
 | `invoiceNumber` (`invoice_number`)    | `text`                                     | NULL                                                              |                        |                                                                               |
@@ -7718,24 +7720,24 @@ Table `transaction_match_suggestions`.
 
 ![transactionMatchSuggestions and the tables it relates to](tables/transactionMatchSuggestions.svg)
 
-| Column                                 | Type            | Constraints                                       | Default               | Description                   |
-| -------------------------------------- | --------------- | ------------------------------------------------- | --------------------- | ----------------------------- |
-| `id`                                   | `uuid`          | PK NOT NULL                                       | `.defaultRandom()`    |                               |
-| `createdAt` (`created_at`)             | `timestamp`     | NOT NULL                                          | `.defaultNow()`       |                               |
-| `updatedAt` (`updated_at`)             | `timestamp`     | NOT NULL                                          | `.defaultNow()`       |                               |
-| `teamId` (`team_id`)                   | `uuid`          | NOT NULL → [teams.id](#table-teams)               |                       | Core relationship             |
-| `inboxId` (`inbox_id`)                 | `uuid`          | NOT NULL → [inbox.id](#table-inbox)               |                       |                               |
-| `transactionId` (`transaction_id`)     | `uuid`          | NOT NULL → [transactions.id](#table-transactions) |                       |                               |
-| `confidenceScore` (`confidence_score`) | `numericCasted` | NOT NULL                                          |                       | Match scores for transparency |
-| `amountScore` (`amount_score`)         | `numericCasted` | NULL                                              |                       |                               |
-| `currencyScore` (`currency_score`)     | `numericCasted` | NULL                                              |                       |                               |
-| `dateScore` (`date_score`)             | `numericCasted` | NULL                                              |                       |                               |
-| `nameScore` (`name_score`)             | `numericCasted` | NULL                                              |                       |                               |
-| `matchType` (`match_type`)             | `text`          | NOT NULL                                          |                       | Match context                 |
-| `matchDetails` (`match_details`)       | `jsonb`         | NULL                                              |                       |                               |
-| `status`                               | `text`          | NOT NULL                                          | `.default("pending")` | User interaction tracking     |
-| `userActionAt` (`user_action_at`)      | `timestamp`     | NULL                                              |                       |                               |
-| `userId` (`user_id`)                   | `uuid`          | NULL → [users.id](#table-users)                   |                       |                               |
+| Column                                 | Type           | Constraints                                       | Default               | Description                   |
+| -------------------------------------- | -------------- | ------------------------------------------------- | --------------------- | ----------------------------- |
+| `id`                                   | `uuid`         | PK NOT NULL                                       | `.defaultRandom()`    |                               |
+| `createdAt` (`created_at`)             | `timestamp`    | NOT NULL                                          | `.defaultNow()`       |                               |
+| `updatedAt` (`updated_at`)             | `timestamp`    | NOT NULL                                          | `.defaultNow()`       |                               |
+| `teamId` (`team_id`)                   | `uuid`         | NOT NULL → [teams.id](#table-teams)               |                       | Core relationship             |
+| `inboxId` (`inbox_id`)                 | `uuid`         | NOT NULL → [inbox.id](#table-inbox)               |                       |                               |
+| `transactionId` (`transaction_id`)     | `uuid`         | NOT NULL → [transactions.id](#table-transactions) |                       |                               |
+| `confidenceScore` (`confidence_score`) | `numeric(4,3)` | NOT NULL                                          |                       | Match scores for transparency |
+| `amountScore` (`amount_score`)         | `numeric(4,3)` | NULL                                              |                       |                               |
+| `currencyScore` (`currency_score`)     | `numeric(4,3)` | NULL                                              |                       |                               |
+| `dateScore` (`date_score`)             | `numeric(4,3)` | NULL                                              |                       |                               |
+| `nameScore` (`name_score`)             | `numeric(4,3)` | NULL                                              |                       |                               |
+| `matchType` (`match_type`)             | `text`         | NOT NULL                                          |                       | Match context                 |
+| `matchDetails` (`match_details`)       | `jsonb`        | NULL                                              |                       |                               |
+| `status`                               | `text`         | NOT NULL                                          | `.default("pending")` | User interaction tracking     |
+| `userActionAt` (`user_action_at`)      | `timestamp`    | NULL                                              |                       |                               |
+| `userId` (`user_id`)                   | `uuid`         | NULL → [users.id](#table-users)                   |                       |                               |
 
 #### Definition
 
@@ -8231,7 +8233,7 @@ Table `transaction_categories`.
 | `createdAt` (`created_at`)                | `timestamp`     | NULL                                                            | `.defaultNow()`    |             |
 | `system`                                  | `boolean`       | NULL                                                            | `.default(false)`  |             |
 | `slug`                                    | `text`          | PK NULL                                                         |                    |             |
-| `taxRate` (`tax_rate`)                    | `numericCasted` | NULL                                                            |                    |             |
+| `taxRate` (`tax_rate`)                    | `numeric(10,2)` | NULL                                                            |                    |             |
 | `taxType` (`tax_type`)                    | `text`          | NULL                                                            |                    |             |
 | `taxReportingCode` (`tax_reporting_code`) | `text`          | NULL                                                            |                    |             |
 | `excluded`                                | `boolean`       | NULL                                                            | `.default(false)`  |             |
@@ -8282,6 +8284,8 @@ ALTER TABLE "transaction_categories" ADD CONSTRAINT "transaction_categories_pare
 
 #### Referenced by
 
+- `teamId` → [transactions.teamId](#table-transactions) (one to many)
+- `teamId` → [transactionEnrichments.teamId](#table-transactionEnrichments) (one to many, on delete cascade)
 - `id` → [transactionCategories.parentId](#table-transactionCategories) (one to many, on delete set null)
 
 <details>
@@ -8604,7 +8608,7 @@ Table `short_links`.
 | `shortId` (`short_id`)     | `text`          | NOT NULL                            |                    |             |
 | `url`                      | `text`          | NOT NULL                            |                    |             |
 | `type`                     | `text`          | NULL                                |                    |             |
-| `size`                     | `numericCasted` | NULL                                |                    |             |
+| `size`                     | `numeric(10,2)` | NULL                                |                    |             |
 | `mimeType` (`mime_type`)   | `text`          | NULL                                |                    |             |
 | `fileName` (`file_name`)   | `text`          | NULL                                |                    |             |
 | `teamId` (`team_id`)       | `uuid`          | NOT NULL → [teams.id](#table-teams) |                    |             |

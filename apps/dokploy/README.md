@@ -12,7 +12,6 @@ The schema of Dokploy, a self-hosted PaaS (an open-source alternative to Vercel,
 - `createInsertSchema` is imported from `drizzle-orm/zod` instead of `drizzle-zod`, which drizzle-orm 1.0 replaces.
 - `dbml.ts` is left out. It is not exported from `index.ts` and only runs `drizzle-dbml-generator`.
 - The modules the schema imports from the rest of `@dokploy/server` are stand-ins: `lib/encryption.ts` (identity `encryptValue` / `decryptValue`), `templates/index.ts` (`generatePassword`), `constants/index.ts` (`paths`) and the types in `services/*.ts`. The two `utils` files are copied as they are.
-- `generate` skips `er.png` and `er-dark.png` (see the known issues).
 
 ## Generate
 
@@ -23,11 +22,10 @@ pnpm generate
 The output is written to [`docs/`](docs/):
 
 - [`README.md`](docs/README.md): table docs with the SQL
-- [`er.svg`](docs/er.svg) and `tables/*.svg`: ER diagrams
+- [`er.svg`](docs/er.svg), [`er.png`](docs/er.png), [`er-dark.png`](docs/er-dark.png) and `tables/*.svg`: ER diagrams
 - [`schema.dbml`](docs/schema.dbml): DBML
 - [`er.md`](docs/er.md): Mermaid `erDiagram`
 
 ## Known issues
 
-- [nakita628/drizzler#35](https://github.com/nakita628/drizzler/issues/35): `drizzler -o docs/er.png` is killed for out of memory. The diagram is 6460 × 21200.
-- [nakita628/drizzler#36](https://github.com/nakita628/drizzler/issues/36): the 19 `encryptedText` columns have the type `encryptedText` instead of `text`.
+None.

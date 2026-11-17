@@ -39,7 +39,7 @@ Table account {
   refreshTokenExpiresAt integer
   scope text
   password text
-  createdAt createdAtMsField
+  createdAt integer [not null]
   updatedAt integer [not null]
   indexes {
     (providerId, accountId) [unique, name: 'accounts_providerId_accountId_unique']
@@ -54,7 +54,7 @@ Table session {
   expiresAt integer [not null]
   ipAddress text
   userAgent text
-  createdAt createdAtMsField
+  createdAt integer [not null]
   updatedAt integer [not null]
   indexes {
     (userId) [name: 'sessions_userId_idx']
@@ -66,7 +66,7 @@ Table verificationToken {
   identifier text [not null]
   value text [not null]
   expiresAt integer [not null]
-  createdAt createdAtMsField
+  createdAt integer [not null]
   updatedAt integer [not null]
   indexes {
     (identifier, value) [unique, name: 'verificationTokens_identifier_value_unique']
@@ -77,7 +77,7 @@ Table verificationToken {
 Table apiKey {
   id text [pk, not null]
   name text [not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   lastUsedAt integer
   keyId text [not null, unique]
   keyHash text [not null]
@@ -90,9 +90,9 @@ Table apiKey {
 
 Table bookmarks {
   id text [pk, not null]
-  dbCreatedAt createdAtField [note: 'The `createdAt` field and the `createdAt` column intentionally don\'t match. Re-saving an existing bookmark bumps it back to the top of the list, so the timestamp everything sorts and filters on is now "when was this last saved" and lives in the `lastSavedAt` column. It keeps the `createdAt` field name because that\'s what the API has always exposed and what every query already orders by. The immutable "when did this row first appear" timestamp stays in the original `createdAt` column, and is exposed to clients as `firstCreatedAt`.']
-  lastSavedAt createdAtField
-  modifiedAt modifiedAtField
+  createdAt integer [not null, note: 'The `createdAt` field and the `createdAt` column intentionally don\'t match. Re-saving an existing bookmark bumps it back to the top of the list, so the timestamp everything sorts and filters on is now "when was this last saved" and lives in the `lastSavedAt` column. It keeps the `createdAt` field name because that\'s what the API has always exposed and what every query already orders by. The immutable "when did this row first appear" timestamp stays in the original `createdAt` column, and is exposed to clients as `firstCreatedAt`.']
+  lastSavedAt integer [not null]
+  modifiedAt integer
   title text
   archived integer [not null]
   favourited integer [not null]
@@ -164,7 +164,7 @@ Table highlights {
   prefix text
   suffix text
   note text
-  createdAt createdAtField
+  createdAt integer [not null]
   indexes {
     (bookmarkId) [name: 'highlights_bookmarkId_idx']
     (userId, createdAt, id) [name: 'highlights_userId_createdAt_id_idx']
@@ -178,7 +178,7 @@ Table userReadingProgress {
   readingProgressOffset integer [not null]
   readingProgressAnchor text
   readingProgressPercent integer
-  modifiedAt modifiedAtField
+  modifiedAt integer
   indexes {
     (bookmarkId, userId) [unique]
     (bookmarkId) [name: 'userReadingProgress_bookmarkId_idx']
@@ -206,7 +206,7 @@ Table bookmarkTags {
   id text [pk, not null]
   name text [not null]
   normalizedName text
-  createdAt createdAtField
+  createdAt integer [not null]
   userId text [not null]
   indexes {
     (userId, name) [unique]
@@ -232,7 +232,7 @@ Table bookmarkLists {
   name text [not null]
   description text
   icon text [not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   userId text [not null]
   type text [not null]
   query text [note: 'Only applicable for smart lists']
@@ -261,7 +261,7 @@ Table listCollaborators {
   listId text [not null]
   userId text [not null]
   role text [not null]
-  addedAt createdAtField
+  createdAt integer [not null]
   addedBy text
   indexes {
     (listId, userId) [unique]
@@ -292,7 +292,7 @@ Table customPrompts {
   text text [not null]
   enabled integer [not null]
   appliesTo text [not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   userId text [not null]
   indexes {
     (userId) [name: 'customPrompts_userId_idx']
@@ -303,8 +303,8 @@ Table chatSessions {
   id text [pk, not null]
   title text [not null]
   userId text [not null]
-  createdAt createdAtMsField
-  modifiedAt modifiedAtMsField
+  createdAt integer [not null]
+  modifiedAt integer
   indexes {
     (userId) [name: 'chatSessions_userId_idx']
     (userId, modifiedAt) [name: 'chatSessions_userId_modifiedAt_idx']
@@ -317,7 +317,7 @@ Table chatMessages {
   role text [not null]
   content text [not null]
   metadata text
-  createdAt createdAtMsField
+  createdAt integer [not null]
   indexes {
     (chatId) [name: 'chatMessages_chatId_idx']
     (chatId, createdAt) [name: 'chatMessages_chatId_createdAt_idx']
@@ -330,7 +330,7 @@ Table rssFeeds {
   url text [not null]
   enabled integer [not null]
   importTags integer [not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   lastFetchedAt integer
   lastSuccessfulFetchAt integer
   lastFetchedStatus text
@@ -342,7 +342,7 @@ Table rssFeeds {
 
 Table webhooks {
   id text [pk, not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   url text [not null]
   userId text [not null]
   events text [not null]
@@ -354,7 +354,7 @@ Table webhooks {
 
 Table rssFeedImports {
   id text [pk, not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   entryId text [not null]
   rssFeedId text [not null]
   bookmarkId text
@@ -371,7 +371,7 @@ Table backups {
   id text [pk, not null]
   userId text [not null]
   assetId text
-  createdAt createdAtField
+  createdAt integer [not null]
   size integer [not null]
   bookmarkCount integer [not null]
   status text [not null]
@@ -418,7 +418,7 @@ Table invites {
   id text [pk, not null]
   email text [not null]
   token text [not null, unique]
-  createdAt createdAtField
+  createdAt integer [not null]
   usedAt integer
   invitedBy text [not null]
 }
@@ -434,8 +434,8 @@ Table subscriptions {
   cancelAtPeriodEnd integer
   startDate integer
   endDate integer
-  createdAt createdAtField
-  modifiedAt modifiedAtField
+  createdAt integer [not null]
+  modifiedAt integer
   indexes {
     (userId) [name: 'subscriptions_userId_idx']
     (stripeCustomerId) [name: 'subscriptions_stripeCustomerId_idx']
@@ -453,8 +453,8 @@ Table inAppSubscriptions {
   isSandbox integer [not null]
   startDate integer
   endDate integer
-  createdAt createdAtField
-  modifiedAt modifiedAtField
+  createdAt integer [not null]
+  modifiedAt integer
   Note: 'Subscriptions purchased through the mobile app stores (App Store / Google Play). These are managed by RevenueCat, which is the source of truth; this table mirrors the state of the configured RevenueCat entitlement.'
 }
 
@@ -472,8 +472,8 @@ Table importSessions {
   failedBookmarks integer [not null]
   pendingBookmarks integer [not null]
   processingBookmarks integer [not null]
-  createdAt createdAtField
-  modifiedAt modifiedAtField
+  createdAt integer [not null]
+  modifiedAt integer
   indexes {
     (userId) [name: 'importSessions_userId_idx']
     (status) [name: 'importSessions_status_idx']
@@ -485,7 +485,7 @@ Table importSessionBookmarks {
   id text [pk, not null]
   importSessionId text [not null]
   bookmarkId text [not null]
-  createdAt createdAtField
+  createdAt integer [not null]
   indexes {
     (bookmarkId) [name: 'importSessionBookmarks_bookmarkId_idx']
     (importSessionId, bookmarkId) [unique]
@@ -509,7 +509,7 @@ Table importStagingBookmarks {
   result text [note: 'Result (for observability)']
   resultReason text
   resultBookmarkId text
-  createdAt createdAtField
+  createdAt integer [not null]
   completedAt integer
   indexes {
     (importSessionId, status) [name: 'importStaging_session_status_idx']
@@ -594,9 +594,15 @@ Ref backups_assetId_assets_id_fk: backups.assetId > assets.id [delete: cascade]
 
 Ref ruleEngineRules_userId_user_id_fk: ruleEngineRules.userId > user.id [delete: cascade]
 
+Ref ruleEngineRules_userId_tagId_bookmarkTags_userId_id_fk: ruleEngineRules.(userId, tagId) > bookmarkTags.(userId, id) [delete: cascade]
+
 Ref ruleEngineActions_userId_user_id_fk: ruleEngineActions.userId > user.id [delete: cascade]
 
 Ref ruleEngineActions_ruleId_ruleEngineRules_id_fk: ruleEngineActions.ruleId > ruleEngineRules.id [delete: cascade]
+
+Ref ruleEngineActions_userId_tagId_bookmarkTags_userId_id_fk: ruleEngineActions.(userId, tagId) > bookmarkTags.(userId, id) [delete: cascade]
+
+Ref ruleEngineActions_userId_listId_bookmarkLists_userId_id_fk: ruleEngineActions.(userId, listId) > bookmarkLists.(userId, id) [delete: cascade]
 
 Ref invites_invitedBy_user_id_fk: invites.invitedBy > user.id [delete: cascade]
 

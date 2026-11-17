@@ -25,4 +25,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#33](https://github.com/nakita628/drizzler/issues/33): the composite foreign key from `Suggestion (documentId, documentCreatedAt)` to `Document (id, createdAt)` is missing from the DBML, the Mermaid diagram and the ER diagrams. The SQL has it.
+None.
