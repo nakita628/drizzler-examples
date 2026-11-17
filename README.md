@@ -28,6 +28,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
 | [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | — |
 | [papra](apps/papra) | papra-hq/papra | SQLite | [#44](https://github.com/nakita628/drizzler/issues/44) |
+| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | [#45](https://github.com/nakita628/drizzler/issues/45), [#46](https://github.com/nakita628/drizzler/issues/46) |
 
 ## Output
 
