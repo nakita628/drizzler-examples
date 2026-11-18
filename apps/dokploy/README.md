@@ -28,5 +28,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#60](https://github.com/nakita628/drizzler/issues/60): the v1 `one()` relations declared from the referenced side are written as a second ref next to their foreign key, so `pnpm check:dbml` fails with `References with same endpoints exist`.
-- [nakita628/drizzler#62](https://github.com/nakita628/drizzler/issues/62): the `appName` defaults, built with Faker, change the insert examples in `docs/README.md` on every run.
+None.

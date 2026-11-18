@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#60](https://github.com/nakita628/drizzler/issues/60): the v1 `one()` relations declared from `bookmarks` to `bookmarkLinks`, `bookmarkTexts` and `bookmarkAssets` are written as a second ref next to their foreign key, so `pnpm check:dbml` fails with `References with same endpoints exist`.
+None.
