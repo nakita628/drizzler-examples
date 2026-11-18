@@ -26,4 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-None.
+- [nakita628/drizzler#57](https://github.com/nakita628/drizzler/issues/57): the indexes written as `index().using("btree", table.col.asc().nullsLast().op("..._ops"))` are missing from the DBML (84 of the SQL's 149 indexes and unique constraints are there).

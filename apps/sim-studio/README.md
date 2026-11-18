@@ -27,3 +27,4 @@ The output is written to [`docs/`](docs/):
 ## Known issues
 
 - [nakita628/drizzler#51](https://github.com/nakita628/drizzler/issues/51): the DBML does not mark the identity columns (`generatedAlwaysAsIdentity()`) as `increment`.
+- [nakita628/drizzler#57](https://github.com/nakita628/drizzler/issues/57): the indexes with `.asc()`, `.desc()` or `.op()` columns and the expression indexes are missing from the DBML.

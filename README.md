@@ -22,14 +22,14 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [authjs-drizzle-mysql](apps/authjs-drizzle-mysql) | nextauthjs/next-auth (Drizzle adapter) | MySQL | — |
 | [vercel-ai-chatbot](apps/vercel-ai-chatbot) | vercel/ai-chatbot | PostgreSQL | — |
 | [saas-starter](apps/saas-starter) | nextjs/saas-starter | PostgreSQL | — |
-| [midday](apps/midday) | midday-ai/midday | PostgreSQL | — |
+| [midday](apps/midday) | midday-ai/midday | PostgreSQL | [#57](https://github.com/nakita628/drizzler/issues/57) |
 | [kan](apps/kan) | kanbn/kan | PostgreSQL | — |
 | [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | — |
 | [dyad](apps/dyad) | dyad-sh/dyad | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
 | [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
-| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
-| [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
+| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51), [#57](https://github.com/nakita628/drizzler/issues/57) |
+| [morphic](apps/morphic) | miurla/morphic | PostgreSQL | [#57](https://github.com/nakita628/drizzler/issues/57) |
 | [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
 | [papra](apps/papra) | papra-hq/papra | SQLite | — |
 | [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | — |
@@ -48,7 +48,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [canva-clone](apps/canva-clone) | Davronov-Alimardon/canva-clone | PostgreSQL | — |
 | [refref](apps/refref) | amicalhq/refref | PostgreSQL | — |
 | [openbio](apps/openbio) | vanxh/openbio | PostgreSQL | — |
-| [infinitunes](apps/infinitunes) | rajput-hemant/infinitunes | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52) |
+| [infinitunes](apps/infinitunes) | rajput-hemant/infinitunes | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52), [#57](https://github.com/nakita628/drizzler/issues/57) |
 | [lipi](apps/lipi) | rajput-hemant/lipi | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52) |
 | [rdt-li](apps/rdt-li) | nrjdalal/rdt-li | PostgreSQL | — |
 | [devterms](apps/devterms) | aelew/devterms | SQLite | [#53](https://github.com/nakita628/drizzler/issues/53) |
@@ -56,6 +56,14 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [survev](apps/survev) | survev/survev | PostgreSQL | — |
 | [openstatus](apps/openstatus) | openstatusHQ/openstatus | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
 | [hyprnote](apps/hyprnote) | fastrepl/hyprnote | SQLite | [#56](https://github.com/nakita628/drizzler/issues/56) |
+| [skateshop](apps/skateshop) | sadmann7/skateshop | PostgreSQL | — |
+| [relivator](apps/relivator) | reliverse/relivator | PostgreSQL | — |
+| [next-saas-stripe-starter](apps/next-saas-stripe-starter) | mickasmt/next-saas-stripe-starter | PostgreSQL | — |
+| [nelsonlai-dev](apps/nelsonlai-dev) | nelsonlaidev/nelsonlai.dev | PostgreSQL | [#57](https://github.com/nakita628/drizzler/issues/57) |
+| [nuxt-ui-chat](apps/nuxt-ui-chat) | nuxt-ui-templates/chat | SQLite | — |
+| [onestopshop](apps/onestopshop) | jackblatch/OneStopShop | MySQL | — |
+| [noodle](apps/noodle) | noodle-run/noodle | PostgreSQL | — |
+| [orbitkit](apps/orbitkit) | ixahmedxi/orbitkit | PostgreSQL | — |
 
 ## Output
 

@@ -684,7 +684,118 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  apps/nelsonlai-dev:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@paralleldrive/cuid2':
+        specifier: 3.3.0
+        version: 3.3.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  apps/next-saas-stripe-starter:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  apps/noodle:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      zod:
+        specifier: ^4.6.6
+        version: 4.6.7
+
   apps/northwind:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  apps/nuxt-ui-chat:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  apps/onestopshop:
     devDependencies:
       '@drizzler-examples/tsconfig':
         specifier: workspace:*
@@ -785,6 +896,27 @@ importers:
       zod:
         specifier: 4.6.5
         version: 4.6.5
+
+  apps/orbitkit:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
   apps/pages-cms:
     devDependencies:
@@ -924,6 +1056,27 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  apps/relivator:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.7))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   apps/saas-starter:
     devDependencies:
       '@drizzler-examples/tsconfig':
@@ -1013,6 +1166,33 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+
+  apps/skateshop:
+    devDependencies:
+      '@drizzler-examples/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      drizzle-kit:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@3.25.76))
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@3.25.76)
+      drizzler:
+        specifier: 'catalog:'
+        version: 0.4.4(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.11.6)(effect@4.1.4)(valibot@1.5.0(typescript@6.0.3))(zod@3.25.76))(redis@6.3.1(@opentelemetry/api@1.10.0))
+      nanoid:
+        specifier: ^5.0.7
+        version: 5.1.16
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
 
   apps/survev:
     devDependencies:
