@@ -53,6 +53,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [rdt-li](apps/rdt-li) | nrjdalal/rdt-li | PostgreSQL | — |
 | [devterms](apps/devterms) | aelew/devterms | SQLite | [#53](https://github.com/nakita628/drizzler/issues/53) |
 | [mylists](apps/mylists) | vincedelmas/MyLists | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51), [#54](https://github.com/nakita628/drizzler/issues/54), [#55](https://github.com/nakita628/drizzler/issues/55) |
+| [survev](apps/survev) | survev/survev | PostgreSQL | — |
 
 ## Output
 
