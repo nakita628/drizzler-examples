@@ -104,6 +104,7 @@ erDiagram
     workspace ||--o{ slack_user : "(id) - (workspace_id)"
     user ||--o{ slack_user : "(id) - (user_id)"
     monitor ||--o| monitor_heartbeat_state : "(id) - (monitor_id)"
+    workspace ||..o{ invitation : "(id) - (workspace_id)"
     integration {
         integer id PK
         text name
@@ -361,7 +362,7 @@ erDiagram
         integer id PK
         text email
         text role
-        integer workspace_id
+        integer workspace_id FK
         text token
         integer expires_at
         integer created_at

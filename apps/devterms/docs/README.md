@@ -86,7 +86,7 @@ CREATE INDEX `wotds_created_at_idx` ON `wotds` (`created_at`);
 
 ### users
 
-![users](tables/users.svg)
+![users and the tables it relates to](tables/users.svg)
 
 | Column                     | Type      | Constraints     | Default                              | Description |
 | -------------------------- | --------- | --------------- | ------------------------------------ | ----------- |
@@ -120,6 +120,12 @@ CREATE INDEX `users_role_idx` ON `users` (`role`);
 
 - INDEX `name`
 - INDEX `role`
+
+#### Referenced by
+
+- `id` → [sessions.userId](#table-sessions) (one to many, defineRelations)
+- `id` → [definitions.userId](#table-definitions) (one to many, defineRelations)
+- `id` → [reports.userId](#table-reports) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -214,13 +220,13 @@ where "users"."id" = ?
 
 ### sessions
 
-![sessions](tables/sessions.svg)
+![sessions and the tables it relates to](tables/sessions.svg)
 
-| Column                     | Type      | Constraints | Default | Description |
-| -------------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                       | `text`    | PK NOT NULL |         |             |
-| `userId` (`user_id`)       | `text`    | NOT NULL    |         |             |
-| `expiresAt` (`expires_at`) | `integer` | NOT NULL    |         |             |
+| Column                     | Type      | Constraints                         | Default | Description |
+| -------------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                       | `text`    | PK NOT NULL                         |         |             |
+| `userId` (`user_id`)       | `text`    | NOT NULL → [users.id](#table-users) |         |             |
+| `expiresAt` (`expires_at`) | `integer` | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -231,6 +237,10 @@ CREATE TABLE `sessions` (
 	`expires_at` integer NOT NULL
 );
 ```
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -325,19 +335,19 @@ where "sessions"."id" = ?
 
 ### definitions
 
-![definitions](tables/definitions.svg)
+![definitions and the tables it relates to](tables/definitions.svg)
 
-| Column                     | Type      | Constraints | Default                              | Description |
-| -------------------------- | --------- | ----------- | ------------------------------------ | ----------- |
-| `id`                       | `text`    | PK NOT NULL | `.$defaultFn()`                      |             |
-| `userId` (`user_id`)       | `text`    | NOT NULL    |                                      |             |
-| `status`                   | `text`    | NOT NULL    | `.default('pending')`                |             |
-| `term`                     | `text`    | NOT NULL    |                                      |             |
-| `definition`               | `text`    | NOT NULL    |                                      |             |
-| `example`                  | `text`    | NOT NULL    |                                      |             |
-| `upvotes`                  | `integer` | NOT NULL    | `.default(0)`                        |             |
-| `downvotes`                | `integer` | NOT NULL    | `.default(0)`                        |             |
-| `createdAt` (`created_at`) | `integer` | NOT NULL    | ``.default(sql`CURRENT_TIMESTAMP`)`` |             |
+| Column                     | Type      | Constraints                         | Default                              | Description |
+| -------------------------- | --------- | ----------------------------------- | ------------------------------------ | ----------- |
+| `id`                       | `text`    | PK NOT NULL                         | `.$defaultFn()`                      |             |
+| `userId` (`user_id`)       | `text`    | NOT NULL → [users.id](#table-users) |                                      |             |
+| `status`                   | `text`    | NOT NULL                            | `.default('pending')`                |             |
+| `term`                     | `text`    | NOT NULL                            |                                      |             |
+| `definition`               | `text`    | NOT NULL                            |                                      |             |
+| `example`                  | `text`    | NOT NULL                            |                                      |             |
+| `upvotes`                  | `integer` | NOT NULL                            | `.default(0)`                        |             |
+| `downvotes`                | `integer` | NOT NULL                            | `.default(0)`                        |             |
+| `createdAt` (`created_at`) | `integer` | NOT NULL                            | ``.default(sql`CURRENT_TIMESTAMP`)`` |             |
 
 #### Definition
 
@@ -369,6 +379,15 @@ CREATE INDEX `definitions_created_at_idx` ON `definitions` (`created_at`);
 - INDEX `term`
 - INDEX `upvotes`
 - INDEX `createdAt`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+
+#### Referenced by
+
+- `id` → [reports.definitionId](#table-reports) (one to many, defineRelations)
+- `id` → [wotds.definitionId](#table-wotds) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -468,16 +487,16 @@ where "definitions"."id" = ?
 
 ### reports
 
-![reports](tables/reports.svg)
+![reports and the tables it relates to](tables/reports.svg)
 
-| Column                           | Type      | Constraints | Default                              | Description |
-| -------------------------------- | --------- | ----------- | ------------------------------------ | ----------- |
-| `id`                             | `text`    | PK NOT NULL | `.$defaultFn()`                      |             |
-| `userId` (`user_id`)             | `text`    | NOT NULL    |                                      |             |
-| `definitionId` (`definition_id`) | `text`    | NOT NULL    |                                      |             |
-| `read`                           | `integer` | NOT NULL    | `.default(false)`                    |             |
-| `reason`                         | `text`    | NOT NULL    |                                      |             |
-| `createdAt` (`created_at`)       | `integer` | NOT NULL    | ``.default(sql`CURRENT_TIMESTAMP`)`` |             |
+| Column                           | Type      | Constraints                                     | Default                              | Description |
+| -------------------------------- | --------- | ----------------------------------------------- | ------------------------------------ | ----------- |
+| `id`                             | `text`    | PK NOT NULL                                     | `.$defaultFn()`                      |             |
+| `userId` (`user_id`)             | `text`    | NOT NULL → [users.id](#table-users)             |                                      |             |
+| `definitionId` (`definition_id`) | `text`    | NOT NULL → [definitions.id](#table-definitions) |                                      |             |
+| `read`                           | `integer` | NOT NULL                                        | `.default(false)`                    |             |
+| `reason`                         | `text`    | NOT NULL                                        |                                      |             |
+| `createdAt` (`created_at`)       | `integer` | NOT NULL                                        | ``.default(sql`CURRENT_TIMESTAMP`)`` |             |
 
 #### Definition
 
@@ -500,6 +519,11 @@ CREATE INDEX `reports_created_at_idx` ON `reports` (`created_at`);
 
 - INDEX `read`
 - INDEX `createdAt`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `definitionId` → [definitions.id](#table-definitions) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -594,13 +618,13 @@ where "reports"."id" = ?
 
 ### wotds
 
-![wotds](tables/wotds.svg)
+![wotds and the tables it relates to](tables/wotds.svg)
 
-| Column                           | Type      | Constraints | Default                              | Description |
-| -------------------------------- | --------- | ----------- | ------------------------------------ | ----------- |
-| `id`                             | `text`    | PK NOT NULL | `.$defaultFn()`                      |             |
-| `definitionId` (`definition_id`) | `text`    | NOT NULL    |                                      |             |
-| `createdAt` (`created_at`)       | `integer` | NOT NULL    | ``.default(sql`CURRENT_TIMESTAMP`)`` |             |
+| Column                           | Type      | Constraints                                     | Default                              | Description |
+| -------------------------------- | --------- | ----------------------------------------------- | ------------------------------------ | ----------- |
+| `id`                             | `text`    | PK NOT NULL                                     | `.$defaultFn()`                      |             |
+| `definitionId` (`definition_id`) | `text`    | NOT NULL → [definitions.id](#table-definitions) |                                      |             |
+| `createdAt` (`created_at`)       | `integer` | NOT NULL                                        | ``.default(sql`CURRENT_TIMESTAMP`)`` |             |
 
 #### Definition
 
@@ -617,6 +641,10 @@ CREATE INDEX `wotds_created_at_idx` ON `wotds` (`created_at`);
 #### Indexes
 
 - INDEX `createdAt`
+
+#### References
+
+- `definitionId` → [definitions.id](#table-definitions) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>

@@ -1112,7 +1112,7 @@ db.insert(chat).values({ userId: "userId" });
 ```sql
 insert into "chat" ("id", "userId", "title", "created_at", "updated_at", "is_pinned", "visibility")
 values ($1, $2, default, default, default, default, default)
--- params: ["019b76da-a800-724e-aeb8-9a277a692e54","userId"]
+-- params: ["019b76da-a800-7000-8000-000000000000","userId"]
 ```
 
 **Update**: Changes a row of chat, found by its primary key.

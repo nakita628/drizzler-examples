@@ -3,6 +3,9 @@ erDiagram
     sys_user ||--o| sys_user_role : "(id) - (user_id)"
     sys_role ||--o{ sys_user_role : "(id) - (role_id)"
     sys_user {
+        uuid id PK
+        timestamptz created_at
+        timestamptz updated_at
         text name
         text email
         boolean email_verified
@@ -18,6 +21,7 @@ erDiagram
         boolean is_super_admin
     }
     sys_role {
+        uuid id PK
         text name
         text description
         varchar type

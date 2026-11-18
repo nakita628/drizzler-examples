@@ -26,4 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#57](https://github.com/nakita628/drizzler/issues/57): the indexes on `.desc()` columns and the `.using("gin", ...)` indexes are missing from the DBML.
+None.

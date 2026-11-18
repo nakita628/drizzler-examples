@@ -568,7 +568,8 @@ ALTER TABLE "chats" ADD CONSTRAINT "chats_space_id_spaces_id_fkey" FOREIGN KEY (
 
 - INDEX `userId`
 - INDEX `spaceId`
-- INDEX `userId`
+- INDEX `userId`, `createdAt`
+- INDEX `createdAt`
 - INDEX `id`, `userId`
 
 #### References
@@ -937,6 +938,8 @@ ALTER TABLE "parts" ADD CONSTRAINT "parts_message_id_messages_id_fkey" FOREIGN K
 
 - INDEX `messageId`
 - INDEX `messageId`, `order`
+- INDEX `search`
+- INDEX `searchReasoning`
 
 #### References
 
@@ -1080,7 +1083,7 @@ ALTER TABLE "notes" ADD CONSTRAINT "notes_chat_id_chats_id_fkey" FOREIGN KEY ("c
 #### Indexes
 
 - INDEX `userId`
-- INDEX `userId`
+- INDEX `userId`, `updatedAt`
 - INDEX `chatId`
 - INDEX `sourceMessageId`
 
@@ -1230,7 +1233,7 @@ ALTER TABLE "files" ADD CONSTRAINT "files_chat_id_chats_id_fkey" FOREIGN KEY ("c
 #### Indexes
 
 - INDEX `userId`
-- INDEX `userId`
+- INDEX `userId`, `updatedAt`
 - INDEX `chatId`
 - INDEX `mediaType`
 - INDEX `objectKey`

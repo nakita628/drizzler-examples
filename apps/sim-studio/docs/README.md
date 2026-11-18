@@ -7483,6 +7483,7 @@ ALTER TABLE "workflow_execution_logs" ADD CONSTRAINT "workflow_execution_logs_wT
 - INDEX `workspaceId`, `startedAt`, `status`, `totalDurationMs`, `workflowId`, `trigger`, `level`
 - INDEX `workspaceId`
 - INDEX `workspaceId`, `costTotal`
+- INDEX `modelsUsed`
 - INDEX `workspaceId`, `id`
 - INDEX `startedAt`
 - INDEX `executionDeadlineAt`
@@ -9267,7 +9268,7 @@ ALTER TABLE "secret_usage" ADD CONSTRAINT "secret_usage_workspace_id_workspace_i
 #### Indexes
 
 - UNIQUE `workspaceId`, `secretName`, `secretScope`, `secretOwnerUserId`, `source`, `workflowId`, `actorUserId`, `usageDate`
-- INDEX `workspaceId`, `secretName`, `secretScope`, `secretOwnerUserId`
+- INDEX `workspaceId`, `secretName`, `secretScope`, `secretOwnerUserId`, `lastUsedAt`
 
 #### References
 
@@ -10293,7 +10294,7 @@ ALTER TABLE "webhook" ADD CONSTRAINT "webhook_7eeCd11XzWhb_fkey" FOREIGN KEY ("d
 - INDEX `routingKey`, `provider`
 - INDEX `archivedAt`
 - INDEX `provider`, `isActive`, `workflowId`, `deploymentVersionId`
-- INDEX `workflowId`, `blockId`
+- INDEX `workflowId`, `blockId`, `updatedAt`
 - UNIQUE `workflowId`, `blockId`
 - UNIQUE `workflowId`, `blockId`
 - INDEX `workflowId`, `registrationStatus`, `registrationGeneration`
@@ -15548,7 +15549,7 @@ ALTER TABLE "workspace_fork_workflow_sync" ADD CONSTRAINT "workspace_fork_workfl
 
 #### Indexes
 
-- INDEX `childWorkspaceId`, `sourceWorkflowId`, `targetWorkflowId`
+- INDEX `childWorkspaceId`, `sourceWorkflowId`, `targetWorkflowId`, `sequence`
 - INDEX `promoteRunId`, `targetWorkflowId`
 - INDEX `rollbackOperationId`
 - INDEX `sourceWorkflowId`
@@ -17046,6 +17047,7 @@ ALTER TABLE "workspace_files" ADD CONSTRAINT "workspace_files_chat_id_copilot_ch
 - INDEX `workspaceId`, `uploadedAt`, `id`
 - INDEX `workspaceId`, `updatedAt`, `id`
 - INDEX `workspaceId`, `uploadedAt`, `id`
+- INDEX `workspaceId`, `originalName`
 - INDEX `workspaceId`
 - UNIQUE `chatId`, `displayName`
 - INDEX `organizationId`
@@ -17376,7 +17378,7 @@ ALTER TABLE "workspace_file_search_dispatch_queue" ADD CONSTRAINT "workspace_fil
 
 #### Indexes
 
-- INDEX `enqueuedAt`, `workspaceId`
+- INDEX `lastDispatchedAt`, `enqueuedAt`, `workspaceId`
 
 #### References
 
@@ -17510,7 +17512,7 @@ CREATE INDEX "file_search_dispatch_schedule_idx" ON "file_search_dispatch_queue"
 #### Indexes
 
 - PRIMARY KEY `entityType`, `entityId`
-- INDEX `enqueuedAt`, `entityType`, `entityId`
+- INDEX `lastDispatchedAt`, `enqueuedAt`, `entityType`, `entityId`
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -17785,6 +17787,7 @@ ALTER TABLE "workspace_file_search_segment" ADD CONSTRAINT "workspace_file_searc
 
 - PRIMARY KEY `fileId`, `sourceContentUpdatedAt`, `lineNumber`, `segmentNumber`
 - INDEX `workspaceId`, `fileId`, `sourceContentUpdatedAt`
+- INDEX `workspaceId`, `content`
 
 #### References
 
@@ -18280,8 +18283,10 @@ ALTER TABLE "workspace_file_search_chunk" ADD CONSTRAINT "workspace_file_search_
 
 #### Indexes
 
+- INDEX `entityType`, `entityId`, `content`
 - PRIMARY KEY `buildId`, `ordinal`
 - INDEX `buildId`, `lineStart`, `ordinal`
+- INDEX `workspaceId`, `content`
 
 #### References
 
@@ -21023,6 +21028,7 @@ ALTER TABLE "document" ADD CONSTRAINT "document_uploaded_by_user_id_fkey" FOREIG
 
 - INDEX `uploadedBy`
 - INDEX `knowledgeBaseId`, `sourceModifiedAt`
+- INDEX `acl`
 - INDEX `filename`
 - INDEX `knowledgeBaseId`, `processingStatus`
 - INDEX `connectorId`, `uploadedAt`, `id`
@@ -21600,6 +21606,7 @@ ALTER TABLE "embedding" ADD CONSTRAINT "embedding_document_id_document_id_fkey" 
 - INDEX `boolean1`
 - INDEX `boolean2`
 - INDEX `boolean3`
+- INDEX `contentTsv`
 
 #### References
 
@@ -21786,6 +21793,12 @@ ALTER TABLE "embedding_search" ADD CONSTRAINT "embedding_search_id_embedding_id_
 
 - INDEX `knowledgeBaseId`
 - INDEX `documentId`, `knowledgeBaseId`, `id`
+- INDEX `vector`
+- INDEX `vector512`
+- INDEX `vector384`
+- INDEX `vector768`
+- INDEX `vector1024`
+- INDEX `vector3072`
 
 #### References
 
@@ -22217,6 +22230,9 @@ CREATE INDEX "docs_emb_chunk_text_fts_idx" ON "docs_embeddings" USING gin ("chun
 - INDEX `sourceDocument`, `headerLevel`
 - INDEX `embeddingModel`
 - INDEX `createdAt`
+- INDEX `embedding`
+- INDEX `metadata`
+- INDEX `chunkTextTsv`
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -25060,7 +25076,7 @@ ALTER TABLE "workflow_deployment_operation" ADD CONSTRAINT "workflow_deployment_
 - UNIQUE `workflowId`
 - INDEX `workflowId`, `status`
 - INDEX `deploymentVersionId`
-- INDEX `workflowId`, `deploymentVersionId`
+- INDEX `workflowId`, `deploymentVersionId`, `generation`
 
 #### References
 
@@ -31286,7 +31302,7 @@ ALTER TABLE "knowledge_connector_member" ADD CONSTRAINT "knowledge_connector_mem
 
 - INDEX `organizationId`
 - UNIQUE `connectorId`, `credentialId`
-- INDEX `connectorId`
+- INDEX `connectorId`, `nextAttemptAt`, `lastStartedAt`
 - INDEX `credentialId`
 
 #### References
@@ -31701,9 +31717,9 @@ ALTER TABLE "knowledge_external_group" ADD CONSTRAINT "keg_workspace_fk" FOREIGN
 #### Indexes
 
 - UNIQUE `organizationId`, `providerId`, `tenantId`, `externalGroupId`
-- INDEX `organizationId`
+- INDEX `organizationId`, `lastSyncedAt`
 - UNIQUE `workspaceId`, `providerId`, `tenantId`, `externalGroupId`
-- INDEX `workspaceId`
+- INDEX `workspaceId`, `lastSyncedAt`
 
 #### References
 
@@ -32548,6 +32564,7 @@ ALTER TABLE "user_table_rows" ADD CONSTRAINT "user_table_rows_created_by_user_id
 #### Indexes
 
 - INDEX `createdBy`
+- INDEX `tableId`, `data`
 - INDEX `workspaceId`, `tableId`
 - INDEX `tableId`, `position`
 - INDEX `tableId`, `orderKey`, `id`

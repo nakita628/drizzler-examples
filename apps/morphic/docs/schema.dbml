@@ -23,7 +23,8 @@ Table chats {
   indexes {
     (user_id) [name: 'chats_user_id_idx']
     (space_id) [name: 'chats_space_id_idx']
-    (user_id) [name: 'chats_user_id_created_at_idx']
+    (user_id, created_at) [name: 'chats_user_id_created_at_idx']
+    (created_at) [name: 'chats_created_at_idx']
     (id, user_id) [name: 'chats_id_user_id_idx']
   }
   Note: 'Chats table'
@@ -90,6 +91,8 @@ Table parts {
   indexes {
     (message_id) [name: 'parts_message_id_idx']
     (message_id, order) [name: 'parts_message_id_order_idx']
+    (search) [type: gin, name: 'parts_search_idx']
+    (search_reasoning) [type: gin, name: 'parts_search_reasoning_idx']
   }
   Note: 'Parts table'
 }
@@ -105,7 +108,7 @@ Table notes {
   updated_at timestamp [not null]
   indexes {
     (user_id) [name: 'notes_user_id_idx']
-    (user_id) [name: 'notes_user_id_updated_at_idx']
+    (user_id, updated_at) [name: 'notes_user_id_updated_at_idx']
     (chat_id) [name: 'notes_chat_id_idx']
     (source_message_id) [name: 'notes_source_message_id_idx']
   }
@@ -124,7 +127,7 @@ Table files {
   updated_at timestamp [not null]
   indexes {
     (user_id) [name: 'files_user_id_idx']
-    (user_id) [name: 'files_user_id_updated_at_idx']
+    (user_id, updated_at) [name: 'files_user_id_updated_at_idx']
     (chat_id) [name: 'files_chat_id_idx']
     (media_type) [name: 'files_media_type_idx']
     (object_key) [name: 'files_object_key_idx']

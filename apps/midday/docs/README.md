@@ -2060,6 +2060,10 @@ ALTER TABLE "transaction_category_embeddings" ENABLE ROW LEVEL SECURITY;
 CREATE INDEX "transaction_category_embeddings_system_idx" ON "transaction_category_embeddings" ("system" bool_ops);
 ```
 
+#### Indexes
+
+- INDEX `system`
+
 <details>
 <summary>Queries and their SQL</summary>
 
@@ -2276,6 +2280,21 @@ ALTER TABLE "transactions" ADD CONSTRAINT "transactions_category_slug_team_id_fk
 
 #### Indexes
 
+- INDEX `date`
+- INDEX `ftsVector`
+- INDEX `ftsVector`
+- INDEX `id`
+- INDEX `name`
+- INDEX `merchantName`
+- INDEX `teamId`, `date`, `name`
+- INDEX `teamId`, `name`
+- INDEX `name`
+- INDEX `assignedId`
+- INDEX `bankAccountId`
+- INDEX `categorySlug`
+- INDEX `teamId`, `date`, `currency`, `bankAccountId`
+- INDEX `teamId`
+- INDEX `teamId`, `date`, `categorySlug`
 - UNIQUE `internalId`
 
 #### References
@@ -2284,6 +2303,7 @@ ALTER TABLE "transactions" ADD CONSTRAINT "transactions_category_slug_team_id_fk
 - `teamId` → [teams.id](#table-teams) (many to one)
 - `bankAccountId` → [bankAccounts.id](#table-bankAccounts) (many to one, on delete cascade)
 - `teamId` → [transactionCategories.teamId](#table-transactionCategories) (many to one)
+- `teamId` → [transactionCategories.teamId](#table-transactionCategories) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -2450,6 +2470,7 @@ ALTER TABLE "tracker_entries" ADD CONSTRAINT "tracker_entries_team_id_fkey" FORE
 
 #### Indexes
 
+- INDEX `teamId`
 - INDEX `teamId`, `date`
 
 #### References
@@ -2935,6 +2956,12 @@ ALTER TABLE "bank_accounts" ADD CONSTRAINT "bank_accounts_created_by_fkey" FOREI
 ALTER TABLE "bank_accounts" ADD CONSTRAINT "public_bank_accounts_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE;
 ```
 
+#### Indexes
+
+- INDEX `bankConnectionId`
+- INDEX `createdBy`
+- INDEX `teamId`
+
 #### References
 
 - `bankConnectionId` → [bankConnections.id](#table-bankConnections) (many to one, on delete cascade)
@@ -3147,6 +3174,13 @@ ALTER TABLE "invoice_recurring" ADD CONSTRAINT "invoice_recurring_customer_id_fk
 
 ALTER TABLE "invoice_recurring" ADD CONSTRAINT "invoice_recurring_template_id_fkey" FOREIGN KEY ("template_id") REFERENCES "invoice_templates"("id") ON DELETE SET NULL;
 ```
+
+#### Indexes
+
+- INDEX `teamId`
+- INDEX `nextScheduledAt`
+- INDEX `status`
+- INDEX `nextScheduledAt`
 
 #### References
 
@@ -3409,12 +3443,17 @@ ALTER TABLE "invoices" ADD CONSTRAINT "invoices_invoice_recurring_id_fkey" FOREI
 
 #### Indexes
 
+- INDEX `createdAt`
+- INDEX `fts`
+- INDEX `teamId`
+- INDEX `templateId`
 - INDEX `teamId`, `sentAt`
 - INDEX `teamId`, `status`, `paidAt`
+- INDEX `invoiceRecurringId`
 - UNIQUE `invoiceRecurringId`, `recurringSequence`
 - UNIQUE `scheduledJobId`
-- INDEX `teamId`
-- INDEX `teamId`, `status`
+- INDEX `teamId`, `dueDate`
+- INDEX `teamId`, `status`, `dueDate`
 - INDEX `teamId`, `customerId`
 - INDEX `customerId`
 - INDEX `teamId`, `createdAt`
@@ -3670,6 +3709,7 @@ ALTER TABLE "customers" ADD CONSTRAINT "customers_team_id_fkey" FOREIGN KEY ("te
 
 #### Indexes
 
+- INDEX `fts`
 - INDEX `status`
 - INDEX `isArchived`
 - INDEX `enrichmentStatus`
@@ -3815,6 +3855,7 @@ CREATE INDEX "exchange_rates_base_target_idx" ON "exchange_rates" ("base" text_o
 
 #### Indexes
 
+- INDEX `base`, `target`
 - UNIQUE `base`, `target`
 
 <details>
@@ -3940,6 +3981,7 @@ ALTER TABLE "tags" ADD CONSTRAINT "tags_team_id_fkey" FOREIGN KEY ("team_id") RE
 
 #### Indexes
 
+- INDEX `teamId`
 - UNIQUE `teamId`, `name`
 
 #### References
@@ -4084,6 +4126,10 @@ ALTER TABLE "tracker_reports" ADD CONSTRAINT "public_tracker_reports_project_id_
 
 ALTER TABLE "tracker_reports" ADD CONSTRAINT "tracker_reports_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ```
+
+#### Indexes
+
+- INDEX `teamId`
 
 #### References
 
@@ -4336,6 +4382,8 @@ ALTER TABLE "tracker_project_tags" ADD CONSTRAINT "tracker_project_tags_team_id_
 
 #### Indexes
 
+- INDEX `teamId`
+- INDEX `trackerProjectId`, `tagId`, `teamId`
 - UNIQUE `trackerProjectId`, `tagId`
 
 #### References
@@ -4487,6 +4535,10 @@ ALTER TABLE "reports" ADD CONSTRAINT "public_reports_created_by_fkey" FOREIGN KE
 ALTER TABLE "reports" ADD CONSTRAINT "reports_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE;
 ```
 
+#### Indexes
+
+- INDEX `teamId`
+
 #### References
 
 - `createdBy` → [users.id](#table-users) (many to one, on delete cascade)
@@ -4630,6 +4682,8 @@ CREATE INDEX "institutions_status_idx" ON "institutions" ("status");
 
 #### Indexes
 
+- INDEX `countries`
+- INDEX `name`
 - INDEX `status`
 
 <details>
@@ -4783,6 +4837,7 @@ ALTER TABLE "bank_connections" ADD CONSTRAINT "bank_connections_team_id_fkey" FO
 
 #### Indexes
 
+- INDEX `teamId`
 - UNIQUE `institutionId`, `teamId`
 
 #### References
@@ -4932,6 +4987,7 @@ ALTER TABLE "user_invites" ADD CONSTRAINT "user_invites_invited_by_fkey" FOREIGN
 
 #### Indexes
 
+- INDEX `teamId`
 - UNIQUE `teamId`, `email`
 - UNIQUE `code`
 
@@ -5215,6 +5271,9 @@ ALTER TABLE "transaction_tags" ADD CONSTRAINT "transaction_tags_transaction_id_f
 
 #### Indexes
 
+- INDEX `tagId`
+- INDEX `teamId`
+- INDEX `transactionId`, `tagId`, `teamId`
 - UNIQUE `tagId`, `transactionId`
 
 #### References
@@ -5361,6 +5420,11 @@ ALTER TABLE "transaction_attachments" ADD CONSTRAINT "public_transaction_attachm
 
 ALTER TABLE "transaction_attachments" ADD CONSTRAINT "public_transaction_attachments_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transactions"("id") ON DELETE SET NULL;
 ```
+
+#### Indexes
+
+- INDEX `teamId`
+- INDEX `transactionId`
 
 #### References
 
@@ -5749,6 +5813,20 @@ ALTER TABLE "documents" ADD CONSTRAINT "documents_created_by_fkey" FOREIGN KEY (
 
 ALTER TABLE "documents" ADD CONSTRAINT "storage_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE;
 ```
+
+#### Indexes
+
+- INDEX `name`
+- INDEX `teamId`
+- INDEX `teamId`, `parentId`
+- INDEX `teamId`, `createdAt`
+- INDEX `teamId`, `date`
+- INDEX `teamId`, `name`
+- INDEX `ftsEnglish`
+- INDEX `ftsLanguage`
+- INDEX `ftsSimple`
+- INDEX `title`
+- INDEX `name`
 
 #### References
 
@@ -6789,6 +6867,7 @@ ALTER TABLE "invoice_products" ADD CONSTRAINT "invoice_products_created_by_fkey"
 
 - INDEX `teamId`
 - INDEX `createdBy`
+- INDEX `fts`
 - INDEX `name`
 - INDEX `usageCount`
 - INDEX `lastUsedAt`
@@ -6932,12 +7011,14 @@ ALTER TABLE "transaction_enrichments" ADD CONSTRAINT "transaction_enrichments_te
 
 #### Indexes
 
+- INDEX `categorySlug`, `teamId`
 - UNIQUE `name`, `teamId`
 
 #### References
 
 - `teamId` → [transactionCategories.teamId](#table-transactionCategories) (many to one, on delete cascade)
 - `teamId` → [teams.id](#table-teams) (many to one, on delete cascade)
+- `teamId` → [transactionCategories.teamId](#table-transactionCategories) (many to one, on delete cascade, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7081,10 +7162,15 @@ ALTER TABLE "users" ADD CONSTRAINT "users_id_fkey" FOREIGN KEY ("id") REFERENCES
 ALTER TABLE "users" ADD CONSTRAINT "users_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE SET NULL;
 ```
 
+#### Indexes
+
+- INDEX `teamId`
+
 #### References
 
 - `id` → [users.id](#table-users) (one to one, on delete cascade)
 - `teamId` → [teams.id](#table-teams) (many to one, on delete set null)
+- `id` → [usersInAuth.id](#table-usersInAuth) (one to one, on delete cascade, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -7263,6 +7349,11 @@ ALTER TABLE "tracker_projects" ADD CONSTRAINT "tracker_projects_customer_id_fkey
 
 ALTER TABLE "tracker_projects" ADD CONSTRAINT "tracker_projects_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE;
 ```
+
+#### Indexes
+
+- INDEX `fts`
+- INDEX `teamId`
 
 #### References
 
@@ -7472,6 +7563,14 @@ ALTER TABLE "inbox" ADD CONSTRAINT "inbox_inbox_account_id_fkey" FOREIGN KEY ("i
 
 #### Indexes
 
+- INDEX `attachmentId`
+- INDEX `createdAt`
+- INDEX `teamId`
+- INDEX `transactionId`
+- INDEX `inboxAccountId`
+- INDEX `invoiceNumber`
+- INDEX `groupedInboxId`
+- INDEX `displayName`
 - INDEX `teamId`, `status`, `createdAt`
 - UNIQUE `referenceId`
 
@@ -7787,6 +7886,13 @@ ALTER TABLE "transaction_match_suggestions" ADD CONSTRAINT "transaction_match_su
 
 #### Indexes
 
+- INDEX `inboxId`
+- INDEX `transactionId`
+- INDEX `teamId`
+- INDEX `status`
+- INDEX `confidenceScore`
+- INDEX `transactionId`, `teamId`, `status`
+- INDEX `teamId`, `status`, `createdAt`
 - UNIQUE `inboxId`, `transactionId`
 
 #### References
@@ -7937,6 +8043,8 @@ ALTER TABLE "document_tag_assignments" ADD CONSTRAINT "document_tag_assignments_
 
 #### Indexes
 
+- INDEX `documentId`
+- INDEX `tagId`
 - PRIMARY KEY `documentId`, `tagId`
 - UNIQUE `documentId`, `tagId`
 
@@ -8097,6 +8205,8 @@ ALTER TABLE "users_on_team" ADD CONSTRAINT "users_on_team_user_id_fkey" FOREIGN 
 
 #### Indexes
 
+- INDEX `teamId`
+- INDEX `userId`
 - PRIMARY KEY `userId`, `teamId`, `id`
 
 #### References
@@ -8274,6 +8384,8 @@ ALTER TABLE "transaction_categories" ADD CONSTRAINT "transaction_categories_pare
 
 #### Indexes
 
+- INDEX `teamId`
+- INDEX `parentId`
 - PRIMARY KEY `teamId`, `slug`
 - UNIQUE `teamId`, `slug`
 
@@ -8287,6 +8399,8 @@ ALTER TABLE "transaction_categories" ADD CONSTRAINT "transaction_categories_pare
 - `teamId` → [transactions.teamId](#table-transactions) (one to many)
 - `teamId` → [transactionEnrichments.teamId](#table-transactionEnrichments) (one to many, on delete cascade)
 - `id` → [transactionCategories.parentId](#table-transactionCategories) (one to many, on delete set null)
+- `teamId` → [transactions.teamId](#table-transactions) (one to many, defineRelations)
+- `teamId` → [transactionEnrichments.teamId](#table-transactionEnrichments) (one to many, on delete cascade, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8400,7 +8514,7 @@ where (("transaction_categories"."team_id" = $1) and ("transaction_categories"."
 
 Table `auth.users`.
 
-![usersInAuth](tables/usersInAuth.svg)
+![usersInAuth and the tables it relates to](tables/usersInAuth.svg)
 
 | Column                                                     | Type        | Constraints | Default                                    | Description                                                                 |
 | ---------------------------------------------------------- | ----------- | ----------- | ------------------------------------------ | --------------------------------------------------------------------------- |
@@ -8502,6 +8616,10 @@ CREATE INDEX "users_is_anonymous_idx" ON "auth.users" ("is_anonymous");
 - INDEX `instanceId`
 - INDEX `instanceId`
 - INDEX `isAnonymous`
+
+#### Referenced by
+
+- `id` → [users.id](#table-users) (one to one, on delete cascade, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8648,6 +8766,9 @@ ALTER TABLE "short_links" ADD CONSTRAINT "short_links_team_id_fkey" FOREIGN KEY 
 
 #### Indexes
 
+- INDEX `shortId`
+- INDEX `teamId`
+- INDEX `userId`
 - UNIQUE `shortId`
 
 #### References
@@ -8799,6 +8920,9 @@ ALTER TABLE "api_keys" ADD CONSTRAINT "api_keys_team_id_fkey" FOREIGN KEY ("team
 
 #### Indexes
 
+- INDEX `keyHash`
+- INDEX `userId`
+- INDEX `teamId`
 - UNIQUE `keyHash`
 
 #### References
@@ -8974,6 +9098,12 @@ ALTER TABLE "oauth_applications" ADD CONSTRAINT "oauth_applications_team_id_fkey
 ALTER TABLE "oauth_applications" ADD CONSTRAINT "oauth_applications_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "users"("id") ON DELETE CASCADE;
 ```
 
+#### Indexes
+
+- INDEX `teamId`
+- INDEX `clientId`
+- INDEX `slug`
+
 #### References
 
 - `teamId` → [teams.id](#table-teams) (many to one, on delete cascade)
@@ -9135,6 +9265,12 @@ ALTER TABLE "oauth_authorization_codes" ADD CONSTRAINT "oauth_authorization_code
 
 ALTER TABLE "oauth_authorization_codes" ADD CONSTRAINT "oauth_authorization_codes_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE;
 ```
+
+#### Indexes
+
+- INDEX `code`
+- INDEX `applicationId`
+- INDEX `userId`
 
 #### References
 
@@ -9303,6 +9439,13 @@ ALTER TABLE "oauth_access_tokens" ADD CONSTRAINT "oauth_access_tokens_user_id_fk
 ALTER TABLE "oauth_access_tokens" ADD CONSTRAINT "oauth_access_tokens_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE;
 ```
 
+#### Indexes
+
+- INDEX `token`
+- INDEX `refreshToken`
+- INDEX `applicationId`
+- INDEX `userId`
+
 #### References
 
 - `applicationId` → [oauthApplications.id](#table-oauthApplications) (many to one, on delete cascade)
@@ -9463,7 +9606,11 @@ ALTER TABLE "activities" ADD CONSTRAINT "activities_user_id_fkey" FOREIGN KEY ("
 
 #### Indexes
 
+- INDEX `teamId`, `priority`, `status`, `createdAt`
+- INDEX `teamId`, `type`, `source`, `createdAt`
+- INDEX `metadata`
 - INDEX `groupId`
+- INDEX `teamId`, `groupId`, `type`, `createdAt`
 
 #### References
 
@@ -9962,7 +10109,7 @@ ALTER TABLE "insights" ADD CONSTRAINT "insights_team_id_teams_id_fkey" FOREIGN K
 
 - UNIQUE `teamId`, `periodType`, `periodYear`, `periodNumber`
 - INDEX `teamId`
-- INDEX `teamId`, `periodType`
+- INDEX `teamId`, `periodType`, `generatedAt`
 
 #### References
 

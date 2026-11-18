@@ -1,5 +1,5 @@
 Table "pg-drizzle_post" {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   name varchar
   createdById varchar [not null]
   createdAt timestamptz [not null]

@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#58](https://github.com/nakita628/drizzler/issues/58): seven files declare their own `const scope = () => ({ ... })`, and tables spread the wrong file's helper: `email_imap_aliases` loses `logical_message_id` and the `app_integration_capture_*` tables lose `installation_id`, `account_ref` and `store_key`, so `pnpm check:dbml` fails. The SQL is right.
+None.

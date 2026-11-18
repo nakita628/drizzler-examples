@@ -51,6 +51,9 @@ erDiagram
     bookmarks ||--o{ importSessionBookmarks : "(id) - (bookmarkId)"
     importSessions ||--o{ importStagingBookmarks : "(id) - (importSessionId)"
     bookmarks |o--o{ importStagingBookmarks : "(id) - (resultBookmarkId)"
+    bookmarkLinks ||..o| bookmarks : "(id) - (id)"
+    bookmarkTexts ||..o| bookmarks : "(id) - (id)"
+    bookmarkAssets ||..o| bookmarks : "(id) - (id)"
     user {
         text id PK
         text name
@@ -123,7 +126,7 @@ erDiagram
         text userId FK
     }
     bookmarks {
-        text id PK
+        text id PK, FK
         integer createdAt "The `createdAt` field and the `createdAt` column intentionally don't match. Re-saving an existing bookmark bumps it back to the top of the list, so the timestamp everything sorts and filters on is now 'when was this last saved' and lives in the `lastSavedAt` column. It keeps the `createdAt` field name because that's what the API has always exposed and what every query already orders by. The immutable 'when did this row first appear' timestamp stays in the original `createdAt` column, and is exposed to clients as `firstCreatedAt`."
         integer lastSavedAt
         integer modifiedAt

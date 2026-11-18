@@ -24,22 +24,53 @@ erDiagram
     user ||--o{ user_media_stats_history : "(id) - (user_id)"
     user ||--o{ profile_custom : "(id) - (user_id)"
     user ||--o{ series_list : "(id) - (user_id)"
+    series ||--o{ series_list : "(id) - (media_id)"
+    series_list ||--o{ series_list_seasons : "(id) - (list_id)"
+    series ||--o{ series_genre : "(id) - (media_id)"
+    series ||--o{ series_actors : "(id) - (media_id)"
+    series ||--o{ series_network : "(id) - (media_id)"
+    series ||--o{ series_episodes_per_season : "(id) - (media_id)"
     user ||--o{ series_tags : "(id) - (user_id)"
+    series ||--o{ series_tags : "(id) - (media_id)"
     media_tags ||--o{ series_tags : "(id) - (tag_id)"
     user ||--o{ anime_list : "(id) - (user_id)"
+    anime ||--o{ anime_list : "(id) - (media_id)"
+    anime_list ||--o{ anime_list_seasons : "(id) - (list_id)"
+    anime ||--o{ anime_genre : "(id) - (media_id)"
+    anime ||--o{ anime_actors : "(id) - (media_id)"
+    anime ||--o{ anime_network : "(id) - (media_id)"
+    anime ||--o{ anime_episodes_per_season : "(id) - (media_id)"
     user ||--o{ anime_tags : "(id) - (user_id)"
+    anime ||--o{ anime_tags : "(id) - (media_id)"
     media_tags ||--o{ anime_tags : "(id) - (tag_id)"
     user ||--o{ movies_list : "(id) - (user_id)"
+    movies ||--o{ movies_list : "(id) - (media_id)"
+    movies ||--o{ movies_genre : "(id) - (media_id)"
+    movies ||--o{ movies_actors : "(id) - (media_id)"
     user ||--o{ movies_tags : "(id) - (user_id)"
+    movies ||--o{ movies_tags : "(id) - (media_id)"
     media_tags ||--o{ movies_tags : "(id) - (tag_id)"
     user ||--o{ games_list : "(id) - (user_id)"
+    games ||--o{ games_list : "(id) - (media_id)"
+    games ||--o{ games_genre : "(id) - (media_id)"
+    games ||--o{ games_platforms : "(id) - (media_id)"
+    games ||--o{ games_companies : "(id) - (media_id)"
     user ||--o{ games_tags : "(id) - (user_id)"
+    games ||--o{ games_tags : "(id) - (media_id)"
     media_tags ||--o{ games_tags : "(id) - (tag_id)"
     user ||--o{ books_list : "(id) - (user_id)"
+    books ||--o{ books_list : "(id) - (media_id)"
+    books ||--o{ books_genre : "(id) - (media_id)"
+    books ||--o{ books_authors : "(id) - (media_id)"
     user ||--o{ books_tags : "(id) - (user_id)"
+    books ||--o{ books_tags : "(id) - (media_id)"
     media_tags ||--o{ books_tags : "(id) - (tag_id)"
     user ||--o{ manga_list : "(id) - (user_id)"
+    manga ||--o{ manga_list : "(id) - (media_id)"
+    manga ||--o{ manga_genre : "(id) - (media_id)"
+    manga ||--o{ manga_authors : "(id) - (media_id)"
     user ||--o{ manga_tags : "(id) - (user_id)"
+    manga ||--o{ manga_tags : "(id) - (media_id)"
     media_tags ||--o{ manga_tags : "(id) - (tag_id)"
     user ||--o{ mediadle_stats : "(id) - (user_id)"
     user ||--o{ user_mediadle_progress : "(id) - (user_id)"
@@ -369,9 +400,9 @@ erDiagram
     }
     series_list_seasons {
         real rating
-        integer season
+        integer season PK
         integer redo
-        integer list_id FK
+        integer list_id PK, FK
     }
     series_genre {
         integer id PK
@@ -446,9 +477,9 @@ erDiagram
     }
     anime_list_seasons {
         real rating
-        integer season
+        integer season PK
         integer redo
-        integer list_id FK
+        integer list_id PK, FK
     }
     anime_genre {
         integer id PK

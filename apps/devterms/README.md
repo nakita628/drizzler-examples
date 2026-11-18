@@ -28,4 +28,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#53](https://github.com/nakita628/drizzler/issues/53): the tables have no foreign keys and relate only through v1 `relations`, which drizzler does not read, so the diagrams, the DBML and Mermaid have no relation between them.
+None.

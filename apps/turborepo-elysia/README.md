@@ -26,4 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#49](https://github.com/nakita628/drizzler/issues/49): `id: idUuid` and the `createdAt` and `updatedAt` spread through `...Audit` are missing from the docs, the diagrams, the DBML and Mermaid, so `sys_user` and `sys_role` have no `id` and `pnpm check:dbml` fails with `Column 'id' does not exist in Table 'public.sys_user'`. The SQL has every column.
+None.

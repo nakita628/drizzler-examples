@@ -3,6 +3,7 @@ erDiagram
     chats ||--o{ messages : "(id) - (chat_id)"
     chats ||--o{ votes : "(id) - (chat_id)"
     messages ||--o{ votes : "(id) - (message_id)"
+    users ||..o{ chats : "(id) - (user_id)"
     users {
         text id PK
         text email
@@ -16,7 +17,7 @@ erDiagram
     chats {
         text id PK
         text title
-        text user_id
+        text user_id FK
         text visibility
         integer created_at
     }

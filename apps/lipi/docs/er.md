@@ -1,15 +1,15 @@
 ```mermaid
 erDiagram
-    workspaces |o--o{ folders : "(id) - (workspace_id)"
-    workspaces |o--o{ files : "(id) - (workspace_id)"
-    folders |o--o{ files : "(id) - (folder_id)"
-    user ||--o{ accounts : "(id) - (user_id)"
-    products |o--o{ prices : "(id) - (product_id)"
-    prices |o--o{ subscriptions : "(id) - (price_id)"
-    workspaces ||--o{ collaborators : "(id) - (workspace_id)"
-    user ||--o{ collaborators : "(id) - (user_id)"
+    lipi_workspaces |o--o{ lipi_folders : "(id) - (workspace_id)"
+    lipi_workspaces |o--o{ lipi_files : "(id) - (workspace_id)"
+    lipi_folders |o--o{ lipi_files : "(id) - (folder_id)"
+    user ||--o{ lipi_accounts : "(id) - (user_id)"
+    lipi_products |o--o{ lipi_prices : "(id) - (product_id)"
+    lipi_prices |o--o{ lipi_subscriptions : "(id) - (price_id)"
+    lipi_workspaces ||--o{ lipi_collaborators : "(id) - (workspace_id)"
+    user ||--o{ lipi_collaborators : "(id) - (user_id)"
     user ||--o{ account : "(id) - (userId)"
-    workspaces {
+    lipi_workspaces {
         uuid id PK
         text title
         text icon_id
@@ -20,7 +20,7 @@ erDiagram
         boolean in_trash
         timestamptz created_at
     }
-    folders {
+    lipi_folders {
         uuid id PK
         text title
         text icon_id
@@ -30,7 +30,7 @@ erDiagram
         boolean in_trash
         timestamptz created_at
     }
-    files {
+    lipi_files {
         uuid id PK
         text title
         text icon_id
@@ -41,17 +41,17 @@ erDiagram
         boolean in_trash
         timestamptz created_at
     }
-    accounts {
+    lipi_accounts {
         uuid user_id FK
         jsonb billing_address
         timestamptz updated_at
         jsonb payment_method
     }
-    customers {
+    lipi_customers {
         uuid id PK
         text stripe_customer_id
     }
-    prices {
+    lipi_prices {
         text id PK
         text product_id FK
         boolean active
@@ -64,7 +64,7 @@ erDiagram
         integer trial_period_days
         jsonb metadata
     }
-    products {
+    lipi_products {
         text id PK
         boolean active
         text name
@@ -72,7 +72,7 @@ erDiagram
         text image
         jsonb metadata
     }
-    subscriptions {
+    lipi_subscriptions {
         text id PK
         uuid user_id
         subscription_status status
@@ -89,7 +89,7 @@ erDiagram
         timestamptz trial_start
         timestamptz trial_end
     }
-    collaborators {
+    lipi_collaborators {
         uuid id PK
         uuid workspace_id FK
         timestamptz created_at

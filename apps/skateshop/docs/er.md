@@ -17,6 +17,8 @@ erDiagram
     variants ||--o{ product_variants : "(id) - (variant_id)"
     product_variants ||--o{ product_variant_values : "(id) - (product_variant_id)"
     stocks ||--o{ product_variant_values : "(id) - (stock_id)"
+    product_variant_values ||..o{ stocks : "(product_variant_id) - (product_variant_id)"
+    product_variants ||..o{ product_variant_values : "(product_id) - (product_variant_id)"
     addresses {
         varchar id PK
         text line1

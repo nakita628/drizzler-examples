@@ -619,3 +619,7 @@ Ref workspace_members_roleId_workspace_roles_id_fk: workspace_members.roleId > w
 Ref workspace_slug_checks_workspaceId_workspace_id_fk: workspace_slug_checks.workspaceId > workspace.id
 
 Ref workspace_slug_checks_createdBy_user_id_fk: workspace_slug_checks.createdBy > user.id [delete: set null]
+
+Ref workspace_members_createdBy_user_id: workspace_members.createdBy > user.id
+
+Ref workspace_member_permissions_workspaceMemberId_workspace_members_id: workspace_member_permissions.workspaceMemberId > workspace_members.id

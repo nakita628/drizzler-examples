@@ -16,6 +16,47 @@ erDiagram
     developer_apps ||--o{ developer_delivery_daily : "(id) - (appId)"
     developer_apps ||--o{ developer_webhook_endpoints : "(id) - (appId)"
     developer_apps ||--o{ developer_video_imports : "(id) - (appId)"
+    organizations ||..o{ notifications : "(id) - (orgId)"
+    users ||..o{ notifications : "(id) - (recipientId)"
+    users ||..o{ comments : "(id) - (authorId)"
+    videos ||..o{ comments : "(id) - (videoId)"
+    comments |o..o{ comments : "(id) - (parentCommentId)"
+    users |o..o{ messenger_conversations : "(id) - (userId)"
+    users |o..o{ messenger_messages : "(id) - (userId)"
+    users ||..o{ messenger_support_emails : "(id) - (userId)"
+    users ||..o{ accounts : "(id) - (userId)"
+    users ||..o{ s3_buckets : "(id) - (ownerId)"
+    organizations |o..o{ s3_buckets : "(id) - (organizationId)"
+    users ||..o{ storage_integrations : "(id) - (ownerId)"
+    organizations |o..o{ storage_integrations : "(id) - (organizationId)"
+    videos |o..o{ storage_objects : "(id) - (videoId)"
+    users ||..o{ organizations : "(id) - (ownerId)"
+    users ||..o{ sessions : "(id) - (userId)"
+    users ||..o{ organization_members : "(id) - (userId)"
+    organizations ||..o{ organization_members : "(id) - (organizationId)"
+    organizations ||..o{ integration_installations : "(id) - (organizationId)"
+    users ||..o{ integration_installations : "(id) - (installedByUserId)"
+    organizations ||..o{ organization_invites : "(id) - (organizationId)"
+    users ||..o{ organization_invites : "(id) - (invitedByUserId)"
+    users ||..o{ videos : "(id) - (ownerId)"
+    video_edits ||..o| videos : "(videoId) - (id)"
+    folders |o..o{ videos : "(id) - (folderId)"
+    videos ||..o{ shared_videos : "(id) - (videoId)"
+    organizations ||..o{ shared_videos : "(id) - (organizationId)"
+    users ||..o{ shared_videos : "(id) - (sharedByUserId)"
+    organizations ||..o{ spaces : "(id) - (organizationId)"
+    users ||..o{ spaces : "(id) - (createdById)"
+    spaces ||..o{ space_members : "(id) - (spaceId)"
+    users ||..o{ space_members : "(id) - (userId)"
+    spaces ||..o{ space_videos : "(id) - (spaceId)"
+    videos ||..o{ space_videos : "(id) - (videoId)"
+    users ||..o{ space_videos : "(id) - (addedById)"
+    organizations ||..o{ folders : "(id) - (organizationId)"
+    users ||..o{ folders : "(id) - (createdById)"
+    folders |o..o{ folders : "(id) - (parentId)"
+    users ||..o{ developer_apps : "(id) - (ownerId)"
+    developer_credit_accounts ||..o| developer_apps : "(appId) - (id)"
+    users ||..o{ developer_credit_accounts : "(id) - (ownerId)"
     users {
         varchar id PK
         varchar name
@@ -55,7 +96,7 @@ erDiagram
     }
     accounts {
         varchar id PK
-        varchar userId
+        varchar userId FK
         varchar type
         varchar provider
         varchar providerAccountId
@@ -73,7 +114,7 @@ erDiagram
     sessions {
         varchar id PK
         varchar sessionToken
-        varchar userId
+        varchar userId FK
         datetime expires
         timestamp created_at
         timestamp updated_at
@@ -88,7 +129,7 @@ erDiagram
     organizations {
         varchar id PK
         varchar name
-        varchar ownerId
+        varchar ownerId FK
         json metadata
         timestamp tombstoneAt
         varchar allowedEmailDomain
@@ -144,8 +185,8 @@ erDiagram
     }
     organization_members {
         varchar id PK
-        varchar userId
-        varchar organizationId
+        varchar userId FK
+        varchar organizationId FK
         varchar role
         boolean hasProSeat
         timestamp createdAt
@@ -156,8 +197,8 @@ erDiagram
         varchar provider
         varchar externalId
         varchar displayName
-        varchar organizationId
-        varchar installedByUserId
+        varchar organizationId FK
+        varchar installedByUserId FK
         text encryptedCredentials
         json metadata
         timestamp createdAt
@@ -165,9 +206,9 @@ erDiagram
     }
     organization_invites {
         varchar id PK
-        varchar organizationId
+        varchar organizationId FK
         varchar invitedEmail
-        varchar invitedByUserId
+        varchar invitedByUserId FK
         varchar role
         varchar status
         timestamp createdAt
@@ -180,16 +221,16 @@ erDiagram
         varchar color
         boolean public "Internet-facing public collection link (/c/[id])."
         json settings
-        varchar organizationId
-        varchar createdById
-        varchar parentId
+        varchar organizationId FK
+        varchar createdById FK
+        varchar parentId FK
         varchar spaceId
         timestamp createdAt
         timestamp updatedAt
     }
     videos {
-        varchar id PK
-        varchar ownerId
+        varchar id PK, FK
+        varchar ownerId FK
         varchar orgId
         varchar name
         varchar bucket
@@ -203,7 +244,7 @@ erDiagram
         json settings
         varchar transcriptionStatus
         json source
-        varchar folderId
+        varchar folderId FK
         timestamp createdAt
         datetime effectiveCreatedAt
         timestamp updatedAt
@@ -228,10 +269,10 @@ erDiagram
     }
     shared_videos {
         varchar id PK
-        varchar videoId
+        varchar videoId FK
         varchar folderId
-        varchar organizationId
-        varchar sharedByUserId
+        varchar organizationId FK
+        varchar sharedByUserId FK
         timestamp sharedAt
     }
     video_viewer_grants {
@@ -247,19 +288,19 @@ erDiagram
         varchar type
         text content
         float timestamp
-        varchar authorId
-        varchar videoId
+        varchar authorId FK
+        varchar videoId FK
         timestamp createdAt
         timestamp updatedAt
-        varchar parentCommentId
+        varchar parentCommentId FK
         varchar mediaKey "Media comments ('video'/'audio' type): object key under the parent video's prefix (`${ownerId}/${videoId}/comments/${commentId}/...`), served via /api/storage/object which asserts that prefix."
         float mediaDuration
         json mediaMeta
     }
     notifications {
         varchar id PK
-        varchar orgId
-        varchar recipientId
+        varchar orgId FK
+        varchar recipientId FK
         varchar type
         json data
         varchar videoId
@@ -271,7 +312,7 @@ erDiagram
         varchar id PK
         varchar agent
         varchar mode
-        varchar userId
+        varchar userId FK
         varchar anonymousId
         varchar takeoverByUserId
         timestamp takeoverAt
@@ -284,14 +325,14 @@ erDiagram
         varchar conversationId FK
         varchar role
         text content
-        varchar userId
+        varchar userId FK
         varchar anonymousId
         timestamp createdAt
     }
     messenger_support_emails {
         varchar id PK
         varchar conversationId FK
-        varchar userId
+        varchar userId FK
         varchar userEmail
         varchar subject
         text message
@@ -317,8 +358,8 @@ erDiagram
     }
     s3_buckets {
         varchar id PK
-        varchar ownerId
-        varchar organizationId
+        varchar ownerId FK
+        varchar organizationId FK
         text region
         text endpoint
         text bucketName
@@ -331,8 +372,8 @@ erDiagram
     }
     storage_integrations {
         varchar id PK
-        varchar ownerId
-        varchar organizationId
+        varchar ownerId FK
+        varchar organizationId FK
         varchar provider
         varchar displayName
         varchar status
@@ -350,7 +391,7 @@ erDiagram
         varchar id PK
         varchar integrationId FK
         varchar ownerId
-        varchar videoId
+        varchar videoId FK
         text objectKey
         varchar objectKeyHash
         varchar providerObjectId
@@ -473,8 +514,8 @@ erDiagram
         varchar id PK
         boolean primary
         varchar name
-        varchar organizationId
-        varchar createdById
+        varchar organizationId FK
+        varchar createdById FK
         varchar iconUrl
         varchar description
         json settings
@@ -486,18 +527,18 @@ erDiagram
     }
     space_members {
         varchar id PK
-        varchar spaceId
-        varchar userId
+        varchar spaceId FK
+        varchar userId FK
         varchar role
         timestamp createdAt
         timestamp updatedAt
     }
     space_videos {
         varchar id PK
-        varchar spaceId
+        varchar spaceId FK
         varchar folderId
-        varchar videoId
-        varchar addedById
+        varchar videoId FK
+        varchar addedById FK
         timestamp addedAt
     }
     video_uploads {
@@ -574,8 +615,8 @@ erDiagram
         datetime createdAt
     }
     developer_apps {
-        varchar id PK
-        varchar ownerId
+        varchar id PK, FK
+        varchar ownerId FK
         varchar name
         varchar environment
         varchar logoUrl
@@ -659,7 +700,7 @@ erDiagram
     developer_credit_accounts {
         varchar id PK
         varchar appId FK
-        varchar ownerId
+        varchar ownerId FK
         bigint balanceMicroCredits
         varchar stripeCustomerId
         varchar stripePaymentMethodId

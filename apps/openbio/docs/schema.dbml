@@ -104,3 +104,9 @@ Ref session_user_id_user_id_fk: session.user_id > user.id [delete: cascade]
 Ref account_user_id_user_id_fk: account.user_id > user.id [delete: cascade]
 
 Ref email_subscriber_link_id_link_id_fk: email_subscriber.link_id > link.id [delete: cascade]
+
+Ref link_user_id_user_id: link.user_id > user.id
+
+Ref link_view_link_id_link_id: link_view.link_id > link.id
+
+Ref link_click_link_id_link_id: link_click.link_id > link.id

@@ -1,11 +1,11 @@
 Table customers {
   id serial [pk, increment, not null]
-  companyName text [not null]
-  contactName varchar [not null]
-  contactTitle varchar [not null]
+  company_name text [not null]
+  contact_name varchar [not null]
+  contact_title varchar [not null]
   address varchar [not null]
   city varchar [not null]
-  postalCode varchar
+  postal_code varchar
   region varchar
   country varchar [not null]
   phone varchar [not null]
@@ -14,50 +14,50 @@ Table customers {
 
 Table employees {
   id serial [pk, increment, not null]
-  lastName varchar [not null]
-  firstName varchar
+  last_name varchar [not null]
+  first_name varchar
   title varchar [not null]
-  titleOfCourtesy varchar [not null]
-  birthDate date [not null]
-  hireDate date [not null]
+  title_of_courtesy varchar [not null]
+  birth_date date [not null]
+  hire_date date [not null]
   address varchar [not null]
   city varchar [not null]
-  postalCode varchar [not null]
+  postal_code varchar [not null]
   country varchar [not null]
-  homePhone varchar [not null]
+  home_phone varchar [not null]
   extension integer [not null]
   notes text [not null]
-  recipientId integer
+  recipient_id integer
   indexes {
-    (recipientId) [name: 'recepient_idx']
+    (recipient_id) [name: 'recepient_idx']
   }
 }
 
 Table orders {
   id serial [pk, increment, not null]
-  orderDate date [not null]
-  requiredDate date [not null]
-  shippedDate date
-  shipVia integer [not null]
+  order_date date [not null]
+  required_date date [not null]
+  shipped_date date
+  ship_via integer [not null]
   freight "double precision" [not null]
-  shipName varchar [not null]
-  shipCity varchar [not null]
-  shipRegion varchar
-  shipPostalCode varchar
-  shipCountry varchar [not null]
-  customerId integer [not null]
-  employeeId integer [not null]
+  ship_name varchar [not null]
+  ship_city varchar [not null]
+  ship_region varchar
+  ship_postal_code varchar
+  ship_country varchar [not null]
+  customer_id integer [not null]
+  employee_id integer [not null]
 }
 
 Table suppliers {
   id serial [pk, increment, not null]
-  companyName varchar [not null]
-  contactName varchar [not null]
-  contactTitle varchar [not null]
+  company_name varchar [not null]
+  contact_name varchar [not null]
+  contact_title varchar [not null]
   address varchar [not null]
   city varchar [not null]
   region varchar
-  postalCode varchar [not null]
+  postal_code varchar [not null]
   country varchar [not null]
   phone varchar [not null]
 }
@@ -65,36 +65,38 @@ Table suppliers {
 Table products {
   id serial [pk, increment, not null]
   name text [not null]
-  quantityPerUnit varchar [not null]
-  unitPrice "double precision" [not null]
-  unitsInStock integer [not null]
-  unitsOnOrder integer [not null]
-  reorderLevel integer [not null]
+  quantity_per_unit varchar [not null]
+  unit_price "double precision" [not null]
+  units_in_stock integer [not null]
+  units_on_order integer [not null]
+  reorder_level integer [not null]
   discontinued integer [not null]
-  supplierId serial [increment, not null]
+  supplier_id serial [increment, not null]
   indexes {
-    (supplierId) [name: 'supplier_idx']
+    (supplier_id) [name: 'supplier_idx']
   }
 }
 
 Table order_details {
-  unitPrice "double precision" [not null]
+  unit_price "double precision" [not null]
   quantity integer [not null]
   discount "double precision" [not null]
-  orderId integer [not null]
-  productId integer [not null]
+  order_id integer [not null]
+  product_id integer [not null]
   indexes {
-    (orderId) [name: 'order_id_idx']
-    (productId) [name: 'product_id_idx']
+    (order_id) [name: 'order_id_idx']
+    (product_id) [name: 'product_id_idx']
   }
 }
 
-Ref orders_customerId_customers_id_fk: orders.customerId > customers.id [delete: cascade]
+Ref employees_recipient_id_employees_id_fk: employees.recipient_id > employees.id
 
-Ref orders_employeeId_employees_id_fk: orders.employeeId > employees.id [delete: cascade]
+Ref orders_customer_id_customers_id_fk: orders.customer_id > customers.id [delete: cascade]
 
-Ref products_supplierId_suppliers_id_fk: products.supplierId > suppliers.id [delete: cascade]
+Ref orders_employee_id_employees_id_fk: orders.employee_id > employees.id [delete: cascade]
 
-Ref order_details_orderId_orders_id_fk: order_details.orderId > orders.id [delete: cascade]
+Ref products_supplier_id_suppliers_id_fk: products.supplier_id > suppliers.id [delete: cascade]
 
-Ref order_details_productId_products_id_fk: order_details.productId > products.id [delete: cascade]
+Ref order_details_order_id_orders_id_fk: order_details.order_id > orders.id [delete: cascade]
+
+Ref order_details_product_id_products_id_fk: order_details.product_id > products.id [delete: cascade]

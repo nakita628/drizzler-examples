@@ -252,3 +252,7 @@ Ref product_variants_variant_id_variants_id_fk: product_variants.variant_id > va
 Ref product_variant_values_product_variant_id_product_variants_id_fk: product_variant_values.product_variant_id > product_variants.id [delete: cascade]
 
 Ref product_variant_values_stock_id_stocks_id_fk: product_variant_values.stock_id > stocks.id [delete: cascade]
+
+Ref stocks_product_variant_id_product_variant_values_product_variant_id: stocks.product_variant_id > product_variant_values.product_variant_id [delete: cascade]
+
+Ref product_variant_values_product_variant_id_product_variants_product_id: product_variant_values.product_variant_id > product_variants.product_id [delete: cascade]

@@ -164,15 +164,15 @@ ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fkey" FOREIGN KEY (
 
 | Table                                           | Name in the database | Description |
 | ----------------------------------------------- | -------------------- | ----------- |
-| [workspaces](#table-workspaces)                 | `workspaces`         |             |
-| [folders](#table-folders)                       | `folders`            |             |
-| [files](#table-files)                           | `files`              |             |
-| [accounts](#table-accounts)                     | `accounts`           |             |
-| [customers](#table-customers)                   | `customers`          |             |
-| [prices](#table-prices)                         | `prices`             |             |
-| [products](#table-products)                     | `products`           |             |
-| [subscriptions](#table-subscriptions)           | `subscriptions`      |             |
-| [collaborators](#table-collaborators)           | `collaborators`      |             |
+| [workspaces](#table-workspaces)                 | `lipi_workspaces`    |             |
+| [folders](#table-folders)                       | `lipi_folders`       |             |
+| [files](#table-files)                           | `lipi_files`         |             |
+| [accounts](#table-accounts)                     | `lipi_accounts`      |             |
+| [customers](#table-customers)                   | `lipi_customers`     |             |
+| [prices](#table-prices)                         | `lipi_prices`        |             |
+| [products](#table-products)                     | `lipi_products`      |             |
+| [subscriptions](#table-subscriptions)           | `lipi_subscriptions` |             |
+| [collaborators](#table-collaborators)           | `lipi_collaborators` |             |
 | [users](#table-users)                           | `user`               |             |
 | [dbAccounts](#table-dbAccounts)                 | `account`            |             |
 | [verificationTokens](#table-verificationTokens) | `verificationToken`  |             |
@@ -189,6 +189,8 @@ ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fkey" FOREIGN KEY (
 
 ### workspaces
 
+Table `lipi_workspaces`.
+
 ![workspaces and the tables it relates to](tables/workspaces.svg)
 
 | Column                                    | Type        | Constraints | Default            | Description |
@@ -202,6 +204,22 @@ ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fkey" FOREIGN KEY (
 | `workspaceOwnerId` (`workspace_owner_id`) | `uuid`      | NOT NULL    |                    |             |
 | `inTrash` (`in_trash`)                    | `boolean`   | NOT NULL    | `.default(false)`  |             |
 | `createdAt` (`created_at`)                | `timestamp` | NOT NULL    | `.defaultNow()`    |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_workspaces" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"title" text NOT NULL,
+	"icon_id" text NOT NULL,
+	"data" text,
+	"logo" text,
+	"banner_url" text,
+	"workspace_owner_id" uuid NOT NULL,
+	"in_trash" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+```
 
 #### Referenced by
 
@@ -308,6 +326,8 @@ where "lipi_workspaces"."id" = $1
 
 ### folders
 
+Table `lipi_folders`.
+
 ![folders and the tables it relates to](tables/folders.svg)
 
 | Column                         | Type        | Constraints                               | Default            | Description |
@@ -320,6 +340,23 @@ where "lipi_workspaces"."id" = $1
 | `workspaceId` (`workspace_id`) | `uuid`      | NULL → [workspaces.id](#table-workspaces) |                    |             |
 | `inTrash` (`in_trash`)         | `boolean`   | NOT NULL                                  | `.default(false)`  |             |
 | `createdAt` (`created_at`)     | `timestamp` | NOT NULL                                  | `.defaultNow()`    |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_folders" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"title" text NOT NULL,
+	"icon_id" text NOT NULL,
+	"data" text,
+	"banner_url" text,
+	"workspace_id" uuid,
+	"in_trash" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE "lipi_folders" ADD CONSTRAINT "lipi_folders_workspace_id_lipi_workspaces_id_fkey" FOREIGN KEY ("workspace_id") REFERENCES "lipi_workspaces"("id") ON DELETE CASCADE;
+```
 
 #### References
 
@@ -424,6 +461,8 @@ where "lipi_folders"."id" = $1
 
 ### files
 
+Table `lipi_files`.
+
 ![files and the tables it relates to](tables/files.svg)
 
 | Column                         | Type        | Constraints                               | Default            | Description |
@@ -437,6 +476,26 @@ where "lipi_folders"."id" = $1
 | `folderId` (`folder_id`)       | `uuid`      | NULL → [folders.id](#table-folders)       |                    |             |
 | `inTrash` (`in_trash`)         | `boolean`   | NOT NULL                                  | `.default(false)`  |             |
 | `createdAt` (`created_at`)     | `timestamp` | NOT NULL                                  | `.defaultNow()`    |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_files" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"title" text NOT NULL,
+	"icon_id" text NOT NULL,
+	"data" text,
+	"banner_url" text,
+	"workspace_id" uuid,
+	"folder_id" uuid,
+	"in_trash" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE "lipi_files" ADD CONSTRAINT "lipi_files_workspace_id_lipi_workspaces_id_fkey" FOREIGN KEY ("workspace_id") REFERENCES "lipi_workspaces"("id") ON DELETE CASCADE;
+
+ALTER TABLE "lipi_files" ADD CONSTRAINT "lipi_files_folder_id_lipi_folders_id_fkey" FOREIGN KEY ("folder_id") REFERENCES "lipi_folders"("id") ON DELETE CASCADE;
+```
 
 #### References
 
@@ -538,6 +597,8 @@ where "lipi_files"."id" = $1
 
 ### accounts
 
+Table `lipi_accounts`.
+
 ![accounts and the tables it relates to](tables/accounts.svg)
 
 | Column                               | Type        | Constraints                         | Default | Description |
@@ -546,6 +607,19 @@ where "lipi_files"."id" = $1
 | `billingAddress` (`billing_address`) | `jsonb`     | NULL                                |         |             |
 | `updatedAt` (`updated_at`)           | `timestamp` | NULL                                |         |             |
 | `paymentMethod` (`payment_method`)   | `jsonb`     | NULL                                |         |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_accounts" (
+	"user_id" uuid NOT NULL,
+	"billing_address" jsonb,
+	"updated_at" timestamp with time zone,
+	"payment_method" jsonb
+);
+
+ALTER TABLE "lipi_accounts" ADD CONSTRAINT "lipi_accounts_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id");
+```
 
 #### References
 
@@ -605,12 +679,23 @@ values ($1, default, default, default)
 
 ### customers
 
+Table `lipi_customers`.
+
 ![customers](tables/customers.svg)
 
 | Column                                    | Type   | Constraints | Default | Description |
 | ----------------------------------------- | ------ | ----------- | ------- | ----------- |
 | `id`                                      | `uuid` | PK NOT NULL |         |             |
 | `stripeCustomerId` (`stripe_customer_id`) | `text` | NULL        |         |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_customers" (
+	"id" uuid PRIMARY KEY,
+	"stripe_customer_id" text
+);
+```
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -707,6 +792,8 @@ where "lipi_customers"."id" = $1
 
 ### prices
 
+Table `lipi_prices`.
+
 ![prices and the tables it relates to](tables/prices.svg)
 
 | Column                                  | Type                                               | Constraints                           | Default | Description                                                                   |
@@ -722,6 +809,26 @@ where "lipi_customers"."id" = $1
 | `intervalCount` (`interval_count`)      | `integer`                                          | NULL                                  |         |                                                                               |
 | `trialPeriodDays` (`trial_period_days`) | `integer`                                          | NULL                                  |         |                                                                               |
 | `metadata`                              | `jsonb`                                            | NULL                                  |         |                                                                               |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_prices" (
+	"id" text PRIMARY KEY,
+	"product_id" text,
+	"active" boolean,
+	"description" text,
+	"unit_amount" bigint,
+	"currency" text,
+	"type" "pricing_type",
+	"interval" "pricing_plan_interval",
+	"interval_count" integer,
+	"trial_period_days" integer,
+	"metadata" jsonb
+);
+
+ALTER TABLE "lipi_prices" ADD CONSTRAINT "lipi_prices_product_id_lipi_products_id_fkey" FOREIGN KEY ("product_id") REFERENCES "lipi_products"("id");
+```
 
 #### References
 
@@ -824,6 +931,8 @@ where "lipi_prices"."id" = $1
 
 ### products
 
+Table `lipi_products`.
+
 ![products and the tables it relates to](tables/products.svg)
 
 | Column        | Type      | Constraints | Default | Description |
@@ -834,6 +943,19 @@ where "lipi_prices"."id" = $1
 | `description` | `text`    | NULL        |         |             |
 | `image`       | `text`    | NULL        |         |             |
 | `metadata`    | `jsonb`   | NULL        |         |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_products" (
+	"id" text PRIMARY KEY,
+	"active" boolean,
+	"name" text,
+	"description" text,
+	"image" text,
+	"metadata" jsonb
+);
+```
 
 #### Referenced by
 
@@ -932,6 +1054,8 @@ where "lipi_products"."id" = $1
 
 ### subscriptions
 
+Table `lipi_subscriptions`.
+
 ![subscriptions and the tables it relates to](tables/subscriptions.svg)
 
 | Column                                        | Type                                             | Constraints                       | Default         | Description |
@@ -951,6 +1075,30 @@ where "lipi_products"."id" = $1
 | `canceledAt` (`canceled_at`)                  | `timestamp`                                      | NULL                              | `.defaultNow()` |             |
 | `trialStart` (`trial_start`)                  | `timestamp`                                      | NULL                              | `.defaultNow()` |             |
 | `trialEnd` (`trial_end`)                      | `timestamp`                                      | NULL                              | `.defaultNow()` |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_subscriptions" (
+	"id" text PRIMARY KEY,
+	"user_id" uuid NOT NULL,
+	"status" "subscription_status",
+	"metadata" jsonb,
+	"price_id" text,
+	"quantity" integer,
+	"cancel_at_period_end" boolean,
+	"created" timestamp with time zone DEFAULT now() NOT NULL,
+	"current_period_start" timestamp with time zone DEFAULT now() NOT NULL,
+	"current_period_end" timestamp with time zone DEFAULT now() NOT NULL,
+	"ended_at" timestamp with time zone DEFAULT now(),
+	"cancel_at" timestamp with time zone DEFAULT now(),
+	"canceled_at" timestamp with time zone DEFAULT now(),
+	"trial_start" timestamp with time zone DEFAULT now(),
+	"trial_end" timestamp with time zone DEFAULT now()
+);
+
+ALTER TABLE "lipi_subscriptions" ADD CONSTRAINT "lipi_subscriptions_price_id_lipi_prices_id_fkey" FOREIGN KEY ("price_id") REFERENCES "lipi_prices"("id");
+```
 
 #### References
 
@@ -1051,6 +1199,8 @@ where "lipi_subscriptions"."id" = $1
 
 ### collaborators
 
+Table `lipi_collaborators`.
+
 ![collaborators and the tables it relates to](tables/collaborators.svg)
 
 | Column                         | Type        | Constraints                                   | Default            | Description |
@@ -1059,6 +1209,21 @@ where "lipi_subscriptions"."id" = $1
 | `workspaceId` (`workspace_id`) | `uuid`      | NOT NULL → [workspaces.id](#table-workspaces) |                    |             |
 | `createdAt` (`created_at`)     | `timestamp` | NOT NULL                                      | `.defaultNow()`    |             |
 | `userId` (`user_id`)           | `uuid`      | NOT NULL → [users.id](#table-users)           |                    |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "lipi_collaborators" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"workspace_id" uuid NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"user_id" uuid NOT NULL
+);
+
+ALTER TABLE "lipi_collaborators" ADD CONSTRAINT "lipi_collaborators_workspace_id_lipi_workspaces_id_fkey" FOREIGN KEY ("workspace_id") REFERENCES "lipi_workspaces"("id") ON DELETE CASCADE;
+
+ALTER TABLE "lipi_collaborators" ADD CONSTRAINT "lipi_collaborators_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE;
+```
 
 #### References
 

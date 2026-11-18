@@ -25,4 +25,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#50](https://github.com/nakita628/drizzler/issues/50): the docs, the diagrams, the DBML and Mermaid keep the TypeScript keys (`customerId`) instead of the snake_case names (`customer_id`), and the `employees.recipient_id` self-reference is missing. The SQL is right.
+None.

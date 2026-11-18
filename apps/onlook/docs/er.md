@@ -32,6 +32,8 @@ erDiagram
     users ||--o{ user_projects : "(id) - (user_id)"
     projects ||--o{ user_projects : "(id) - (project_id)"
     "auth.users" ||--o| users : "(id) - (id)"
+    canvas ||..o| projects : "(project_id) - (id)"
+    project_settings ||..o| projects : "(project_id) - (id)"
     canvas {
         uuid id PK
         uuid project_id FK
@@ -166,7 +168,7 @@ erDiagram
         timestamptz updated_at
     }
     projects {
-        uuid id PK
+        uuid id PK, FK
         varchar name "metadata"
         text description
         varchar tags

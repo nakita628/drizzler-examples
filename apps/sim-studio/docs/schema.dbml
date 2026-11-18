@@ -258,6 +258,7 @@ Table workflow_execution_logs {
     (workspace_id, started_at, status, total_duration_ms, workflow_id, trigger, level) [name: 'workflow_execution_logs_workspace_activity_level_idx']
     (workspace_id) [name: 'workflow_execution_logs_workspace_started_at_id_desc_idx']
     (workspace_id, cost_total) [name: 'workflow_execution_logs_workspace_cost_total_idx']
+    (models_used) [type: gin, name: 'workflow_execution_logs_models_used_idx']
     (workspace_id, id) [name: 'workflow_execution_logs_workspace_ended_at_id_idx']
     (started_at) [name: 'workflow_execution_logs_running_started_at_idx']
     (execution_deadline_at) [name: 'workflow_execution_logs_running_deadline_idx']
@@ -449,7 +450,7 @@ Table secret_usage {
   updated_at timestamp [not null]
   indexes {
     (workspace_id, secret_name, secret_scope, secret_owner_user_id, source, workflow_id, actor_user_id, usage_date) [unique, name: 'secret_usage_bucket_unique']
-    (workspace_id, secret_name, secret_scope, secret_owner_user_id) [name: 'secret_usage_secret_recent_idx']
+    (workspace_id, secret_name, secret_scope, secret_owner_user_id, last_used_at) [name: 'secret_usage_secret_recent_idx']
   }
   Note: 'Per-day rollup of which secrets a run actually resolved. Execution logs cannot answer this. They persist the whole *available* encrypted environment rather than what a run referenced, they only evidence a secret where value-matching redaction happened to fire, and they expire under `DataRetentionSettings.logRetentionHours`. A secret\'s usage trail has to outlive its runs\' logs, so it is written here instead of derived from them. Rows are a rollup rather than one per run: a workflow on a one-minute schedule touching three secrets would otherwise write thousands of rows a day, which is also why this is not `audit_log` — that table is a human-scale compliance surface and machine-scale rows would drown it. `secretScope` and `secretOwnerUserId` are part of the key because a workspace secret and a personal secret can share a name — as can two people\'s personal secrets — and none of them may merge. `lastTriggeredByUserId` is deliberately *not* in the key: a public endpoint called by many people would otherwise fragment one bucket per caller.'
 }
@@ -604,7 +605,7 @@ Table webhook {
     (routing_key, provider) [name: 'webhook_routing_key_active_idx']
     (archived_at) [name: 'webhook_archived_at_partial_idx']
     (provider, is_active, workflow_id, deployment_version_id) [name: 'idx_webhook_on_provider_is_active_workflow_id_deploym_bdeed5468']
-    (workflow_id, block_id) [name: 'idx_webhook_on_workflow_id_block_id_updated_at_desc']
+    (workflow_id, block_id, updated_at) [name: 'idx_webhook_on_workflow_id_block_id_updated_at_desc']
     (workflow_id, block_id) [unique, name: 'webhook_active_registration_unique']
     (workflow_id, block_id) [unique, name: 'webhook_candidate_registration_unique']
     (workflow_id, registration_status, registration_generation) [name: 'webhook_registration_status_generation_idx']
@@ -1197,13 +1198,13 @@ Table workspace_fork_workflow_sync {
   source_workflow_id text [not null]
   target_workflow_id text [not null]
   source_deployment_version_id text [not null]
-  sequence bigint
+  sequence bigint [increment]
   promote_run_id text [not null]
   activated_at timestamp
   rollback_operation_id text
   rolled_back_at timestamp
   indexes {
-    (child_workspace_id, source_workflow_id, target_workflow_id) [name: 'workspace_fork_workflow_sync_baseline_idx']
+    (child_workspace_id, source_workflow_id, target_workflow_id, sequence) [name: 'workspace_fork_workflow_sync_baseline_idx']
     (promote_run_id, target_workflow_id) [name: 'workspace_fork_workflow_sync_run_idx']
     (rollback_operation_id) [name: 'workspace_fork_workflow_sync_rollback_idx']
     (source_workflow_id) [name: 'workspace_fork_workflow_sync_source_idx']
@@ -1394,6 +1395,7 @@ Table workspace_files {
     (workspace_id, uploaded_at, id) [name: 'workspace_files_workspace_active_uploaded_idx']
     (workspace_id, updated_at, id) [name: 'workspace_files_workspace_active_updated_idx']
     (workspace_id, uploaded_at, id) [name: 'workspace_files_workspace_folder_uploaded_idx']
+    (workspace_id, original_name) [type: gin, name: 'workspace_files_workspace_name_trgm_idx']
     (workspace_id) [name: 'workspace_files_workspace_display_name_idx']
     (chat_id, display_name) [unique, name: 'workspace_files_chat_display_name_unique']
     (organization_id) [name: 'workspace_files_organization_id_idx']
@@ -1435,7 +1437,7 @@ Table workspace_file_search_dispatch_queue {
   last_dispatched_at timestamp
   updated_at timestamp [not null]
   indexes {
-    (enqueued_at, workspace_id) [name: 'workspace_file_search_dispatch_queue_schedule_idx']
+    (last_dispatched_at, enqueued_at, workspace_id) [name: 'workspace_file_search_dispatch_queue_schedule_idx']
   }
   Note: 'contract-pending(after owner-aware search workers are fully deployed): retire this queue and dual enqueue after old dispatchers and retries drain.'
 }
@@ -1448,7 +1450,7 @@ Table file_search_dispatch_queue {
   updated_at timestamp [not null]
   indexes {
     (entity_type, entity_id) [pk]
-    (enqueued_at, entity_type, entity_id) [name: 'file_search_dispatch_schedule_idx']
+    (last_dispatched_at, enqueued_at, entity_type, entity_id) [name: 'file_search_dispatch_schedule_idx']
   }
   Note: 'Owner-neutral dispatch replaces the workspace-only queue after older workers drain.'
 }
@@ -1476,6 +1478,7 @@ Table workspace_file_search_segment {
   indexes {
     (file_id, source_content_updated_at, line_number, segment_number) [pk]
     (workspace_id, file_id, source_content_updated_at) [name: 'workspace_file_search_segment_workspace_revision_idx']
+    (workspace_id, content) [type: gin, name: 'workspace_file_search_segment_workspace_content_trgm_idx']
   }
   Note: 'Bounded, overlapping logical-line segments searched through PostgreSQL trigram indexes.'
 }
@@ -1535,7 +1538,9 @@ Table workspace_file_search_chunk {
   content text [not null]
   indexes {
     (build_id, ordinal) [pk]
+    (entity_type, entity_id, content) [type: gin, name: 'file_search_chunk_owner_content_idx']
     (build_id, line_start, ordinal) [name: 'workspace_file_search_chunk_line_idx']
+    (workspace_id, content) [type: gin, name: 'workspace_file_search_chunk_content_idx']
   }
   Note: 'UTF-8 byte-bounded blocks; long-line fragments overlap only for conservative candidate lookup.'
 }
@@ -1720,7 +1725,7 @@ Table memory_secret_provenance {
 Table memory_item {
   id text [pk, not null]
   memory_id text [not null]
-  sequence bigint
+  sequence bigint [increment]
   append_key text [not null]
   turn_id text
   kind text [not null]
@@ -1886,6 +1891,7 @@ Table document {
   indexes {
     (uploaded_by) [name: 'doc_uploaded_by_idx']
     (knowledge_base_id, source_modified_at) [name: 'doc_kb_source_modified_idx']
+    (acl) [type: gin, name: 'doc_acl_gin_idx']
     (filename) [name: 'doc_filename_idx']
     (knowledge_base_id, processing_status) [name: 'doc_processing_status_idx']
     (connector_id, uploaded_at, id) [name: 'doc_connector_processing_recovery_idx']
@@ -2003,6 +2009,7 @@ Table embedding {
     (boolean1) [name: 'emb_boolean1_idx']
     (boolean2) [name: 'emb_boolean2_idx']
     (boolean3) [name: 'emb_boolean3_idx']
+    (content_tsv) [type: gin, name: 'emb_content_fts_idx']
   }
 }
 
@@ -2027,6 +2034,12 @@ Table embedding_search {
   indexes {
     (knowledge_base_id) [name: 'embedding_search_kb_idx']
     (document_id, knowledge_base_id, id) [name: 'embedding_search_document_lookup_idx']
+    (vector) [type: hnsw, name: 'embedding_search_cosine_hnsw_idx']
+    (vector_512) [type: hnsw, name: 'embedding_search_512_cosine_hnsw_idx']
+    (vector_384) [type: hnsw, name: 'embedding_search_384_cosine_hnsw_idx']
+    (vector_768) [type: hnsw, name: 'embedding_search_768_cosine_hnsw_idx']
+    (vector_1024) [type: hnsw, name: 'embedding_search_1024_cosine_hnsw_idx']
+    (vector_3072) [type: hnsw, name: 'embedding_search_3072_cosine_hnsw_idx']
   }
   Note: 'Candidate projection. Keeping identities and half-precision vectors apart from content prevents candidate scans from fetching full-precision TOAST values. Application writers only change `embedding`: its trigger writes this projection in the writer\'s transaction, and deletes the row instead for a chunk of a retired Search knowledge base (`isSearchIndex`). A chunk write that skipped the trigger, as releases that deferred projection did, is written by the knowledge projector after the commit (see {@link knowledgeProjectionDirty}).'
 }
@@ -2071,6 +2084,9 @@ Table docs_embeddings {
     (source_document, header_level) [name: 'docs_emb_source_header_idx']
     (embedding_model) [name: 'docs_emb_model_idx']
     (created_at) [name: 'docs_emb_created_at_idx']
+    (embedding) [type: hnsw, name: 'docs_embedding_vector_hnsw_idx']
+    (metadata) [type: gin, name: 'docs_emb_metadata_gin_idx']
+    (chunk_text_tsv) [type: gin, name: 'docs_emb_chunk_text_fts_idx']
   }
 }
 
@@ -2426,7 +2442,7 @@ Table workflow_deployment_operation {
     (workflow_id) [unique, name: 'workflow_deployment_operation_workflow_in_flight_unique']
     (workflow_id, status) [name: 'workflow_deployment_operation_workflow_status_idx']
     (deployment_version_id) [name: 'workflow_deployment_operation_deployment_version_idx']
-    (workflow_id, deployment_version_id) [name: 'workflow_deployment_operation_workflow_version_generation_idx']
+    (workflow_id, deployment_version_id, generation) [name: 'workflow_deployment_operation_workflow_version_generation_idx']
   }
   Note: 'Tracks mutable deployment attempts separately from immutable version snapshots.'
 }
@@ -2948,7 +2964,7 @@ Table slack_search_installation {
 
 Table slack_search_turn {
   id text [pk, not null]
-  ordinal integer
+  ordinal integer [increment]
   installation_id text [not null]
   conversation_key text [not null]
   event_id text [not null]
@@ -3261,7 +3277,7 @@ Table knowledge_connector_member {
   indexes {
     (organization_id) [name: 'kcm_organization_id_idx']
     (connector_id, credential_id) [unique, name: 'kcm_connector_credential_unique']
-    (connector_id) [name: 'kcm_connector_queue_idx']
+    (connector_id, next_attempt_at, last_started_at) [name: 'kcm_connector_queue_idx']
     (credential_id) [name: 'kcm_credential_idx']
   }
   Note: 'One row per (members-mode connector, member credential). Membership is derived from the credential-group option on every run: `active` while the managed credential is usable and the enrollment live, `suspended` otherwise (needs re-auth, enrollment revoked, option disabled). Suspension drops the member\'s token from every ACL immediately but keeps their observations, so a routine scope-version bump never wipes the observation graph. A row is deleted only when the credential row is gone (cascade), the option no longer references it, or it has stayed suspended past the purge window.'
@@ -3307,9 +3323,9 @@ Table knowledge_external_group {
   updated_at timestamp [not null]
   indexes {
     (organization_id, provider_id, tenant_id, external_group_id) [unique, name: 'keg_organization_identity_unique']
-    (organization_id) [name: 'keg_organization_synced_idx']
+    (organization_id, last_synced_at) [name: 'keg_organization_synced_idx']
     (workspace_id, provider_id, tenant_id, external_group_id) [unique, name: 'keg_identity_unique']
-    (workspace_id) [name: 'keg_workspace_synced_idx']
+    (workspace_id, last_synced_at) [name: 'keg_workspace_synced_idx']
   }
   Note: 'A group in an external directory, as an admin-mode crawl names it. Scoped by workspace, provider and tenant rather than by connector: two Drive connectors over the same Google Workspace domain grant the same groups, and resolving that domain\'s directory once per connector would multiply the Admin SDK traffic by the number of knowledge bases. `externalGroupId` is whatever the source\'s permissions API names a group by — a group email in Drive, a group id in Confluence — canonicalised by `canonicalGroupId`, exactly as `groupToken` spells it. Keying the directory by the same identifier the grant carries is what lets a token resolve to membership with no lookup in between.'
 }
@@ -3424,6 +3440,7 @@ Table user_table_rows {
   created_by text
   indexes {
     (created_by) [name: 'user_table_rows_created_by_idx']
+    `data jsonb_path_ops` [type: gin, name: 'user_table_rows_tenant_data_gin_idx']
     (workspace_id, table_id) [name: 'user_table_rows_workspace_table_idx']
     (table_id, position) [name: 'user_table_rows_table_position_idx']
     (table_id, order_key, id) [name: 'user_table_rows_table_order_key_idx']
@@ -3434,7 +3451,7 @@ Table user_table_rows {
 }
 
 Table user_table_row_changes {
-  id bigint [pk, not null]
+  id bigint [pk, increment, not null]
   table_id text [not null]
   row_delta integer [not null, note: '`+n` for an insert, `-n` for a delete, `0` for an update of row content or order.']
   indexes {

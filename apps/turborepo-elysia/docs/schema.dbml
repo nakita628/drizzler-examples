@@ -1,4 +1,7 @@
 Table sys_user {
+  id uuid [pk, not null]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
   name text [not null]
   email text [not null, unique]
   email_verified boolean
@@ -15,6 +18,7 @@ Table sys_user {
 }
 
 Table sys_role {
+  id uuid [pk, not null]
   name text [not null]
   description text
   type varchar [not null]

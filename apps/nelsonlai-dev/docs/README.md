@@ -796,8 +796,9 @@ ALTER TABLE "comments" ADD CONSTRAINT "comments_parent_id_comments_id_fkey" FORE
 
 - INDEX `postId`
 - INDEX `userId`
-- INDEX `postId`
-- INDEX `parentId`
+- INDEX `postId`, `createdAt`
+- INDEX `parentId`, `createdAt`
+- INDEX `body`
 
 #### References
 
@@ -1064,6 +1065,7 @@ ALTER TABLE "messages" ADD CONSTRAINT "messages_user_id_users_id_fkey" FOREIGN K
 
 #### Indexes
 
+- INDEX `createdAt`
 - INDEX `userId`
 
 #### References
@@ -1184,6 +1186,10 @@ CREATE TABLE "posts" (
 
 CREATE INDEX "posts_created_at_desc_idx" ON "posts" ("created_at" DESC NULLS LAST);
 ```
+
+#### Indexes
+
+- INDEX `createdAt`
 
 #### Referenced by
 

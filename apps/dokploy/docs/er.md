@@ -137,6 +137,12 @@ erDiagram
     compose |o--o{ volume_backup : "(composeId) - (composeId)"
     destination ||--o{ volume_backup : "(destinationId) - (destinationId)"
     organization |o--o{ webServerSettings : "(id) - (vectorAgentOrganizationId)"
+    rollback ||..o| deployment : "(deploymentId) - (deploymentId)"
+    github ||..o| git_provider : "(gitProviderId) - (gitProviderId)"
+    gitlab ||..o| git_provider : "(gitProviderId) - (gitProviderId)"
+    bitbucket ||..o| git_provider : "(gitProviderId) - (gitProviderId)"
+    gitea ||..o| git_provider : "(gitProviderId) - (gitProviderId)"
+    account ||..o| user : "(user_id) - (id)"
     account {
         text id PK
         text account_id
@@ -486,7 +492,7 @@ erDiagram
         jsonb serviceNetworks
     }
     deployment {
-        text deploymentId PK
+        text deploymentId PK, FK
         text title
         text description
         deploymentStatus status
@@ -571,7 +577,7 @@ erDiagram
         text createdAt
     }
     git_provider {
-        text gitProviderId PK
+        text gitProviderId PK, FK
         text name
         gitProviderType providerType
         text createdAt
@@ -1173,7 +1179,7 @@ erDiagram
         text organizationId FK
     }
     user {
-        text id PK
+        text id PK, FK
         text firstName
         text lastName
         boolean isRegistered

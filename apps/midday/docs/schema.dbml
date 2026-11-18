@@ -12,6 +12,9 @@ Table transaction_category_embeddings {
   system boolean [not null]
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
+  indexes {
+    (system) [type: btree, name: 'transaction_category_embeddings_system_idx']
+  }
 }
 
 Table transactions {
@@ -46,6 +49,21 @@ Table transactions {
   enrichment_completed boolean
   fts_vector tsvector [not null]
   indexes {
+    (date) [type: btree, name: 'idx_transactions_date']
+    (fts_vector) [type: gin, name: 'idx_transactions_fts']
+    (fts_vector) [type: gin, name: 'idx_transactions_fts_vector']
+    (id) [type: btree, name: 'idx_transactions_id']
+    (name) [type: btree, name: 'idx_transactions_name']
+    (merchant_name) [type: gin, name: 'idx_transactions_merchant_name_trgm']
+    (team_id, date, name) [type: btree, name: 'idx_transactions_team_id_date_name']
+    (team_id, name) [type: btree, name: 'idx_transactions_team_id_name']
+    (name) [type: gist, name: 'idx_trgm_name']
+    (assigned_id) [type: btree, name: 'transactions_assigned_id_idx']
+    (bank_account_id) [type: btree, name: 'transactions_bank_account_id_idx']
+    (category_slug) [type: btree, name: 'transactions_category_slug_idx']
+    (team_id, date, currency, bank_account_id) [type: btree, name: 'transactions_team_id_date_currency_bank_account_id_category_idx']
+    (team_id) [type: btree, name: 'transactions_team_id_idx']
+    (team_id, date, category_slug) [type: btree, name: 'idx_transactions_reports']
     (internal_id) [unique, name: 'transactions_internal_id_key']
   }
 }
@@ -65,6 +83,7 @@ Table tracker_entries {
   billed boolean
   date date
   indexes {
+    (team_id) [type: btree, name: 'tracker_entries_team_id_idx']
     (team_id, date) [name: 'tracker_entries_team_date_idx']
   }
 }
@@ -127,6 +146,11 @@ Table bank_accounts {
   sort_code text
   availableBalance numeric(10,2) [note: 'Credit account balances']
   creditLimit numeric(10,2)
+  indexes {
+    (bank_connection_id) [type: btree, name: 'bank_accounts_bank_connection_id_idx']
+    (created_by) [type: btree, name: 'bank_accounts_created_by_idx']
+    (team_id) [type: btree, name: 'bank_accounts_team_id_idx']
+  }
 }
 
 Table invoice_recurring {
@@ -166,6 +190,12 @@ Table invoice_recurring {
   bottom_block jsonb
   template_id uuid
   upcoming_notification_sent_at timestamptz [note: 'Notification tracking']
+  indexes {
+    (team_id) [type: btree, name: 'invoice_recurring_team_id_idx']
+    (next_scheduled_at) [type: btree, name: 'invoice_recurring_next_scheduled_at_idx']
+    (status) [type: btree, name: 'invoice_recurring_status_idx']
+    (next_scheduled_at) [type: btree, name: 'invoice_recurring_active_scheduled_idx']
+  }
 }
 
 Table invoices {
@@ -215,12 +245,17 @@ Table invoices {
   invoice_recurring_id uuid [note: 'Recurring invoice fields']
   recurring_sequence integer
   indexes {
+    (created_at) [type: btree, name: 'invoices_created_at_idx']
+    (fts) [type: gin, name: 'invoices_fts']
+    (team_id) [type: btree, name: 'invoices_team_id_idx']
+    (template_id) [type: btree, name: 'invoices_template_id_idx']
     (team_id, sent_at) [name: 'invoices_team_sent_at_idx']
     (team_id, status, paid_at) [name: 'invoices_team_status_paid_at_idx']
+    (invoice_recurring_id) [type: btree, name: 'invoices_invoice_recurring_id_idx']
     (invoice_recurring_id, recurring_sequence) [unique, name: 'invoices_recurring_sequence_unique_idx']
     (scheduled_job_id) [unique, name: 'invoices_scheduled_job_id_key']
-    (team_id) [name: 'invoices_team_due_date_idx']
-    (team_id, status) [name: 'invoices_team_status_due_date_idx']
+    (team_id, due_date) [name: 'invoices_team_due_date_idx']
+    (team_id, status, due_date) [name: 'invoices_team_status_due_date_idx']
     (team_id, customer_id) [name: 'invoices_team_customer_id_idx']
     (customer_id) [name: 'invoices_customer_id_idx']
     (team_id, created_at) [name: 'invoices_team_created_at_idx']
@@ -279,6 +314,7 @@ Table customers {
   portal_id text
   fts tsvector [not null]
   indexes {
+    (fts) [type: gin, name: 'customers_fts']
     (status) [name: 'idx_customers_status']
     (is_archived) [name: 'idx_customers_is_archived']
     (enrichment_status) [name: 'idx_customers_enrichment_status']
@@ -296,6 +332,7 @@ Table exchange_rates {
   target text
   updated_at timestamptz
   indexes {
+    (base, target) [type: btree, name: 'exchange_rates_base_target_idx']
     (base, target) [unique, name: 'unique_rate']
   }
 }
@@ -306,6 +343,7 @@ Table tags {
   team_id uuid [not null]
   name text [not null]
   indexes {
+    (team_id) [type: btree, name: 'tags_team_id_idx']
     (team_id, name) [unique, name: 'unique_tag_name']
   }
 }
@@ -318,6 +356,9 @@ Table tracker_reports {
   team_id uuid
   project_id uuid
   created_by uuid
+  indexes {
+    (team_id) [type: btree, name: 'tracker_reports_team_id_idx']
+  }
 }
 
 Table invoice_comments {
@@ -332,6 +373,8 @@ Table tracker_project_tags {
   tag_id uuid [not null]
   team_id uuid [not null]
   indexes {
+    (team_id) [type: btree, name: 'tracker_project_tags_team_id_idx']
+    (tracker_project_id, tag_id, team_id) [type: btree, name: 'tracker_project_tags_tracker_project_id_tag_id_team_id_idx']
     (tracker_project_id, tag_id) [unique, name: 'unique_project_tag']
   }
 }
@@ -348,6 +391,9 @@ Table reports {
   expire_at timestamptz
   currency text
   created_by uuid
+  indexes {
+    (team_id) [type: btree, name: 'reports_team_id_idx']
+  }
 }
 
 Table institutions {
@@ -364,6 +410,8 @@ Table institutions {
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
   indexes {
+    (countries) [type: gin, name: 'institutions_country_idx']
+    `name gin_trgm_ops` [type: gin, name: 'institutions_name_trgm_idx']
     (status) [name: 'institutions_status_idx']
   }
 }
@@ -385,6 +433,7 @@ Table bank_connections {
   error_details text
   error_retries smallint
   indexes {
+    (team_id) [type: btree, name: 'bank_connections_team_id_idx']
     (institution_id, team_id) [unique, name: 'unique_bank_connections']
   }
 }
@@ -398,6 +447,7 @@ Table user_invites {
   code text
   invited_by uuid
   indexes {
+    (team_id) [type: btree, name: 'user_invites_team_id_idx']
     (team_id, email) [unique, name: 'unique_team_invite']
     (code) [unique, name: 'user_invites_code_key']
   }
@@ -421,6 +471,9 @@ Table transaction_tags {
   tag_id uuid [not null]
   transaction_id uuid [not null]
   indexes {
+    (tag_id) [type: btree, name: 'transaction_tags_tag_id_idx']
+    (team_id) [type: btree, name: 'transaction_tags_team_id_idx']
+    (transaction_id, tag_id, team_id) [type: btree, name: 'transaction_tags_transaction_id_tag_id_team_id_idx']
     (tag_id, transaction_id) [unique, name: 'unique_tag']
   }
 }
@@ -434,6 +487,10 @@ Table transaction_attachments {
   size bigint [note: 'You can use { mode: "bigint" } if numbers are exceeding js number limitations']
   name text
   path text
+  indexes {
+    (team_id) [type: btree, name: 'transaction_attachments_team_id_idx']
+    (transaction_id) [type: btree, name: 'transaction_attachments_transaction_id_idx']
+  }
 }
 
 Table teams {
@@ -485,6 +542,19 @@ Table documents {
   fts_simple tsvector
   fts_english tsvector
   fts_language tsvector
+  indexes {
+    (name) [type: btree, name: 'documents_name_idx']
+    (team_id) [type: btree, name: 'documents_team_id_idx']
+    (team_id, parent_id) [type: btree, name: 'documents_team_id_parent_id_idx']
+    (team_id, created_at) [type: btree, name: 'documents_team_id_created_at_idx']
+    (team_id, date) [type: btree, name: 'documents_team_id_date_idx']
+    (team_id, name) [type: btree, name: 'documents_team_id_name_idx']
+    (fts_english) [type: gin, name: 'idx_documents_fts_english']
+    (fts_language) [type: gin, name: 'idx_documents_fts_language']
+    (fts_simple) [type: gin, name: 'idx_documents_fts_simple']
+    (title) [type: gin, name: 'idx_gin_documents_title']
+    (name) [type: gin, name: 'idx_gin_documents_name']
+  }
 }
 
 Table apps {
@@ -632,6 +702,7 @@ Table invoice_products {
   indexes {
     (team_id) [name: 'invoice_products_team_id_idx']
     (created_by) [name: 'invoice_products_created_by_idx']
+    (fts) [type: gin, name: 'invoice_products_fts_idx']
     (name) [name: 'invoice_products_name_idx']
     (usage_count) [name: 'invoice_products_usage_count_idx']
     (last_used_at) [name: 'invoice_products_last_used_at_idx']
@@ -648,6 +719,7 @@ Table transaction_enrichments {
   category_slug text
   system boolean
   indexes {
+    (category_slug, team_id) [type: btree, name: 'transaction_enrichments_category_slug_team_id_idx']
     (name, team_id) [unique, name: 'unique_team_name']
   }
 }
@@ -665,6 +737,9 @@ Table users {
   timezone_auto_sync boolean
   time_format numeric
   date_format text
+  indexes {
+    (team_id) [type: btree, name: 'users_team_id_idx']
+  }
 }
 
 Table tracker_projects {
@@ -680,6 +755,10 @@ Table tracker_projects {
   estimate bigint [note: 'You can use { mode: "bigint" } if numbers are exceeding js number limitations']
   customer_id uuid
   fts tsvector [not null]
+  indexes {
+    (fts) [type: gin, name: 'tracker_projects_fts']
+    (team_id) [type: btree, name: 'tracker_projects_team_id_idx']
+  }
 }
 
 Table inbox {
@@ -714,6 +793,14 @@ Table inbox {
   invoice_number text
   grouped_inbox_id uuid
   indexes {
+    (attachment_id) [type: btree, name: 'inbox_attachment_id_idx']
+    (created_at) [type: btree, name: 'inbox_created_at_idx']
+    (team_id) [type: btree, name: 'inbox_team_id_idx']
+    (transaction_id) [type: btree, name: 'inbox_transaction_id_idx']
+    (inbox_account_id) [type: btree, name: 'inbox_inbox_account_id_idx']
+    (invoice_number) [type: btree, name: 'inbox_invoice_number_idx']
+    (grouped_inbox_id) [type: btree, name: 'inbox_grouped_inbox_id_idx']
+    (display_name) [type: gin, name: 'idx_inbox_display_name_trgm']
     (team_id, status, created_at) [name: 'inbox_team_status_created_at_idx']
     (reference_id) [unique, name: 'inbox_reference_id_key']
   }
@@ -748,6 +835,13 @@ Table transaction_match_suggestions {
   user_action_at timestamptz
   user_id uuid
   indexes {
+    (inbox_id) [type: btree, name: 'transaction_match_suggestions_inbox_id_idx']
+    (transaction_id) [type: btree, name: 'transaction_match_suggestions_transaction_id_idx']
+    (team_id) [type: btree, name: 'transaction_match_suggestions_team_id_idx']
+    (status) [type: btree, name: 'transaction_match_suggestions_status_idx']
+    (confidence_score) [type: btree, name: 'transaction_match_suggestions_confidence_idx']
+    (transaction_id, team_id, status) [type: btree, name: 'transaction_match_suggestions_lookup_idx']
+    (team_id, status, created_at) [type: btree, name: 'transaction_match_suggestions_team_status_created_idx']
     (inbox_id, transaction_id) [unique, name: 'transaction_match_suggestions_unique']
   }
 }
@@ -758,6 +852,8 @@ Table document_tag_assignments {
   team_id uuid [not null]
   indexes {
     (document_id, tag_id) [pk]
+    (document_id) [type: btree, name: 'idx_document_tag_assignments_document_id']
+    (tag_id) [type: btree, name: 'idx_document_tag_assignments_tag_id']
     (document_id, tag_id) [unique, name: 'document_tag_assignments_unique']
   }
 }
@@ -770,6 +866,8 @@ Table users_on_team {
   created_at timestamptz
   indexes {
     (user_id, team_id, id) [pk]
+    (team_id) [type: btree, name: 'users_on_team_team_id_idx']
+    (user_id) [type: btree, name: 'users_on_team_user_id_idx']
   }
 }
 
@@ -789,6 +887,8 @@ Table transaction_categories {
   parent_id uuid
   indexes {
     (team_id, slug) [pk]
+    (team_id) [type: btree, name: 'transaction_categories_team_id_idx']
+    (parent_id) [type: btree, name: 'transaction_categories_parent_id_idx']
     (team_id, slug) [unique, name: 'unique_team_slug']
   }
 }
@@ -857,6 +957,9 @@ Table short_links {
   expires_at timestamptz
   created_at timestamptz [not null]
   indexes {
+    (short_id) [type: btree, name: 'short_links_short_id_idx']
+    (team_id) [type: btree, name: 'short_links_team_id_idx']
+    (user_id) [type: btree, name: 'short_links_user_id_idx']
     (short_id) [unique, name: 'short_links_short_id_unique']
   }
 }
@@ -872,6 +975,9 @@ Table api_keys {
   scopes text [not null]
   last_used_at timestamptz
   indexes {
+    (key_hash) [type: btree, name: 'api_keys_key_idx']
+    (user_id) [type: btree, name: 'api_keys_user_id_idx']
+    (team_id) [type: btree, name: 'api_keys_team_id_idx']
     (key_hash) [unique, name: 'api_keys_key_unique']
   }
 }
@@ -898,6 +1004,11 @@ Table oauth_applications {
   is_public boolean
   active boolean
   status text
+  indexes {
+    (team_id) [type: btree, name: 'oauth_applications_team_id_idx']
+    (client_id) [type: btree, name: 'oauth_applications_client_id_idx']
+    (slug) [type: btree, name: 'oauth_applications_slug_idx']
+  }
   Note: 'Relations OAuth Applications'
 }
 
@@ -914,6 +1025,11 @@ Table oauth_authorization_codes {
   used boolean
   code_challenge text
   code_challenge_method text
+  indexes {
+    (code) [type: btree, name: 'oauth_authorization_codes_code_idx']
+    (application_id) [type: btree, name: 'oauth_authorization_codes_application_id_idx']
+    (user_id) [type: btree, name: 'oauth_authorization_codes_user_id_idx']
+  }
   Note: 'OAuth Authorization Codes'
 }
 
@@ -931,6 +1047,12 @@ Table oauth_access_tokens {
   last_used_at timestamptz
   revoked boolean
   revoked_at timestamptz
+  indexes {
+    (token) [type: btree, name: 'oauth_access_tokens_token_idx']
+    (refresh_token) [type: btree, name: 'oauth_access_tokens_refresh_token_idx']
+    (application_id) [type: btree, name: 'oauth_access_tokens_application_id_idx']
+    (user_id) [type: btree, name: 'oauth_access_tokens_user_id_idx']
+  }
   Note: 'OAuth Access Tokens'
 }
 
@@ -947,7 +1069,11 @@ Table activities {
   status activity_status [not null, note: 'Simple lifecycle (only for notifications)']
   last_used_at timestamptz [note: 'Timestamp of last system use (e.g. insight generation, digest inclusion)']
   indexes {
+    (team_id, priority, status, created_at) [type: btree, name: 'activities_notifications_idx']
+    (team_id, type, source, created_at) [type: btree, name: 'activities_insights_idx']
+    (metadata) [type: gin, name: 'activities_metadata_gin_idx']
     (group_id) [name: 'activities_group_id_idx']
+    (team_id, group_id, type, created_at) [type: btree, name: 'activities_insights_group_idx']
   }
 }
 
@@ -1017,7 +1143,7 @@ Table insights {
   indexes {
     (team_id, period_type, period_year, period_number) [unique, name: 'insights_team_period_unique']
     (team_id) [name: 'insights_team_id_idx']
-    (team_id, period_type) [name: 'insights_team_period_type_idx']
+    (team_id, period_type, generated_at) [name: 'insights_team_period_type_idx']
   }
 }
 
@@ -1233,3 +1359,9 @@ Ref insights_team_id_teams_id_fk: insights.team_id > teams.id [delete: cascade]
 Ref insight_user_status_insight_id_insights_id_fk: insight_user_status.insight_id > insights.id [delete: cascade]
 
 Ref insight_user_status_user_id_users_id_fk: insight_user_status.user_id > users.id [delete: cascade]
+
+Ref transactions_team_id_transaction_categories_team_id: transactions.team_id > transaction_categories.team_id
+
+Ref "users_id_auth.users_id": users.id - "auth.users".id [delete: cascade]
+
+Ref transaction_enrichments_team_id_transaction_categories_team_id: transaction_enrichments.team_id > transaction_categories.team_id [delete: cascade]

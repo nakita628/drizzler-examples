@@ -29,6 +29,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#54](https://github.com/nakita628/drizzler/issues/54): the 31 `media_id` foreign keys the helpers build from their parameter (`books_list.media_id` → `books.id`, ...) are missing from the docs, the diagrams, the DBML and Mermaid. The SQL has all 97 keys.
-- [nakita628/drizzler#55](https://github.com/nakita628/drizzler/issues/55): the indexes the media tables get from `commonMediaListIndexes()` and the other helpers are missing from the DBML.
-- [nakita628/drizzler#51](https://github.com/nakita628/drizzler/issues/51): the DBML does not mark the `autoIncrement: true` keys as `increment`.
+- [nakita628/drizzler#61](https://github.com/nakita628/drizzler/issues/61): the indexes of the `*_list` tables, named from `MediaType.BOOKS` and the like, have no names in the DBML.

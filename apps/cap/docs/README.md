@@ -1181,7 +1181,7 @@ ALTER TABLE `videos` ADD CONSTRAINT `videos_storageIntegrationId_storage_integra
 
 ### users
 
-![users](tables/users.svg)
+![users and the tables it relates to](tables/users.svg)
 
 | Column                           | Type        | Constraints | Default               | Description |
 | -------------------------------- | ----------- | ----------- | --------------------- | ----------- |
@@ -1241,6 +1241,30 @@ CREATE TABLE `users` (
 #### Indexes
 
 - UNIQUE `email`
+
+#### Referenced by
+
+- `id` → [notifications.recipientId](#table-notifications) (one to many, defineRelations)
+- `id` → [comments.authorId](#table-comments) (one to many, defineRelations)
+- `id` → [messengerConversations.userId](#table-messengerConversations) (one to many, defineRelations)
+- `id` → [messengerMessages.userId](#table-messengerMessages) (one to many, defineRelations)
+- `id` → [messengerSupportEmails.userId](#table-messengerSupportEmails) (one to many, defineRelations)
+- `id` → [accounts.userId](#table-accounts) (one to many, defineRelations)
+- `id` → [s3Buckets.ownerId](#table-s3Buckets) (one to many, defineRelations)
+- `id` → [storageIntegrations.ownerId](#table-storageIntegrations) (one to many, defineRelations)
+- `id` → [organizations.ownerId](#table-organizations) (one to many, defineRelations)
+- `id` → [sessions.userId](#table-sessions) (one to many, defineRelations)
+- `id` → [organizationMembers.userId](#table-organizationMembers) (one to many, defineRelations)
+- `id` → [integrationInstallations.installedByUserId](#table-integrationInstallations) (one to many, defineRelations)
+- `id` → [organizationInvites.invitedByUserId](#table-organizationInvites) (one to many, defineRelations)
+- `id` → [videos.ownerId](#table-videos) (one to many, defineRelations)
+- `id` → [sharedVideos.sharedByUserId](#table-sharedVideos) (one to many, defineRelations)
+- `id` → [spaces.createdById](#table-spaces) (one to many, defineRelations)
+- `id` → [spaceMembers.userId](#table-spaceMembers) (one to many, defineRelations)
+- `id` → [spaceVideos.addedById](#table-spaceVideos) (one to many, defineRelations)
+- `id` → [folders.createdById](#table-folders) (one to many, defineRelations)
+- `id` → [developerApps.ownerId](#table-developerApps) (one to many, defineRelations)
+- `id` → [developerCreditAccounts.ownerId](#table-developerCreditAccounts) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -1473,25 +1497,25 @@ where `loops_sync_jobs`.`userId` = ?
 
 ### accounts
 
-![accounts](tables/accounts.svg)
+![accounts and the tables it relates to](tables/accounts.svg)
 
-| Column                     | Type        | Constraints | Default         | Description |
-| -------------------------- | ----------- | ----------- | --------------- | ----------- |
-| `id`                       | `varchar`   | PK NOT NULL |                 |             |
-| `userId`                   | `varchar`   | NOT NULL    |                 |             |
-| `type`                     | `varchar`   | NOT NULL    |                 |             |
-| `provider`                 | `varchar`   | NOT NULL    |                 |             |
-| `providerAccountId`        | `varchar`   | NOT NULL    |                 |             |
-| `access_token`             | `text`      | NULL        |                 |             |
-| `expires_in`               | `int`       | NULL        |                 |             |
-| `id_token`                 | `text`      | NULL        |                 |             |
-| `refresh_token`            | `text`      | NULL        |                 |             |
-| `refresh_token_expires_in` | `int`       | NULL        |                 |             |
-| `scope`                    | `varchar`   | NULL        |                 |             |
-| `token_type`               | `varchar`   | NULL        |                 |             |
-| `createdAt`                | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `updatedAt`                | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `tempColumn`               | `text`      | NULL        |                 |             |
+| Column                     | Type        | Constraints                         | Default         | Description |
+| -------------------------- | ----------- | ----------------------------------- | --------------- | ----------- |
+| `id`                       | `varchar`   | PK NOT NULL                         |                 |             |
+| `userId`                   | `varchar`   | NOT NULL → [users.id](#table-users) |                 |             |
+| `type`                     | `varchar`   | NOT NULL                            |                 |             |
+| `provider`                 | `varchar`   | NOT NULL                            |                 |             |
+| `providerAccountId`        | `varchar`   | NOT NULL                            |                 |             |
+| `access_token`             | `text`      | NULL                                |                 |             |
+| `expires_in`               | `int`       | NULL                                |                 |             |
+| `id_token`                 | `text`      | NULL                                |                 |             |
+| `refresh_token`            | `text`      | NULL                                |                 |             |
+| `refresh_token_expires_in` | `int`       | NULL                                |                 |             |
+| `scope`                    | `varchar`   | NULL                                |                 |             |
+| `token_type`               | `varchar`   | NULL                                |                 |             |
+| `createdAt`                | `timestamp` | NOT NULL                            | `.defaultNow()` |             |
+| `updatedAt`                | `timestamp` | NOT NULL                            | `.defaultNow()` |             |
+| `tempColumn`               | `text`      | NULL                                |                 |             |
 
 #### Definition
 
@@ -1523,6 +1547,10 @@ CREATE INDEX `provider_account_id_idx` ON `accounts` (`providerAccountId`);
 
 - INDEX `userId`
 - INDEX `providerAccountId`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -1623,16 +1651,16 @@ where `accounts`.`id` = ?
 
 ### sessions
 
-![sessions](tables/sessions.svg)
+![sessions and the tables it relates to](tables/sessions.svg)
 
-| Column         | Type        | Constraints | Default         | Description |
-| -------------- | ----------- | ----------- | --------------- | ----------- |
-| `id`           | `varchar`   | PK NOT NULL |                 |             |
-| `sessionToken` | `varchar`   | NOT NULL    |                 |             |
-| `userId`       | `varchar`   | NOT NULL    |                 |             |
-| `expires`      | `datetime`  | NOT NULL    |                 |             |
-| `created_at`   | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `updated_at`   | `timestamp` | NOT NULL    | `.defaultNow()` |             |
+| Column         | Type        | Constraints                         | Default         | Description |
+| -------------- | ----------- | ----------------------------------- | --------------- | ----------- |
+| `id`           | `varchar`   | PK NOT NULL                         |                 |             |
+| `sessionToken` | `varchar`   | NOT NULL                            |                 |             |
+| `userId`       | `varchar`   | NOT NULL → [users.id](#table-users) |                 |             |
+| `expires`      | `datetime`  | NOT NULL                            |                 |             |
+| `created_at`   | `timestamp` | NOT NULL                            | `.defaultNow()` |             |
+| `updated_at`   | `timestamp` | NOT NULL                            | `.defaultNow()` |             |
 
 #### Definition
 
@@ -1654,6 +1682,10 @@ CREATE INDEX `user_id_idx` ON `sessions` (`userId`);
 
 - UNIQUE `sessionToken`
 - INDEX `userId`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -1877,26 +1909,26 @@ where `verification_tokens`.`identifier` = ?
 
 ### organizations
 
-![organizations](tables/organizations.svg)
+![organizations and the tables it relates to](tables/organizations.svg)
 
-| Column                   | Type        | Constraints | Default         | Description |
-| ------------------------ | ----------- | ----------- | --------------- | ----------- |
-| `id`                     | `varchar`   | PK NOT NULL |                 |             |
-| `name`                   | `varchar`   | NOT NULL    |                 |             |
-| `ownerId`                | `varchar`   | NOT NULL    |                 |             |
-| `metadata`               | `json`      | NULL        |                 |             |
-| `tombstoneAt`            | `timestamp` | NULL        |                 |             |
-| `allowedEmailDomain`     | `varchar`   | NULL        |                 |             |
-| `defaultVideoVisibility` | `varchar`   | NULL        |                 |             |
-| `customDomain`           | `varchar`   | NULL        |                 |             |
-| `domainVerified`         | `timestamp` | NULL        |                 |             |
-| `settings`               | `json`      | NULL        |                 |             |
-| `iconUrl`                | `varchar`   | NULL        |                 |             |
-| `shareableLinkIconUrl`   | `varchar`   | NULL        |                 |             |
-| `createdAt`              | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `updatedAt`              | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `workosOrganizationId`   | `varchar`   | NULL        |                 |             |
-| `workosConnectionId`     | `varchar`   | NULL        |                 |             |
+| Column                   | Type        | Constraints                         | Default         | Description |
+| ------------------------ | ----------- | ----------------------------------- | --------------- | ----------- |
+| `id`                     | `varchar`   | PK NOT NULL                         |                 |             |
+| `name`                   | `varchar`   | NOT NULL                            |                 |             |
+| `ownerId`                | `varchar`   | NOT NULL → [users.id](#table-users) |                 |             |
+| `metadata`               | `json`      | NULL                                |                 |             |
+| `tombstoneAt`            | `timestamp` | NULL                                |                 |             |
+| `allowedEmailDomain`     | `varchar`   | NULL                                |                 |             |
+| `defaultVideoVisibility` | `varchar`   | NULL                                |                 |             |
+| `customDomain`           | `varchar`   | NULL                                |                 |             |
+| `domainVerified`         | `timestamp` | NULL                                |                 |             |
+| `settings`               | `json`      | NULL                                |                 |             |
+| `iconUrl`                | `varchar`   | NULL                                |                 |             |
+| `shareableLinkIconUrl`   | `varchar`   | NULL                                |                 |             |
+| `createdAt`              | `timestamp` | NOT NULL                            | `.defaultNow()` |             |
+| `updatedAt`              | `timestamp` | NOT NULL                            | `.defaultNow()` |             |
+| `workosOrganizationId`   | `varchar`   | NULL                                |                 |             |
+| `workosConnectionId`     | `varchar`   | NULL                                |                 |             |
 
 #### Definition
 
@@ -1931,6 +1963,22 @@ CREATE INDEX `custom_domain_idx` ON `organizations` (`customDomain`);
 - INDEX `ownerId`, `tombstoneAt`
 - INDEX `customDomain`
 - UNIQUE `workosOrganizationId`
+
+#### References
+
+- `ownerId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+
+#### Referenced by
+
+- `id` → [notifications.orgId](#table-notifications) (one to many, defineRelations)
+- `id` → [s3Buckets.organizationId](#table-s3Buckets) (one to many, defineRelations)
+- `id` → [storageIntegrations.organizationId](#table-storageIntegrations) (one to many, defineRelations)
+- `id` → [organizationMembers.organizationId](#table-organizationMembers) (one to many, defineRelations)
+- `id` → [integrationInstallations.organizationId](#table-integrationInstallations) (one to many, defineRelations)
+- `id` → [organizationInvites.organizationId](#table-organizationInvites) (one to many, defineRelations)
+- `id` → [sharedVideos.organizationId](#table-sharedVideos) (one to many, defineRelations)
+- `id` → [spaces.organizationId](#table-spaces) (one to many, defineRelations)
+- `id` → [folders.organizationId](#table-folders) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -2445,17 +2493,17 @@ where `directory_users`.`id` = ?
 
 Table `organization_members`.
 
-![organizationMembers](tables/organizationMembers.svg)
+![organizationMembers and the tables it relates to](tables/organizationMembers.svg)
 
-| Column           | Type        | Constraints | Default           | Description |
-| ---------------- | ----------- | ----------- | ----------------- | ----------- |
-| `id`             | `varchar`   | PK NOT NULL |                   |             |
-| `userId`         | `varchar`   | NOT NULL    |                   |             |
-| `organizationId` | `varchar`   | NOT NULL    |                   |             |
-| `role`           | `varchar`   | NOT NULL    |                   |             |
-| `hasProSeat`     | `boolean`   | NOT NULL    | `.default(false)` |             |
-| `createdAt`      | `timestamp` | NOT NULL    | `.defaultNow()`   |             |
-| `updatedAt`      | `timestamp` | NOT NULL    | `.defaultNow()`   |             |
+| Column           | Type        | Constraints                                         | Default           | Description |
+| ---------------- | ----------- | --------------------------------------------------- | ----------------- | ----------- |
+| `id`             | `varchar`   | PK NOT NULL                                         |                   |             |
+| `userId`         | `varchar`   | NOT NULL → [users.id](#table-users)                 |                   |             |
+| `organizationId` | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                   |             |
+| `role`           | `varchar`   | NOT NULL                                            |                   |             |
+| `hasProSeat`     | `boolean`   | NOT NULL                                            | `.default(false)` |             |
+| `createdAt`      | `timestamp` | NOT NULL                                            | `.defaultNow()`   |             |
+| `updatedAt`      | `timestamp` | NOT NULL                                            | `.defaultNow()`   |             |
 
 #### Definition
 
@@ -2479,6 +2527,11 @@ CREATE INDEX `user_id_organization_id_idx` ON `organization_members` (`userId`,`
 
 - INDEX `organizationId`
 - INDEX `userId`, `organizationId`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -2580,20 +2633,20 @@ where `organization_members`.`id` = ?
 
 Table `integration_installations`.
 
-![integrationInstallations](tables/integrationInstallations.svg)
+![integrationInstallations and the tables it relates to](tables/integrationInstallations.svg)
 
-| Column                 | Type        | Constraints | Default         | Description |
-| ---------------------- | ----------- | ----------- | --------------- | ----------- |
-| `id`                   | `varchar`   | PK NOT NULL |                 |             |
-| `provider`             | `varchar`   | NOT NULL    |                 |             |
-| `externalId`           | `varchar`   | NOT NULL    |                 |             |
-| `displayName`          | `varchar`   | NOT NULL    |                 |             |
-| `organizationId`       | `varchar`   | NOT NULL    |                 |             |
-| `installedByUserId`    | `varchar`   | NOT NULL    |                 |             |
-| `encryptedCredentials` | `text`      | NOT NULL    |                 |             |
-| `metadata`             | `json`      | NOT NULL    |                 |             |
-| `createdAt`            | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `updatedAt`            | `timestamp` | NOT NULL    | `.defaultNow()` |             |
+| Column                 | Type        | Constraints                                         | Default         | Description |
+| ---------------------- | ----------- | --------------------------------------------------- | --------------- | ----------- |
+| `id`                   | `varchar`   | PK NOT NULL                                         |                 |             |
+| `provider`             | `varchar`   | NOT NULL                                            |                 |             |
+| `externalId`           | `varchar`   | NOT NULL                                            |                 |             |
+| `displayName`          | `varchar`   | NOT NULL                                            |                 |             |
+| `organizationId`       | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                 |             |
+| `installedByUserId`    | `varchar`   | NOT NULL → [users.id](#table-users)                 |                 |             |
+| `encryptedCredentials` | `text`      | NOT NULL                                            |                 |             |
+| `metadata`             | `json`      | NOT NULL                                            |                 |             |
+| `createdAt`            | `timestamp` | NOT NULL                                            | `.defaultNow()` |             |
+| `updatedAt`            | `timestamp` | NOT NULL                                            | `.defaultNow()` |             |
 
 #### Definition
 
@@ -2619,6 +2672,11 @@ CREATE INDEX `organization_provider_display_name_idx` ON `integration_installati
 
 - UNIQUE `provider`, `externalId`
 - INDEX `organizationId`, `provider`, `displayName`
+
+#### References
+
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
+- `installedByUserId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -2726,19 +2784,19 @@ where `integration_installations`.`id` = ?
 
 Table `organization_invites`.
 
-![organizationInvites](tables/organizationInvites.svg)
+![organizationInvites and the tables it relates to](tables/organizationInvites.svg)
 
-| Column            | Type        | Constraints | Default               | Description |
-| ----------------- | ----------- | ----------- | --------------------- | ----------- |
-| `id`              | `varchar`   | PK NOT NULL |                       |             |
-| `organizationId`  | `varchar`   | NOT NULL    |                       |             |
-| `invitedEmail`    | `varchar`   | NOT NULL    |                       |             |
-| `invitedByUserId` | `varchar`   | NOT NULL    |                       |             |
-| `role`            | `varchar`   | NOT NULL    |                       |             |
-| `status`          | `varchar`   | NOT NULL    | `.default("pending")` |             |
-| `createdAt`       | `timestamp` | NOT NULL    | `.defaultNow()`       |             |
-| `updatedAt`       | `timestamp` | NOT NULL    | `.defaultNow()`       |             |
-| `expiresAt`       | `timestamp` | NULL        |                       |             |
+| Column            | Type        | Constraints                                         | Default               | Description |
+| ----------------- | ----------- | --------------------------------------------------- | --------------------- | ----------- |
+| `id`              | `varchar`   | PK NOT NULL                                         |                       |             |
+| `organizationId`  | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                       |             |
+| `invitedEmail`    | `varchar`   | NOT NULL                                            |                       |             |
+| `invitedByUserId` | `varchar`   | NOT NULL → [users.id](#table-users)                 |                       |             |
+| `role`            | `varchar`   | NOT NULL                                            |                       |             |
+| `status`          | `varchar`   | NOT NULL                                            | `.default("pending")` |             |
+| `createdAt`       | `timestamp` | NOT NULL                                            | `.defaultNow()`       |             |
+| `updatedAt`       | `timestamp` | NOT NULL                                            | `.defaultNow()`       |             |
+| `expiresAt`       | `timestamp` | NULL                                                |                       |             |
 
 #### Definition
 
@@ -2770,6 +2828,11 @@ CREATE INDEX `status_idx` ON `organization_invites` (`status`);
 - INDEX `invitedEmail`
 - INDEX `invitedByUserId`
 - INDEX `status`
+
+#### References
+
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
+- `invitedByUserId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -2872,21 +2935,21 @@ where `organization_invites`.`id` = ?
 
 ### folders
 
-![folders](tables/folders.svg)
+![folders and the tables it relates to](tables/folders.svg)
 
-| Column           | Type        | Constraints | Default              | Description                                       |
-| ---------------- | ----------- | ----------- | -------------------- | ------------------------------------------------- |
-| `id`             | `varchar`   | PK NOT NULL |                      |                                                   |
-| `name`           | `varchar`   | NOT NULL    |                      |                                                   |
-| `color`          | `varchar`   | NOT NULL    | `.default("normal")` |                                                   |
-| `public`         | `boolean`   | NOT NULL    | `.default(false)`    | Internet-facing public collection link (/c/[id]). |
-| `settings`       | `json`      | NULL        |                      |                                                   |
-| `organizationId` | `varchar`   | NOT NULL    |                      |                                                   |
-| `createdById`    | `varchar`   | NOT NULL    |                      |                                                   |
-| `parentId`       | `varchar`   | NULL        |                      |                                                   |
-| `spaceId`        | `varchar`   | NULL        |                      |                                                   |
-| `createdAt`      | `timestamp` | NOT NULL    | `.defaultNow()`      |                                                   |
-| `updatedAt`      | `timestamp` | NOT NULL    | `.defaultNow()`      |                                                   |
+| Column           | Type        | Constraints                                         | Default              | Description                                       |
+| ---------------- | ----------- | --------------------------------------------------- | -------------------- | ------------------------------------------------- |
+| `id`             | `varchar`   | PK NOT NULL                                         |                      |                                                   |
+| `name`           | `varchar`   | NOT NULL                                            |                      |                                                   |
+| `color`          | `varchar`   | NOT NULL                                            | `.default("normal")` |                                                   |
+| `public`         | `boolean`   | NOT NULL                                            | `.default(false)`    | Internet-facing public collection link (/c/[id]). |
+| `settings`       | `json`      | NULL                                                |                      |                                                   |
+| `organizationId` | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                      |                                                   |
+| `createdById`    | `varchar`   | NOT NULL → [users.id](#table-users)                 |                      |                                                   |
+| `parentId`       | `varchar`   | NULL → [folders.id](#table-folders)                 |                      |                                                   |
+| `spaceId`        | `varchar`   | NULL                                                |                      |                                                   |
+| `createdAt`      | `timestamp` | NOT NULL                                            | `.defaultNow()`      |                                                   |
+| `updatedAt`      | `timestamp` | NOT NULL                                            | `.defaultNow()`      |                                                   |
 
 #### Definition
 
@@ -2926,6 +2989,17 @@ CREATE INDEX `public_space_parent_id_idx` ON `folders` (`public`,`spaceId`,`pare
 - INDEX `spaceId`
 - INDEX `public`, `parentId`
 - INDEX `public`, `spaceId`, `parentId`
+
+#### References
+
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
+- `createdById` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `parentId` → [folders.id](#table-folders) (many to one, defineRelations, no foreign key)
+
+#### Referenced by
+
+- `id` → [videos.folderId](#table-videos) (one to many, defineRelations)
+- `id` → [folders.parentId](#table-folders) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -3029,8 +3103,8 @@ where `folders`.`id` = ?
 
 | Column                 | Type        | Constraints                                                 | Default                              | Description |
 | ---------------------- | ----------- | ----------------------------------------------------------- | ------------------------------------ | ----------- |
-| `id`                   | `varchar`   | PK NOT NULL                                                 |                                      |             |
-| `ownerId`              | `varchar`   | NOT NULL                                                    |                                      |             |
+| `id`                   | `varchar`   | PK NOT NULL → [videoEdits.videoId](#table-videoEdits)       |                                      |             |
+| `ownerId`              | `varchar`   | NOT NULL → [users.id](#table-users)                         |                                      |             |
 | `orgId`                | `varchar`   | NOT NULL                                                    |                                      |             |
 | `name`                 | `varchar`   | NOT NULL                                                    | `.default("My Video")`               |             |
 | `bucket`               | `varchar`   | NULL                                                        |                                      |             |
@@ -3044,7 +3118,7 @@ where `folders`.`id` = ?
 | `settings`             | `json`      | NULL                                                        |                                      |             |
 | `transcriptionStatus`  | `varchar`   | NULL                                                        |                                      |             |
 | `source`               | `json`      | NOT NULL                                                    | `.default({ type: "MediaConvert" })` |             |
-| `folderId`             | `varchar`   | NULL                                                        |                                      |             |
+| `folderId`             | `varchar`   | NULL → [folders.id](#table-folders)                         |                                      |             |
 | `createdAt`            | `timestamp` | NOT NULL                                                    | `.defaultNow()`                      |             |
 | `effectiveCreatedAt`   | `datetime`  | NULL                                                        | `.generatedAlwaysAs()`               |             |
 | `updatedAt`            | `timestamp` | NOT NULL                                                    | `.defaultNow()`                      |             |
@@ -3136,11 +3210,18 @@ ALTER TABLE `videos` ADD CONSTRAINT `videos_storageIntegrationId_storage_integra
 #### References
 
 - `storageIntegrationId` → [storageIntegrations.id](#table-storageIntegrations) (many to one, on delete restrict)
+- `ownerId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `id` → [videoEdits.videoId](#table-videoEdits) (one to one, defineRelations, no foreign key)
+- `folderId` → [folders.id](#table-folders) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 
 - `id` → [videoEdits.videoId](#table-videoEdits) (one to one, on delete cascade)
 - `id` → [videoViewerGrants.videoId](#table-videoViewerGrants) (one to many, on delete cascade)
+- `id` → [comments.videoId](#table-comments) (one to many, defineRelations)
+- `id` → [storageObjects.videoId](#table-storageObjects) (one to many, defineRelations)
+- `id` → [sharedVideos.videoId](#table-sharedVideos) (one to many, defineRelations)
+- `id` → [spaceVideos.videoId](#table-spaceVideos) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -3265,6 +3346,10 @@ ALTER TABLE `video_edits` ADD CONSTRAINT `video_edits_videoId_videos_id_fkey` FO
 
 - `videoId` → [videos.id](#table-videos) (one to one, on delete cascade)
 
+#### Referenced by
+
+- `videoId` → [videos.id](#table-videos) (one to one, defineRelations)
+
 <details>
 <summary>Queries and their SQL</summary>
 
@@ -3360,16 +3445,16 @@ where `video_edits`.`videoId` = ?
 
 Table `shared_videos`.
 
-![sharedVideos](tables/sharedVideos.svg)
+![sharedVideos and the tables it relates to](tables/sharedVideos.svg)
 
-| Column           | Type        | Constraints | Default         | Description |
-| ---------------- | ----------- | ----------- | --------------- | ----------- |
-| `id`             | `varchar`   | PK NOT NULL |                 |             |
-| `videoId`        | `varchar`   | NOT NULL    |                 |             |
-| `folderId`       | `varchar`   | NULL        |                 |             |
-| `organizationId` | `varchar`   | NOT NULL    |                 |             |
-| `sharedByUserId` | `varchar`   | NOT NULL    |                 |             |
-| `sharedAt`       | `timestamp` | NOT NULL    | `.defaultNow()` |             |
+| Column           | Type        | Constraints                                         | Default         | Description |
+| ---------------- | ----------- | --------------------------------------------------- | --------------- | ----------- |
+| `id`             | `varchar`   | PK NOT NULL                                         |                 |             |
+| `videoId`        | `varchar`   | NOT NULL → [videos.id](#table-videos)               |                 |             |
+| `folderId`       | `varchar`   | NULL                                                |                 |             |
+| `organizationId` | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                 |             |
+| `sharedByUserId` | `varchar`   | NOT NULL → [users.id](#table-users)                 |                 |             |
+| `sharedAt`       | `timestamp` | NOT NULL                                            | `.defaultNow()` |             |
 
 #### Definition
 
@@ -3401,6 +3486,12 @@ CREATE INDEX `video_id_folder_id_idx` ON `shared_videos` (`videoId`,`folderId`);
 - INDEX `sharedByUserId`
 - INDEX `videoId`, `organizationId`
 - INDEX `videoId`, `folderId`
+
+#### References
+
+- `videoId` → [videos.id](#table-videos) (many to one, defineRelations, no foreign key)
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
+- `sharedByUserId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -3635,22 +3726,22 @@ where `video_viewer_grants`.`id` = ?
 
 ### comments
 
-![comments](tables/comments.svg)
+![comments and the tables it relates to](tables/comments.svg)
 
-| Column            | Type        | Constraints | Default         | Description                                                                                                                                                                                      |
-| ----------------- | ----------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`              | `varchar`   | PK NOT NULL |                 |                                                                                                                                                                                                  |
-| `type`            | `varchar`   | NOT NULL    |                 |                                                                                                                                                                                                  |
-| `content`         | `text`      | NOT NULL    |                 |                                                                                                                                                                                                  |
-| `timestamp`       | `float`     | NULL        |                 |                                                                                                                                                                                                  |
-| `authorId`        | `varchar`   | NOT NULL    |                 |                                                                                                                                                                                                  |
-| `videoId`         | `varchar`   | NOT NULL    |                 |                                                                                                                                                                                                  |
-| `createdAt`       | `timestamp` | NOT NULL    | `.defaultNow()` |                                                                                                                                                                                                  |
-| `updatedAt`       | `timestamp` | NOT NULL    | `.defaultNow()` |                                                                                                                                                                                                  |
-| `parentCommentId` | `varchar`   | NULL        |                 |                                                                                                                                                                                                  |
-| `mediaKey`        | `varchar`   | NULL        |                 | Media comments ("video"/"audio" type): object key under the parent video's prefix (`${ownerId}/${videoId}/comments/${commentId}/...`), served via /api/storage/object which asserts that prefix. |
-| `mediaDuration`   | `float`     | NULL        |                 |                                                                                                                                                                                                  |
-| `mediaMeta`       | `json`      | NULL        |                 |                                                                                                                                                                                                  |
+| Column            | Type        | Constraints                           | Default         | Description                                                                                                                                                                                      |
+| ----------------- | ----------- | ------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`              | `varchar`   | PK NOT NULL                           |                 |                                                                                                                                                                                                  |
+| `type`            | `varchar`   | NOT NULL                              |                 |                                                                                                                                                                                                  |
+| `content`         | `text`      | NOT NULL                              |                 |                                                                                                                                                                                                  |
+| `timestamp`       | `float`     | NULL                                  |                 |                                                                                                                                                                                                  |
+| `authorId`        | `varchar`   | NOT NULL → [users.id](#table-users)   |                 |                                                                                                                                                                                                  |
+| `videoId`         | `varchar`   | NOT NULL → [videos.id](#table-videos) |                 |                                                                                                                                                                                                  |
+| `createdAt`       | `timestamp` | NOT NULL                              | `.defaultNow()` |                                                                                                                                                                                                  |
+| `updatedAt`       | `timestamp` | NOT NULL                              | `.defaultNow()` |                                                                                                                                                                                                  |
+| `parentCommentId` | `varchar`   | NULL → [comments.id](#table-comments) |                 |                                                                                                                                                                                                  |
+| `mediaKey`        | `varchar`   | NULL                                  |                 | Media comments ("video"/"audio" type): object key under the parent video's prefix (`${ownerId}/${videoId}/comments/${commentId}/...`), served via /api/storage/object which asserts that prefix. |
+| `mediaDuration`   | `float`     | NULL                                  |                 |                                                                                                                                                                                                  |
+| `mediaMeta`       | `json`      | NULL                                  |                 |                                                                                                                                                                                                  |
 
 #### Definition
 
@@ -3682,6 +3773,16 @@ CREATE INDEX `parent_comment_id_idx` ON `comments` (`parentCommentId`);
 - INDEX `videoId`, `type`, `createdAt`, `id`
 - INDEX `authorId`
 - INDEX `parentCommentId`
+
+#### References
+
+- `authorId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `videoId` → [videos.id](#table-videos) (many to one, defineRelations, no foreign key)
+- `parentCommentId` → [comments.id](#table-comments) (many to one, defineRelations, no foreign key)
+
+#### Referenced by
+
+- `id` → [comments.parentCommentId](#table-comments) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -3782,19 +3883,19 @@ where `comments`.`id` = ?
 
 ### notifications
 
-![notifications](tables/notifications.svg)
+![notifications and the tables it relates to](tables/notifications.svg)
 
-| Column        | Type        | Constraints | Default         | Description |
-| ------------- | ----------- | ----------- | --------------- | ----------- |
-| `id`          | `varchar`   | PK NOT NULL |                 |             |
-| `orgId`       | `varchar`   | NOT NULL    |                 |             |
-| `recipientId` | `varchar`   | NOT NULL    |                 |             |
-| `type`        | `varchar`   | NOT NULL    |                 |             |
-| `data`        | `json`      | NOT NULL    |                 |             |
-| `videoId`     | `varchar`   | NULL        |                 |             |
-| `dedupKey`    | `varchar`   | NULL        |                 |             |
-| `readAt`      | `timestamp` | NULL        |                 |             |
-| `createdAt`   | `timestamp` | NOT NULL    | `.defaultNow()` |             |
+| Column        | Type        | Constraints                                         | Default         | Description |
+| ------------- | ----------- | --------------------------------------------------- | --------------- | ----------- |
+| `id`          | `varchar`   | PK NOT NULL                                         |                 |             |
+| `orgId`       | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                 |             |
+| `recipientId` | `varchar`   | NOT NULL → [users.id](#table-users)                 |                 |             |
+| `type`        | `varchar`   | NOT NULL                                            |                 |             |
+| `data`        | `json`      | NOT NULL                                            |                 |             |
+| `videoId`     | `varchar`   | NULL                                                |                 |             |
+| `dedupKey`    | `varchar`   | NULL                                                |                 |             |
+| `readAt`      | `timestamp` | NULL                                                |                 |             |
+| `createdAt`   | `timestamp` | NOT NULL                                            | `.defaultNow()` |             |
 
 #### Definition
 
@@ -3843,6 +3944,11 @@ CREATE INDEX `video_id_idx` ON `notifications` (`videoId`);
 - INDEX `type`, `recipientId`, `createdAt`
 - INDEX `type`, `recipientId`, `videoId`, `createdAt`
 - INDEX `videoId`
+
+#### References
+
+- `orgId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
+- `recipientId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -3947,18 +4053,18 @@ Table `messenger_conversations`.
 
 ![messengerConversations and the tables it relates to](tables/messengerConversations.svg)
 
-| Column             | Type        | Constraints | Default             | Description |
-| ------------------ | ----------- | ----------- | ------------------- | ----------- |
-| `id`               | `varchar`   | PK NOT NULL |                     |             |
-| `agent`            | `varchar`   | NOT NULL    |                     |             |
-| `mode`             | `varchar`   | NOT NULL    | `.default("agent")` |             |
-| `userId`           | `varchar`   | NULL        |                     |             |
-| `anonymousId`      | `varchar`   | NULL        |                     |             |
-| `takeoverByUserId` | `varchar`   | NULL        |                     |             |
-| `takeoverAt`       | `timestamp` | NULL        |                     |             |
-| `createdAt`        | `timestamp` | NOT NULL    | `.defaultNow()`     |             |
-| `updatedAt`        | `timestamp` | NOT NULL    | `.defaultNow()`     |             |
-| `lastMessageAt`    | `timestamp` | NOT NULL    | `.defaultNow()`     |             |
+| Column             | Type        | Constraints                     | Default             | Description |
+| ------------------ | ----------- | ------------------------------- | ------------------- | ----------- |
+| `id`               | `varchar`   | PK NOT NULL                     |                     |             |
+| `agent`            | `varchar`   | NOT NULL                        |                     |             |
+| `mode`             | `varchar`   | NOT NULL                        | `.default("agent")` |             |
+| `userId`           | `varchar`   | NULL → [users.id](#table-users) |                     |             |
+| `anonymousId`      | `varchar`   | NULL                            |                     |             |
+| `takeoverByUserId` | `varchar`   | NULL                            |                     |             |
+| `takeoverAt`       | `timestamp` | NULL                            |                     |             |
+| `createdAt`        | `timestamp` | NOT NULL                        | `.defaultNow()`     |             |
+| `updatedAt`        | `timestamp` | NOT NULL                        | `.defaultNow()`     |             |
+| `lastMessageAt`    | `timestamp` | NOT NULL                        | `.defaultNow()`     |             |
 
 #### Definition
 
@@ -3991,6 +4097,10 @@ CREATE INDEX `updated_at_idx` ON `messenger_conversations` (`updatedAt`);
 - INDEX `anonymousId`, `lastMessageAt`
 - INDEX `mode`, `lastMessageAt`
 - INDEX `updatedAt`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -4102,7 +4212,7 @@ Table `messenger_messages`.
 | `conversationId` | `varchar`   | NOT NULL → [messengerConversations.id](#table-messengerConversations) |                 |             |
 | `role`           | `varchar`   | NOT NULL                                                              |                 |             |
 | `content`        | `text`      | NOT NULL                                                              |                 |             |
-| `userId`         | `varchar`   | NULL                                                                  |                 |             |
+| `userId`         | `varchar`   | NULL → [users.id](#table-users)                                       |                 |             |
 | `anonymousId`    | `varchar`   | NULL                                                                  |                 |             |
 | `createdAt`      | `timestamp` | NOT NULL                                                              | `.defaultNow()` |             |
 
@@ -4134,6 +4244,7 @@ ALTER TABLE `messenger_messages` ADD CONSTRAINT `messenger_messages_v1HSvDjJoJGa
 #### References
 
 - `conversationId` → [messengerConversations.id](#table-messengerConversations) (many to one, on delete cascade)
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4243,7 +4354,7 @@ Table `messenger_support_emails`.
 | ---------------- | ----------- | --------------------------------------------------------------------- | --------------- | ----------- |
 | `id`             | `varchar`   | PK NOT NULL                                                           |                 |             |
 | `conversationId` | `varchar`   | NOT NULL → [messengerConversations.id](#table-messengerConversations) |                 |             |
-| `userId`         | `varchar`   | NOT NULL                                                              |                 |             |
+| `userId`         | `varchar`   | NOT NULL → [users.id](#table-users)                                   |                 |             |
 | `userEmail`      | `varchar`   | NOT NULL                                                              |                 |             |
 | `subject`        | `varchar`   | NOT NULL                                                              |                 |             |
 | `message`        | `text`      | NOT NULL                                                              |                 |             |
@@ -4277,6 +4388,7 @@ ALTER TABLE `messenger_support_emails` ADD CONSTRAINT `support_email_conversatio
 #### References
 
 - `conversationId` → [messengerConversations.id](#table-messengerConversations) (many to one, on delete cascade)
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4540,22 +4652,22 @@ where `signed_baas`.`id` = ?
 
 Table `s3_buckets`.
 
-![s3Buckets](tables/s3Buckets.svg)
+![s3Buckets and the tables it relates to](tables/s3Buckets.svg)
 
-| Column            | Type        | Constraints | Default           | Description |
-| ----------------- | ----------- | ----------- | ----------------- | ----------- |
-| `id`              | `varchar`   | PK NOT NULL |                   |             |
-| `ownerId`         | `varchar`   | NOT NULL    |                   |             |
-| `organizationId`  | `varchar`   | NULL        |                   |             |
-| `region`          | `text`      | NOT NULL    |                   |             |
-| `endpoint`        | `text`      | NULL        |                   |             |
-| `bucketName`      | `text`      | NOT NULL    |                   |             |
-| `accessKeyId`     | `text`      | NOT NULL    |                   |             |
-| `secretAccessKey` | `text`      | NOT NULL    |                   |             |
-| `provider`        | `text`      | NOT NULL    | `.default("aws")` |             |
-| `active`          | `boolean`   | NOT NULL    | `.default(true)`  |             |
-| `createdAt`       | `timestamp` | NOT NULL    | `.defaultNow()`   |             |
-| `updatedAt`       | `timestamp` | NOT NULL    | `.defaultNow()`   |             |
+| Column            | Type        | Constraints                                     | Default           | Description |
+| ----------------- | ----------- | ----------------------------------------------- | ----------------- | ----------- |
+| `id`              | `varchar`   | PK NOT NULL                                     |                   |             |
+| `ownerId`         | `varchar`   | NOT NULL → [users.id](#table-users)             |                   |             |
+| `organizationId`  | `varchar`   | NULL → [organizations.id](#table-organizations) |                   |             |
+| `region`          | `text`      | NOT NULL                                        |                   |             |
+| `endpoint`        | `text`      | NULL                                            |                   |             |
+| `bucketName`      | `text`      | NOT NULL                                        |                   |             |
+| `accessKeyId`     | `text`      | NOT NULL                                        |                   |             |
+| `secretAccessKey` | `text`      | NOT NULL                                        |                   |             |
+| `provider`        | `text`      | NOT NULL                                        | `.default("aws")` |             |
+| `active`          | `boolean`   | NOT NULL                                        | `.default(true)`  |             |
+| `createdAt`       | `timestamp` | NOT NULL                                        | `.defaultNow()`   |             |
+| `updatedAt`       | `timestamp` | NOT NULL                                        | `.defaultNow()`   |             |
 
 #### Definition
 
@@ -4587,6 +4699,11 @@ CREATE INDEX `organization_active_idx` ON `s3_buckets` (`organizationId`,`active
 - INDEX `ownerId`, `organizationId`
 - INDEX `organizationId`
 - INDEX `organizationId`, `active`, `updatedAt`
+
+#### References
+
+- `ownerId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4692,23 +4809,23 @@ Table `storage_integrations`.
 
 ![storageIntegrations and the tables it relates to](tables/storageIntegrations.svg)
 
-| Column                                  | Type        | Constraints | Default              | Description |
-| --------------------------------------- | ----------- | ----------- | -------------------- | ----------- |
-| `id`                                    | `varchar`   | PK NOT NULL |                      |             |
-| `ownerId`                               | `varchar`   | NOT NULL    |                      |             |
-| `organizationId`                        | `varchar`   | NULL        |                      |             |
-| `provider`                              | `varchar`   | NOT NULL    |                      |             |
-| `displayName`                           | `varchar`   | NOT NULL    |                      |             |
-| `status`                                | `varchar`   | NOT NULL    | `.default("active")` |             |
-| `active`                                | `boolean`   | NOT NULL    | `.default(false)`    |             |
-| `encryptedConfig`                       | `text`      | NOT NULL    |                      |             |
-| `googleDriveAccessToken`                | `text`      | NULL        |                      |             |
-| `googleDriveAccessTokenExpiresAt`       | `timestamp` | NULL        |                      |             |
-| `googleDriveTokenRefreshLeaseId`        | `varchar`   | NULL        |                      |             |
-| `googleDriveTokenRefreshLeaseExpiresAt` | `timestamp` | NULL        |                      |             |
-| `googleDriveStorageQuotaCache`          | `json`      | NULL        |                      |             |
-| `createdAt`                             | `timestamp` | NOT NULL    | `.defaultNow()`      |             |
-| `updatedAt`                             | `timestamp` | NOT NULL    | `.defaultNow()`      |             |
+| Column                                  | Type        | Constraints                                     | Default              | Description |
+| --------------------------------------- | ----------- | ----------------------------------------------- | -------------------- | ----------- |
+| `id`                                    | `varchar`   | PK NOT NULL                                     |                      |             |
+| `ownerId`                               | `varchar`   | NOT NULL → [users.id](#table-users)             |                      |             |
+| `organizationId`                        | `varchar`   | NULL → [organizations.id](#table-organizations) |                      |             |
+| `provider`                              | `varchar`   | NOT NULL                                        |                      |             |
+| `displayName`                           | `varchar`   | NOT NULL                                        |                      |             |
+| `status`                                | `varchar`   | NOT NULL                                        | `.default("active")` |             |
+| `active`                                | `boolean`   | NOT NULL                                        | `.default(false)`    |             |
+| `encryptedConfig`                       | `text`      | NOT NULL                                        |                      |             |
+| `googleDriveAccessToken`                | `text`      | NULL                                            |                      |             |
+| `googleDriveAccessTokenExpiresAt`       | `timestamp` | NULL                                            |                      |             |
+| `googleDriveTokenRefreshLeaseId`        | `varchar`   | NULL                                            |                      |             |
+| `googleDriveTokenRefreshLeaseExpiresAt` | `timestamp` | NULL                                            |                      |             |
+| `googleDriveStorageQuotaCache`          | `json`      | NULL                                            |                      |             |
+| `createdAt`                             | `timestamp` | NOT NULL                                        | `.defaultNow()`      |             |
+| `updatedAt`                             | `timestamp` | NOT NULL                                        | `.defaultNow()`      |             |
 
 #### Definition
 
@@ -4746,6 +4863,11 @@ CREATE INDEX `organization_active_idx` ON `storage_integrations` (`organizationI
 - INDEX `ownerId`, `active`
 - INDEX `organizationId`, `provider`
 - INDEX `organizationId`, `active`, `status`
+
+#### References
+
+- `ownerId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -4860,7 +4982,7 @@ Table `storage_objects`.
 | `id`               | `varchar`   | PK NOT NULL                                                     |                       |             |
 | `integrationId`    | `varchar`   | NOT NULL → [storageIntegrations.id](#table-storageIntegrations) |                       |             |
 | `ownerId`          | `varchar`   | NOT NULL                                                        |                       |             |
-| `videoId`          | `varchar`   | NULL                                                            |                       |             |
+| `videoId`          | `varchar`   | NULL → [videos.id](#table-videos)                               |                       |             |
 | `objectKey`        | `text`      | NOT NULL                                                        |                       |             |
 | `objectKeyHash`    | `varchar`   | NOT NULL                                                        |                       |             |
 | `providerObjectId` | `varchar`   | NOT NULL                                                        |                       |             |
@@ -4915,6 +5037,7 @@ ALTER TABLE `storage_objects` ADD CONSTRAINT `storage_objects_integrationId_stor
 #### References
 
 - `integrationId` → [storageIntegrations.id](#table-storageIntegrations) (many to one, on delete restrict)
+- `videoId` → [videos.id](#table-videos) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6534,23 +6657,23 @@ where `agent_api_operations`.`id` = ?
 
 ### spaces
 
-![spaces](tables/spaces.svg)
+![spaces and the tables it relates to](tables/spaces.svg)
 
-| Column           | Type        | Constraints | Default               | Description                                                                                                                      |
-| ---------------- | ----------- | ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `id`             | `varchar`   | PK NOT NULL |                       |                                                                                                                                  |
-| `primary`        | `boolean`   | NOT NULL    | `.default(false)`     |                                                                                                                                  |
-| `name`           | `varchar`   | NOT NULL    |                       |                                                                                                                                  |
-| `organizationId` | `varchar`   | NOT NULL    |                       |                                                                                                                                  |
-| `createdById`    | `varchar`   | NOT NULL    |                       |                                                                                                                                  |
-| `iconUrl`        | `varchar`   | NULL        |                       |                                                                                                                                  |
-| `description`    | `varchar`   | NULL        |                       |                                                                                                                                  |
-| `settings`       | `json`      | NULL        |                       |                                                                                                                                  |
-| `password`       | `text`      | NULL        |                       |                                                                                                                                  |
-| `createdAt`      | `timestamp` | NOT NULL    | `.defaultNow()`       |                                                                                                                                  |
-| `updatedAt`      | `timestamp` | NOT NULL    | `.defaultNow()`       |                                                                                                                                  |
-| `privacy`        | `varchar`   | NOT NULL    | `.default("Private")` | Org-internal browsability: "Public" spaces are visible to all org members. Unrelated to the internet-facing `public` flag below. |
-| `public`         | `boolean`   | NOT NULL    | `.default(false)`     | Internet-facing public collection link (/c/[id]).                                                                                |
+| Column           | Type        | Constraints                                         | Default               | Description                                                                                                                      |
+| ---------------- | ----------- | --------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `id`             | `varchar`   | PK NOT NULL                                         |                       |                                                                                                                                  |
+| `primary`        | `boolean`   | NOT NULL                                            | `.default(false)`     |                                                                                                                                  |
+| `name`           | `varchar`   | NOT NULL                                            |                       |                                                                                                                                  |
+| `organizationId` | `varchar`   | NOT NULL → [organizations.id](#table-organizations) |                       |                                                                                                                                  |
+| `createdById`    | `varchar`   | NOT NULL → [users.id](#table-users)                 |                       |                                                                                                                                  |
+| `iconUrl`        | `varchar`   | NULL                                                |                       |                                                                                                                                  |
+| `description`    | `varchar`   | NULL                                                |                       |                                                                                                                                  |
+| `settings`       | `json`      | NULL                                                |                       |                                                                                                                                  |
+| `password`       | `text`      | NULL                                                |                       |                                                                                                                                  |
+| `createdAt`      | `timestamp` | NOT NULL                                            | `.defaultNow()`       |                                                                                                                                  |
+| `updatedAt`      | `timestamp` | NOT NULL                                            | `.defaultNow()`       |                                                                                                                                  |
+| `privacy`        | `varchar`   | NOT NULL                                            | `.default("Private")` | Org-internal browsability: "Public" spaces are visible to all org members. Unrelated to the internet-facing `public` flag below. |
+| `public`         | `boolean`   | NOT NULL                                            | `.default(false)`     | Internet-facing public collection link (/c/[id]).                                                                                |
 
 #### Definition
 
@@ -6583,6 +6706,16 @@ CREATE INDEX `public_organization_id_idx` ON `spaces` (`public`,`organizationId`
 - INDEX `organizationId`
 - INDEX `createdById`
 - INDEX `public`, `organizationId`
+
+#### References
+
+- `organizationId` → [organizations.id](#table-organizations) (many to one, defineRelations, no foreign key)
+- `createdById` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+
+#### Referenced by
+
+- `id` → [spaceMembers.spaceId](#table-spaceMembers) (one to many, defineRelations)
+- `id` → [spaceVideos.spaceId](#table-spaceVideos) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6684,16 +6817,16 @@ where `spaces`.`id` = ?
 
 Table `space_members`.
 
-![spaceMembers](tables/spaceMembers.svg)
+![spaceMembers and the tables it relates to](tables/spaceMembers.svg)
 
-| Column      | Type        | Constraints | Default              | Description |
-| ----------- | ----------- | ----------- | -------------------- | ----------- |
-| `id`        | `varchar`   | PK NOT NULL |                      |             |
-| `spaceId`   | `varchar`   | NOT NULL    |                      |             |
-| `userId`    | `varchar`   | NOT NULL    |                      |             |
-| `role`      | `varchar`   | NOT NULL    | `.default("member")` |             |
-| `createdAt` | `timestamp` | NOT NULL    | `.defaultNow()`      |             |
-| `updatedAt` | `timestamp` | NOT NULL    | `.defaultNow()`      |             |
+| Column      | Type        | Constraints                           | Default              | Description |
+| ----------- | ----------- | ------------------------------------- | -------------------- | ----------- |
+| `id`        | `varchar`   | PK NOT NULL                           |                      |             |
+| `spaceId`   | `varchar`   | NOT NULL → [spaces.id](#table-spaces) |                      |             |
+| `userId`    | `varchar`   | NOT NULL → [users.id](#table-users)   |                      |             |
+| `role`      | `varchar`   | NOT NULL                              | `.default("member")` |             |
+| `createdAt` | `timestamp` | NOT NULL                              | `.defaultNow()`      |             |
+| `updatedAt` | `timestamp` | NOT NULL                              | `.defaultNow()`      |             |
 
 #### Definition
 
@@ -6715,6 +6848,11 @@ CREATE INDEX `user_id_idx` ON `space_members` (`userId`);
 
 - INDEX `userId`
 - UNIQUE `spaceId`, `userId`
+
+#### References
+
+- `spaceId` → [spaces.id](#table-spaces) (many to one, defineRelations, no foreign key)
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6811,16 +6949,16 @@ where `space_members`.`id` = ?
 
 Table `space_videos`.
 
-![spaceVideos](tables/spaceVideos.svg)
+![spaceVideos and the tables it relates to](tables/spaceVideos.svg)
 
-| Column      | Type        | Constraints | Default         | Description |
-| ----------- | ----------- | ----------- | --------------- | ----------- |
-| `id`        | `varchar`   | PK NOT NULL |                 |             |
-| `spaceId`   | `varchar`   | NOT NULL    |                 |             |
-| `folderId`  | `varchar`   | NULL        |                 |             |
-| `videoId`   | `varchar`   | NOT NULL    |                 |             |
-| `addedById` | `varchar`   | NOT NULL    |                 |             |
-| `addedAt`   | `timestamp` | NOT NULL    | `.defaultNow()` |             |
+| Column      | Type        | Constraints                           | Default         | Description |
+| ----------- | ----------- | ------------------------------------- | --------------- | ----------- |
+| `id`        | `varchar`   | PK NOT NULL                           |                 |             |
+| `spaceId`   | `varchar`   | NOT NULL → [spaces.id](#table-spaces) |                 |             |
+| `folderId`  | `varchar`   | NULL                                  |                 |             |
+| `videoId`   | `varchar`   | NOT NULL → [videos.id](#table-videos) |                 |             |
+| `addedById` | `varchar`   | NOT NULL → [users.id](#table-users)   |                 |             |
+| `addedAt`   | `timestamp` | NOT NULL                              | `.defaultNow()` |             |
 
 #### Definition
 
@@ -6852,6 +6990,12 @@ CREATE INDEX `space_id_folder_id_idx` ON `space_videos` (`spaceId`,`folderId`);
 - INDEX `addedById`
 - INDEX `spaceId`, `videoId`
 - INDEX `spaceId`, `folderId`
+
+#### References
+
+- `spaceId` → [spaces.id](#table-spaces) (many to one, defineRelations, no foreign key)
+- `videoId` → [videos.id](#table-videos) (many to one, defineRelations, no foreign key)
+- `addedById` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7810,16 +7954,16 @@ Table `developer_apps`.
 
 ![developerApps and the tables it relates to](tables/developerApps.svg)
 
-| Column        | Type        | Constraints | Default         | Description |
-| ------------- | ----------- | ----------- | --------------- | ----------- |
-| `id`          | `varchar`   | PK NOT NULL |                 |             |
-| `ownerId`     | `varchar`   | NOT NULL    |                 |             |
-| `name`        | `varchar`   | NOT NULL    |                 |             |
-| `environment` | `varchar`   | NOT NULL    |                 |             |
-| `logoUrl`     | `varchar`   | NULL        |                 |             |
-| `deletedAt`   | `timestamp` | NULL        |                 |             |
-| `createdAt`   | `timestamp` | NOT NULL    | `.defaultNow()` |             |
-| `updatedAt`   | `timestamp` | NOT NULL    | `.defaultNow()` |             |
+| Column        | Type        | Constraints                                                                   | Default         | Description |
+| ------------- | ----------- | ----------------------------------------------------------------------------- | --------------- | ----------- |
+| `id`          | `varchar`   | PK NOT NULL → [developerCreditAccounts.appId](#table-developerCreditAccounts) |                 |             |
+| `ownerId`     | `varchar`   | NOT NULL → [users.id](#table-users)                                           |                 |             |
+| `name`        | `varchar`   | NOT NULL                                                                      |                 |             |
+| `environment` | `varchar`   | NOT NULL                                                                      |                 |             |
+| `logoUrl`     | `varchar`   | NULL                                                                          |                 |             |
+| `deletedAt`   | `timestamp` | NULL                                                                          |                 |             |
+| `createdAt`   | `timestamp` | NOT NULL                                                                      | `.defaultNow()` |             |
+| `updatedAt`   | `timestamp` | NOT NULL                                                                      | `.defaultNow()` |             |
 
 #### Definition
 
@@ -7841,6 +7985,11 @@ CREATE INDEX `owner_deleted_idx` ON `developer_apps` (`ownerId`,`deletedAt`);
 #### Indexes
 
 - INDEX `ownerId`, `deletedAt`
+
+#### References
+
+- `ownerId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
+- `id` → [developerCreditAccounts.appId](#table-developerCreditAccounts) (one to one, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -8614,7 +8763,7 @@ Table `developer_credit_accounts`.
 | -------------------------------- | ----------- | --------------------------------------------------- | ----------------- | ----------- |
 | `id`                             | `varchar`   | PK NOT NULL                                         |                   |             |
 | `appId`                          | `varchar`   | NOT NULL → [developerApps.id](#table-developerApps) |                   |             |
-| `ownerId`                        | `varchar`   | NOT NULL                                            |                   |             |
+| `ownerId`                        | `varchar`   | NOT NULL → [users.id](#table-users)                 |                   |             |
 | `balanceMicroCredits`            | `bigint`    | NOT NULL                                            | `.default(0)`     |             |
 | `stripeCustomerId`               | `varchar`   | NULL                                                |                   |             |
 | `stripePaymentMethodId`          | `varchar`   | NULL                                                |                   |             |
@@ -8658,10 +8807,12 @@ ALTER TABLE `developer_credit_accounts` ADD CONSTRAINT `developer_credit_account
 #### References
 
 - `appId` → [developerApps.id](#table-developerApps) (one to one)
+- `ownerId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 
 - `id` → [developerCreditTransactions.accountId](#table-developerCreditTransactions) (one to many)
+- `appId` → [developerApps.id](#table-developerApps) (one to one, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>

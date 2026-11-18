@@ -57,3 +57,13 @@ Table wotds {
     (created_at) [name: 'wotds_created_at_idx']
   }
 }
+
+Ref sessions_user_id_users_id: sessions.user_id > users.id
+
+Ref definitions_user_id_users_id: definitions.user_id > users.id
+
+Ref reports_user_id_users_id: reports.user_id > users.id
+
+Ref reports_definition_id_definitions_id: reports.definition_id > definitions.id
+
+Ref wotds_definition_id_definitions_id: wotds.definition_id > definitions.id

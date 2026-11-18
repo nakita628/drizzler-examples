@@ -19861,6 +19861,7 @@ ALTER TABLE "module_records" ADD CONSTRAINT "module_records_validated_version_fk
 - UNIQUE `org_id`, `installation_id`, `created_by_actor_type`, `created_by_actor_id`, `create_idempotency_key`
 - INDEX `org_id`, `installation_id`, `collection_key`, `is_deleted`, `updated_at`
 - INDEX `org_id`, `installation_id`, `validated_version_id`
+- INDEX `search_vector`
 
 #### References
 
@@ -41659,15 +41660,16 @@ Table `email_imap_aliases`.
 
 ![emailImapAliases and the tables it relates to](tables/emailImapAliases.svg)
 
-| Column              | Type        | Constraints                                                | Default         | Description |
-| ------------------- | ----------- | ---------------------------------------------------------- | --------------- | ----------- |
-| `org_id`            | `text`      | PK NOT NULL → [emailMessages.org_id](#table-emailMessages) |                 |             |
-| `owner_user_id`     | `text`      | PK NOT NULL                                                |                 |             |
-| `account_id`        | `text`      | PK NOT NULL                                                |                 |             |
-| `locator_key`       | `text`      | PK NOT NULL                                                |                 |             |
-| `revision`          | `integer`   | NOT NULL                                                   |                 |             |
-| `evidence_envelope` | `jsonb`     | NOT NULL                                                   |                 |             |
-| `updated_at`        | `timestamp` | NOT NULL                                                   | `.defaultNow()` |             |
+| Column               | Type        | Constraints                                                | Default         | Description |
+| -------------------- | ----------- | ---------------------------------------------------------- | --------------- | ----------- |
+| `org_id`             | `text`      | PK NOT NULL → [emailMessages.org_id](#table-emailMessages) |                 |             |
+| `owner_user_id`      | `text`      | PK NOT NULL                                                |                 |             |
+| `account_id`         | `text`      | PK NOT NULL                                                |                 |             |
+| `logical_message_id` | `text`      | NOT NULL                                                   |                 |             |
+| `locator_key`        | `text`      | PK NOT NULL                                                |                 |             |
+| `revision`           | `integer`   | NOT NULL                                                   |                 |             |
+| `evidence_envelope`  | `jsonb`     | NOT NULL                                                   |                 |             |
+| `updated_at`         | `timestamp` | NOT NULL                                                   | `.defaultNow()` |             |
 
 #### Definition
 
@@ -41763,6 +41765,7 @@ db.insert(emailImapAliases).values({
   org_id: "org_id",
   owner_user_id: "owner_user_id",
   account_id: "account_id",
+  logical_message_id: "logical_message_id",
   locator_key: "locator_key",
   revision: 1,
   evidence_envelope: {},
@@ -41771,15 +41774,15 @@ db.insert(emailImapAliases).values({
 
 ```sql
 insert into "email_imap_aliases" ("org_id", "owner_user_id", "account_id", "logical_message_id", "locator_key", "revision", "evidence_envelope", "updated_at")
-values ($1, $2, $3, default, $4, $5, $6, default)
--- params: ["org_id","owner_user_id","account_id","locator_key",1,{}]
+values ($1, $2, $3, $4, $5, $6, $7, default)
+-- params: ["org_id","owner_user_id","account_id","logical_message_id","locator_key",1,{}]
 ```
 
 **Update**: Changes a row of emailImapAliases, found by its primary key.
 
 ```ts
 db.update(emailImapAliases)
-  .set({ revision: 1 })
+  .set({ logical_message_id: "logical_message_id" })
   .where(
     and(
       eq(emailImapAliases.org_id, "org_id"),
@@ -41792,9 +41795,9 @@ db.update(emailImapAliases)
 
 ```sql
 update "email_imap_aliases"
-set "revision" = $1
+set "logical_message_id" = $1
 where (("email_imap_aliases"."org_id" = $2) and ("email_imap_aliases"."owner_user_id" = $3) and ("email_imap_aliases"."account_id" = $4) and ("email_imap_aliases"."locator_key" = $5))
--- params: [1,"org_id","owner_user_id","account_id","locator_key"]
+-- params: ["logical_message_id","org_id","owner_user_id","account_id","locator_key"]
 ```
 
 **Delete**: Deletes a row of emailImapAliases, found by its primary key.
@@ -41831,6 +41834,7 @@ Table `email_imap_move_reservations`. One unresolved reservation per message. Un
 | `org_id`               | `text`      | PK NOT NULL → [emailMessages.org_id](#table-emailMessages) |                 |             |
 | `owner_user_id`        | `text`      | PK NOT NULL                                                |                 |             |
 | `account_id`           | `text`      | PK NOT NULL                                                |                 |             |
+| `logical_message_id`   | `text`      | PK NOT NULL                                                |                 |             |
 | `operation_id`         | `text`      | NOT NULL                                                   |                 |             |
 | `source_digest`        | `text`      | NOT NULL                                                   |                 |             |
 | `reservation_envelope` | `jsonb`     | NOT NULL                                                   |                 |             |
@@ -41906,16 +41910,21 @@ from "email_imap_move_reservations" as "d0"
 
 ```ts
 db.query.emailImapMoveReservations.findFirst({
-  where: { org_id: "org_id", owner_user_id: "owner_user_id", account_id: "account_id" },
+  where: {
+    org_id: "org_id",
+    owner_user_id: "owner_user_id",
+    account_id: "account_id",
+    logical_message_id: "logical_message_id",
+  },
 });
 ```
 
 ```sql
 select "d0"."org_id" as "org_id", "d0"."owner_user_id" as "owner_user_id", "d0"."account_id" as "account_id", "d0"."logical_message_id" as "logical_message_id", "d0"."operation_id" as "operation_id", "d0"."source_digest" as "source_digest", "d0"."reservation_envelope" as "reservation_envelope", "d0"."created_at" as "created_at"
 from "email_imap_move_reservations" as "d0"
-where (("d0"."org_id" = $1) and ("d0"."owner_user_id" = $2) and ("d0"."account_id" = $3))
-limit $4
--- params: ["org_id","owner_user_id","account_id",1]
+where (("d0"."org_id" = $1) and ("d0"."owner_user_id" = $2) and ("d0"."account_id" = $3) and ("d0"."logical_message_id" = $4))
+limit $5
+-- params: ["org_id","owner_user_id","account_id","logical_message_id",1]
 ```
 
 **Insert**: Adds a row to emailImapMoveReservations, giving the columns that have no default.
@@ -41925,6 +41934,7 @@ db.insert(emailImapMoveReservations).values({
   org_id: "org_id",
   owner_user_id: "owner_user_id",
   account_id: "account_id",
+  logical_message_id: "logical_message_id",
   operation_id: "operation_id",
   source_digest: "source_digest",
   reservation_envelope: {},
@@ -41933,8 +41943,8 @@ db.insert(emailImapMoveReservations).values({
 
 ```sql
 insert into "email_imap_move_reservations" ("org_id", "owner_user_id", "account_id", "logical_message_id", "operation_id", "source_digest", "reservation_envelope", "created_at")
-values ($1, $2, $3, default, $4, $5, $6, default)
--- params: ["org_id","owner_user_id","account_id","operation_id","source_digest",{}]
+values ($1, $2, $3, $4, $5, $6, $7, default)
+-- params: ["org_id","owner_user_id","account_id","logical_message_id","operation_id","source_digest",{}]
 ```
 
 **Update**: Changes a row of emailImapMoveReservations, found by its primary key.
@@ -41947,6 +41957,7 @@ db.update(emailImapMoveReservations)
       eq(emailImapMoveReservations.org_id, "org_id"),
       eq(emailImapMoveReservations.owner_user_id, "owner_user_id"),
       eq(emailImapMoveReservations.account_id, "account_id"),
+      eq(emailImapMoveReservations.logical_message_id, "logical_message_id"),
     ),
   );
 ```
@@ -41954,8 +41965,8 @@ db.update(emailImapMoveReservations)
 ```sql
 update "email_imap_move_reservations"
 set "operation_id" = $1
-where (("email_imap_move_reservations"."org_id" = $2) and ("email_imap_move_reservations"."owner_user_id" = $3) and ("email_imap_move_reservations"."account_id" = $4))
--- params: ["operation_id","org_id","owner_user_id","account_id"]
+where (("email_imap_move_reservations"."org_id" = $2) and ("email_imap_move_reservations"."owner_user_id" = $3) and ("email_imap_move_reservations"."account_id" = $4) and ("email_imap_move_reservations"."logical_message_id" = $5))
+-- params: ["operation_id","org_id","owner_user_id","account_id","logical_message_id"]
 ```
 
 **Delete**: Deletes a row of emailImapMoveReservations, found by its primary key.
@@ -41966,14 +41977,15 @@ db.delete(emailImapMoveReservations).where(
     eq(emailImapMoveReservations.org_id, "org_id"),
     eq(emailImapMoveReservations.owner_user_id, "owner_user_id"),
     eq(emailImapMoveReservations.account_id, "account_id"),
+    eq(emailImapMoveReservations.logical_message_id, "logical_message_id"),
   ),
 );
 ```
 
 ```sql
 delete from "email_imap_move_reservations"
-where (("email_imap_move_reservations"."org_id" = $1) and ("email_imap_move_reservations"."owner_user_id" = $2) and ("email_imap_move_reservations"."account_id" = $3))
--- params: ["org_id","owner_user_id","account_id"]
+where (("email_imap_move_reservations"."org_id" = $1) and ("email_imap_move_reservations"."owner_user_id" = $2) and ("email_imap_move_reservations"."account_id" = $3) and ("email_imap_move_reservations"."logical_message_id" = $4))
+-- params: ["org_id","owner_user_id","account_id","logical_message_id"]
 ```
 
 </details>
@@ -45578,7 +45590,9 @@ Table `app_integration_capture_policies`.
 | `id`                       | `text`      | PK NOT NULL                         |                   |             |
 | `org_id`                   | `text`      | NOT NULL → [orgs.id](#table-orgs)   |                   |             |
 | `owner_user_id`            | `text`      | NOT NULL → [users.id](#table-users) |                   |             |
-| `account_id`               | `text`      | NOT NULL                            |                   |             |
+| `installation_id`          | `text`      | NOT NULL                            |                   |             |
+| `account_ref`              | `text`      | NOT NULL                            |                   |             |
+| `store_key`                | `text`      | NOT NULL                            |                   |             |
 | `revision`                 | `integer`   | NOT NULL                            |                   |             |
 | `enabled`                  | `boolean`   | NOT NULL                            | `.default(false)` |             |
 | `input`                    | `jsonb`     | NOT NULL                            |                   |             |
@@ -45696,7 +45710,9 @@ db.insert(appIntegrationCapturePolicies).values({
   id: "id",
   org_id: "org_id",
   owner_user_id: "owner_user_id",
-  account_id: "account_id",
+  installation_id: "installation_id",
+  account_ref: "account_ref",
+  store_key: "store_key",
   revision: 1,
   input: {},
   history_since: new Date("2026-01-01T00:00:00.000Z"),
@@ -45705,8 +45721,8 @@ db.insert(appIntegrationCapturePolicies).values({
 
 ```sql
 insert into "app_integration_capture_policies" ("id", "org_id", "owner_user_id", "installation_id", "account_ref", "store_key", "revision", "enabled", "input", "history_since", "scan_checkpoint_id", "scan_after_projection_id", "retired_at", "retired_reason", "last_error", "created_at", "updated_at")
-values ($1, $2, $3, default, default, default, $4, default, $5, $6, default, default, default, default, default, default, default)
--- params: ["id","org_id","owner_user_id",1,{},"2026-01-01T00:00:00.000Z"]
+values ($1, $2, $3, $4, $5, $6, $7, default, $8, $9, default, default, default, default, default, default, default)
+-- params: ["id","org_id","owner_user_id","installation_id","account_ref","store_key",1,{},"2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of appIntegrationCapturePolicies, found by its primary key.
@@ -45751,7 +45767,9 @@ Table `app_integration_capture_claims`.
 | `id`              | `text`      | PK NOT NULL                                                                             |                          |             |
 | `org_id`          | `text`      | NOT NULL → [appIntegrationCapturePolicies.org_id](#table-appIntegrationCapturePolicies) |                          |             |
 | `owner_user_id`   | `text`      | NOT NULL                                                                                |                          |             |
-| `account_id`      | `text`      | NOT NULL                                                                                |                          |             |
+| `installation_id` | `text`      | NOT NULL                                                                                |                          |             |
+| `account_ref`     | `text`      | NOT NULL                                                                                |                          |             |
+| `store_key`       | `text`      | NOT NULL                                                                                |                          |             |
 | `policy_id`       | `text`      | NOT NULL                                                                                |                          |             |
 | `policy_revision` | `integer`   | NOT NULL                                                                                |                          |             |
 | `thread_key`      | `text`      | NOT NULL                                                                                |                          |             |
@@ -45862,7 +45880,9 @@ db.insert(appIntegrationCaptureClaims).values({
   id: "id",
   org_id: "org_id",
   owner_user_id: "owner_user_id",
-  account_id: "account_id",
+  installation_id: "installation_id",
+  account_ref: "account_ref",
+  store_key: "store_key",
   policy_id: "policy_id",
   policy_revision: 1,
   thread_key: "thread_key",
@@ -45873,8 +45893,8 @@ db.insert(appIntegrationCaptureClaims).values({
 
 ```sql
 insert into "app_integration_capture_claims" ("id", "org_id", "owner_user_id", "installation_id", "account_ref", "store_key", "policy_id", "policy_revision", "thread_key", "body_digest", "target", "state", "page_id", "error_code", "created_at", "updated_at")
-values ($1, $2, $3, default, default, default, $4, $5, $6, $7, $8, default, default, default, default, default)
--- params: ["id","org_id","owner_user_id","policy_id",1,"thread_key","body_digest",{}]
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, default, default, default, default, default)
+-- params: ["id","org_id","owner_user_id","installation_id","account_ref","store_key","policy_id",1,"thread_key","body_digest",{}]
 ```
 
 **Update**: Changes a row of appIntegrationCaptureClaims, found by its primary key.
@@ -45919,7 +45939,9 @@ Table `app_integration_capture_threads`.
 | `id`               | `text`      | PK NOT NULL                                 |                 |             |
 | `org_id`           | `text`      | NOT NULL                                    |                 |             |
 | `owner_user_id`    | `text`      | NOT NULL                                    |                 |             |
-| `account_id`       | `text`      | NOT NULL                                    |                 |             |
+| `installation_id`  | `text`      | NOT NULL                                    |                 |             |
+| `account_ref`      | `text`      | NOT NULL                                    |                 |             |
+| `store_key`        | `text`      | NOT NULL                                    |                 |             |
 | `thread_key`       | `text`      | NOT NULL                                    |                 |             |
 | `destination_key`  | `text`      | NOT NULL                                    |                 |             |
 | `page_id`          | `text`      | NOT NULL → [wikiPages.id](#table-wikiPages) |                 |             |
@@ -46017,7 +46039,9 @@ db.insert(appIntegrationCaptureThreads).values({
   id: "id",
   org_id: "org_id",
   owner_user_id: "owner_user_id",
-  account_id: "account_id",
+  installation_id: "installation_id",
+  account_ref: "account_ref",
+  store_key: "store_key",
   thread_key: "thread_key",
   destination_key: "destination_key",
   page_id: "page_id",
@@ -46028,8 +46052,8 @@ db.insert(appIntegrationCaptureThreads).values({
 
 ```sql
 insert into "app_integration_capture_threads" ("id", "org_id", "owner_user_id", "installation_id", "account_ref", "store_key", "thread_key", "destination_key", "page_id", "page_version", "last_observed_at", "created_at", "updated_at")
-values ($1, $2, $3, default, default, default, $4, $5, $6, $7, $8, default, default)
--- params: ["id","org_id","owner_user_id","thread_key","destination_key","page_id",1,"2026-01-01T00:00:00.000Z"]
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, default, default)
+-- params: ["id","org_id","owner_user_id","installation_id","account_ref","store_key","thread_key","destination_key","page_id",1,"2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of appIntegrationCaptureThreads, found by its primary key.
@@ -46069,22 +46093,24 @@ Table `app_integration_capture_sources`.
 
 ![appIntegrationCaptureSources and the tables it relates to](tables/appIntegrationCaptureSources.svg)
 
-| Column          | Type        | Constraints                                                                         | Default          | Description |
-| --------------- | ----------- | ----------------------------------------------------------------------------------- | ---------------- | ----------- |
-| `id`            | `text`      | PK NOT NULL                                                                         |                  |             |
-| `org_id`        | `text`      | NOT NULL → [appIntegrationCaptureClaims.org_id](#table-appIntegrationCaptureClaims) |                  |             |
-| `owner_user_id` | `text`      | NOT NULL                                                                            |                  |             |
-| `account_id`    | `text`      | NOT NULL                                                                            |                  |             |
-| `claim_id`      | `text`      | NOT NULL                                                                            |                  |             |
-| `page_id`       | `text`      | NOT NULL → [wikiPages.id](#table-wikiPages)                                         |                  |             |
-| `target`        | `jsonb`     | NOT NULL                                                                            |                  |             |
-| `publication`   | `jsonb`     | NOT NULL                                                                            |                  |             |
-| `thread_key`    | `text`      | NOT NULL                                                                            |                  |             |
-| `body_digest`   | `text`      | NOT NULL                                                                            |                  |             |
-| `observed_at`   | `timestamp` | NOT NULL                                                                            |                  |             |
-| `partial`       | `boolean`   | NOT NULL                                                                            | `.default(true)` |             |
-| `created_at`    | `timestamp` | NOT NULL                                                                            | `.defaultNow()`  |             |
-| `updated_at`    | `timestamp` | NOT NULL                                                                            | `.defaultNow()`  |             |
+| Column            | Type        | Constraints                                                                         | Default          | Description |
+| ----------------- | ----------- | ----------------------------------------------------------------------------------- | ---------------- | ----------- |
+| `id`              | `text`      | PK NOT NULL                                                                         |                  |             |
+| `org_id`          | `text`      | NOT NULL → [appIntegrationCaptureClaims.org_id](#table-appIntegrationCaptureClaims) |                  |             |
+| `owner_user_id`   | `text`      | NOT NULL                                                                            |                  |             |
+| `installation_id` | `text`      | NOT NULL                                                                            |                  |             |
+| `account_ref`     | `text`      | NOT NULL                                                                            |                  |             |
+| `store_key`       | `text`      | NOT NULL                                                                            |                  |             |
+| `claim_id`        | `text`      | NOT NULL                                                                            |                  |             |
+| `page_id`         | `text`      | NOT NULL → [wikiPages.id](#table-wikiPages)                                         |                  |             |
+| `target`          | `jsonb`     | NOT NULL                                                                            |                  |             |
+| `publication`     | `jsonb`     | NOT NULL                                                                            |                  |             |
+| `thread_key`      | `text`      | NOT NULL                                                                            |                  |             |
+| `body_digest`     | `text`      | NOT NULL                                                                            |                  |             |
+| `observed_at`     | `timestamp` | NOT NULL                                                                            |                  |             |
+| `partial`         | `boolean`   | NOT NULL                                                                            | `.default(true)` |             |
+| `created_at`      | `timestamp` | NOT NULL                                                                            | `.defaultNow()`  |             |
+| `updated_at`      | `timestamp` | NOT NULL                                                                            | `.defaultNow()`  |             |
 
 #### Definition
 
@@ -46181,7 +46207,9 @@ db.insert(appIntegrationCaptureSources).values({
   id: "id",
   org_id: "org_id",
   owner_user_id: "owner_user_id",
-  account_id: "account_id",
+  installation_id: "installation_id",
+  account_ref: "account_ref",
+  store_key: "store_key",
   claim_id: "claim_id",
   page_id: "page_id",
   target: {},
@@ -46194,8 +46222,8 @@ db.insert(appIntegrationCaptureSources).values({
 
 ```sql
 insert into "app_integration_capture_sources" ("id", "org_id", "owner_user_id", "installation_id", "account_ref", "store_key", "claim_id", "page_id", "target", "publication", "thread_key", "body_digest", "observed_at", "partial", "created_at", "updated_at")
-values ($1, $2, $3, default, default, default, $4, $5, $6, $7, $8, $9, $10, default, default, default)
--- params: ["id","org_id","owner_user_id","claim_id","page_id",{},{},"thread_key","body_digest","2026-01-01T00:00:00.000Z"]
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, default, default, default)
+-- params: ["id","org_id","owner_user_id","installation_id","account_ref","store_key","claim_id","page_id",{},{},"thread_key","body_digest","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of appIntegrationCaptureSources, found by its primary key.

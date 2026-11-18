@@ -4185,16 +4185,16 @@ where "workspace_role_permissions"."id" = $1
 
 Table `workspace_member_permissions`.
 
-![workspaceMemberPermissions](tables/workspaceMemberPermissions.svg)
+![workspaceMemberPermissions and the tables it relates to](tables/workspaceMemberPermissions.svg)
 
-| Column              | Type        | Constraints | Default          | Description |
-| ------------------- | ----------- | ----------- | ---------------- | ----------- |
-| `id`                | `bigserial` | PK NOT NULL |                  |             |
-| `workspaceMemberId` | `bigint`    | NOT NULL    |                  |             |
-| `permission`        | `varchar`   | NOT NULL    |                  |             |
-| `granted`           | `boolean`   | NOT NULL    | `.default(true)` |             |
-| `createdAt`         | `timestamp` | NOT NULL    | `.defaultNow()`  |             |
-| `updatedAt`         | `timestamp` | NULL        |                  |             |
+| Column              | Type        | Constraints                                               | Default          | Description |
+| ------------------- | ----------- | --------------------------------------------------------- | ---------------- | ----------- |
+| `id`                | `bigserial` | PK NOT NULL                                               |                  |             |
+| `workspaceMemberId` | `bigint`    | NOT NULL → [workspaceMembers.id](#table-workspaceMembers) |                  |             |
+| `permission`        | `varchar`   | NOT NULL                                                  |                  |             |
+| `granted`           | `boolean`   | NOT NULL                                                  | `.default(true)` |             |
+| `createdAt`         | `timestamp` | NOT NULL                                                  | `.defaultNow()`  |             |
+| `updatedAt`         | `timestamp` | NULL                                                      |                  |             |
 
 #### Definition
 
@@ -4219,6 +4219,10 @@ CREATE INDEX "permission_member_idx" ON "workspace_member_permissions" ("workspa
 
 - UNIQUE `workspaceMemberId`, `permission`
 - INDEX `workspaceMemberId`
+
+#### References
+
+- `workspaceMemberId` → [workspaceMembers.id](#table-workspaceMembers) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4539,6 +4543,7 @@ ALTER TABLE "user" ENABLE ROW LEVEL SECURITY;
 - `id` → [workspaceMembers.userId](#table-workspaceMembers) (one to many, on delete set null)
 - `id` → [workspaceMembers.deletedBy](#table-workspaceMembers) (one to many, on delete set null)
 - `id` → [slugChecks.createdBy](#table-slugChecks) (one to many, on delete set null)
+- `id` → [workspaceMembers.createdBy](#table-workspaceMembers) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5103,7 +5108,7 @@ Table `workspace_members`.
 | `email`       | `varchar`                                    | NOT NULL                                          |                       |                  |
 | `userId`      | `uuid`                                       | NULL → [users.id](#table-users)                   |                       |                  |
 | `workspaceId` | `bigint`                                     | NOT NULL → [workspaces.id](#table-workspaces)     |                       |                  |
-| `createdBy`   | `uuid`                                       | NOT NULL                                          |                       |                  |
+| `createdBy`   | `uuid`                                       | NOT NULL → [users.id](#table-users)               |                       |                  |
 | `createdAt`   | `timestamp`                                  | NOT NULL                                          | `.defaultNow()`       |                  |
 | `updatedAt`   | `timestamp`                                  | NULL                                              |                       |                  |
 | `deletedAt`   | `timestamp`                                  | NULL                                              |                       |                  |
@@ -5148,12 +5153,14 @@ ALTER TABLE "workspace_members" ADD CONSTRAINT "workspace_members_roleId_workspa
 - `workspaceId` → [workspaces.id](#table-workspaces) (many to one, on delete cascade)
 - `deletedBy` → [users.id](#table-users) (many to one, on delete set null)
 - `roleId` → [workspaceRoles.id](#table-workspaceRoles) (many to one, on delete restrict)
+- `createdBy` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 
 - `id` → [boardMembers.workspaceMemberId](#table-boardMembers) (one to many, on delete cascade)
 - `id` → [cardActivities.workspaceMemberId](#table-cardActivities) (one to many, on delete set null)
 - `id` → [cardToWorkspaceMembers.workspaceMemberId](#table-cardToWorkspaceMembers) (one to many, on delete cascade)
+- `id` → [workspaceMemberPermissions.workspaceMemberId](#table-workspaceMemberPermissions) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>

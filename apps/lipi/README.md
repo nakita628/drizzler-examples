@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#52](https://github.com/nakita628/drizzler/issues/52): the nine `lipi_*` tables are written without `lipi_` in the docs, the diagrams, the DBML and Mermaid, and their sections in the docs have no `CREATE TABLE`. The whole-schema SQL is right.
+None.

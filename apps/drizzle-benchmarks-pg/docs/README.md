@@ -129,19 +129,19 @@ ALTER TABLE "products" ADD CONSTRAINT "products_supplier_id_suppliers_id_fkey" F
 
 ![customers and the tables it relates to](tables/customers.svg)
 
-| Column         | Type      | Constraints | Default | Description |
-| -------------- | --------- | ----------- | ------- | ----------- |
-| `id`           | `serial`  | PK NOT NULL |         |             |
-| `companyName`  | `text`    | NOT NULL    |         |             |
-| `contactName`  | `varchar` | NOT NULL    |         |             |
-| `contactTitle` | `varchar` | NOT NULL    |         |             |
-| `address`      | `varchar` | NOT NULL    |         |             |
-| `city`         | `varchar` | NOT NULL    |         |             |
-| `postalCode`   | `varchar` | NULL        |         |             |
-| `region`       | `varchar` | NULL        |         |             |
-| `country`      | `varchar` | NOT NULL    |         |             |
-| `phone`        | `varchar` | NOT NULL    |         |             |
-| `fax`          | `varchar` | NULL        |         |             |
+| Column                           | Type      | Constraints | Default | Description |
+| -------------------------------- | --------- | ----------- | ------- | ----------- |
+| `id`                             | `serial`  | PK NOT NULL |         |             |
+| `companyName` (`company_name`)   | `text`    | NOT NULL    |         |             |
+| `contactName` (`contact_name`)   | `varchar` | NOT NULL    |         |             |
+| `contactTitle` (`contact_title`) | `varchar` | NOT NULL    |         |             |
+| `address`                        | `varchar` | NOT NULL    |         |             |
+| `city`                           | `varchar` | NOT NULL    |         |             |
+| `postalCode` (`postal_code`)     | `varchar` | NULL        |         |             |
+| `region`                         | `varchar` | NULL        |         |             |
+| `country`                        | `varchar` | NOT NULL    |         |             |
+| `phone`                          | `varchar` | NOT NULL    |         |             |
+| `fax`                            | `varchar` | NULL        |         |             |
 
 #### Definition
 
@@ -268,23 +268,23 @@ where "customers"."id" = $1
 
 ![employees and the tables it relates to](tables/employees.svg)
 
-| Column            | Type      | Constraints | Default | Description |
-| ----------------- | --------- | ----------- | ------- | ----------- |
-| `id`              | `serial`  | PK NOT NULL |         |             |
-| `lastName`        | `varchar` | NOT NULL    |         |             |
-| `firstName`       | `varchar` | NULL        |         |             |
-| `title`           | `varchar` | NOT NULL    |         |             |
-| `titleOfCourtesy` | `varchar` | NOT NULL    |         |             |
-| `birthDate`       | `date`    | NOT NULL    |         |             |
-| `hireDate`        | `date`    | NOT NULL    |         |             |
-| `address`         | `varchar` | NOT NULL    |         |             |
-| `city`            | `varchar` | NOT NULL    |         |             |
-| `postalCode`      | `varchar` | NOT NULL    |         |             |
-| `country`         | `varchar` | NOT NULL    |         |             |
-| `homePhone`       | `varchar` | NOT NULL    |         |             |
-| `extension`       | `integer` | NOT NULL    |         |             |
-| `notes`           | `text`    | NOT NULL    |         |             |
-| `recipientId`     | `integer` | NULL        |         |             |
+| Column                                  | Type      | Constraints                             | Default | Description |
+| --------------------------------------- | --------- | --------------------------------------- | ------- | ----------- |
+| `id`                                    | `serial`  | PK NOT NULL                             |         |             |
+| `lastName` (`last_name`)                | `varchar` | NOT NULL                                |         |             |
+| `firstName` (`first_name`)              | `varchar` | NULL                                    |         |             |
+| `title`                                 | `varchar` | NOT NULL                                |         |             |
+| `titleOfCourtesy` (`title_of_courtesy`) | `varchar` | NOT NULL                                |         |             |
+| `birthDate` (`birth_date`)              | `date`    | NOT NULL                                |         |             |
+| `hireDate` (`hire_date`)                | `date`    | NOT NULL                                |         |             |
+| `address`                               | `varchar` | NOT NULL                                |         |             |
+| `city`                                  | `varchar` | NOT NULL                                |         |             |
+| `postalCode` (`postal_code`)            | `varchar` | NOT NULL                                |         |             |
+| `country`                               | `varchar` | NOT NULL                                |         |             |
+| `homePhone` (`home_phone`)              | `varchar` | NOT NULL                                |         |             |
+| `extension`                             | `integer` | NOT NULL                                |         |             |
+| `notes`                                 | `text`    | NOT NULL                                |         |             |
+| `recipientId` (`recipient_id`)          | `integer` | NULL → [employees.id](#table-employees) |         |             |
 
 #### Definition
 
@@ -316,8 +316,13 @@ ALTER TABLE "employees" ADD CONSTRAINT "employees_recipient_id_employees_id_fkey
 
 - INDEX `recipientId`
 
+#### References
+
+- `recipientId` → [employees.id](#table-employees) (many to one)
+
 #### Referenced by
 
+- `id` → [employees.recipientId](#table-employees) (one to many)
 - `id` → [orders.employeeId](#table-orders) (one to many, on delete cascade)
 
 <details>
@@ -428,21 +433,21 @@ where "employees"."id" = $1
 
 ![orders and the tables it relates to](tables/orders.svg)
 
-| Column           | Type              | Constraints                                 | Default | Description |
-| ---------------- | ----------------- | ------------------------------------------- | ------- | ----------- |
-| `id`             | `serial`          | PK NOT NULL                                 |         |             |
-| `orderDate`      | `date`            | NOT NULL                                    |         |             |
-| `requiredDate`   | `date`            | NOT NULL                                    |         |             |
-| `shippedDate`    | `date`            | NULL                                        |         |             |
-| `shipVia`        | `integer`         | NOT NULL                                    |         |             |
-| `freight`        | `doublePrecision` | NOT NULL                                    |         |             |
-| `shipName`       | `varchar`         | NOT NULL                                    |         |             |
-| `shipCity`       | `varchar`         | NOT NULL                                    |         |             |
-| `shipRegion`     | `varchar`         | NULL                                        |         |             |
-| `shipPostalCode` | `varchar`         | NULL                                        |         |             |
-| `shipCountry`    | `varchar`         | NOT NULL                                    |         |             |
-| `customerId`     | `integer`         | NOT NULL → [customers.id](#table-customers) |         |             |
-| `employeeId`     | `integer`         | NOT NULL → [employees.id](#table-employees) |         |             |
+| Column                                | Type              | Constraints                                 | Default | Description |
+| ------------------------------------- | ----------------- | ------------------------------------------- | ------- | ----------- |
+| `id`                                  | `serial`          | PK NOT NULL                                 |         |             |
+| `orderDate` (`order_date`)            | `date`            | NOT NULL                                    |         |             |
+| `requiredDate` (`required_date`)      | `date`            | NOT NULL                                    |         |             |
+| `shippedDate` (`shipped_date`)        | `date`            | NULL                                        |         |             |
+| `shipVia` (`ship_via`)                | `integer`         | NOT NULL                                    |         |             |
+| `freight`                             | `doublePrecision` | NOT NULL                                    |         |             |
+| `shipName` (`ship_name`)              | `varchar`         | NOT NULL                                    |         |             |
+| `shipCity` (`ship_city`)              | `varchar`         | NOT NULL                                    |         |             |
+| `shipRegion` (`ship_region`)          | `varchar`         | NULL                                        |         |             |
+| `shipPostalCode` (`ship_postal_code`) | `varchar`         | NULL                                        |         |             |
+| `shipCountry` (`ship_country`)        | `varchar`         | NOT NULL                                    |         |             |
+| `customerId` (`customer_id`)          | `integer`         | NOT NULL → [customers.id](#table-customers) |         |             |
+| `employeeId` (`employee_id`)          | `integer`         | NOT NULL → [employees.id](#table-employees) |         |             |
 
 #### Definition
 
@@ -584,18 +589,18 @@ where "orders"."id" = $1
 
 ![suppliers and the tables it relates to](tables/suppliers.svg)
 
-| Column         | Type      | Constraints | Default | Description |
-| -------------- | --------- | ----------- | ------- | ----------- |
-| `id`           | `serial`  | PK NOT NULL |         |             |
-| `companyName`  | `varchar` | NOT NULL    |         |             |
-| `contactName`  | `varchar` | NOT NULL    |         |             |
-| `contactTitle` | `varchar` | NOT NULL    |         |             |
-| `address`      | `varchar` | NOT NULL    |         |             |
-| `city`         | `varchar` | NOT NULL    |         |             |
-| `region`       | `varchar` | NULL        |         |             |
-| `postalCode`   | `varchar` | NOT NULL    |         |             |
-| `country`      | `varchar` | NOT NULL    |         |             |
-| `phone`        | `varchar` | NOT NULL    |         |             |
+| Column                           | Type      | Constraints | Default | Description |
+| -------------------------------- | --------- | ----------- | ------- | ----------- |
+| `id`                             | `serial`  | PK NOT NULL |         |             |
+| `companyName` (`company_name`)   | `varchar` | NOT NULL    |         |             |
+| `contactName` (`contact_name`)   | `varchar` | NOT NULL    |         |             |
+| `contactTitle` (`contact_title`) | `varchar` | NOT NULL    |         |             |
+| `address`                        | `varchar` | NOT NULL    |         |             |
+| `city`                           | `varchar` | NOT NULL    |         |             |
+| `region`                         | `varchar` | NULL        |         |             |
+| `postalCode` (`postal_code`)     | `varchar` | NOT NULL    |         |             |
+| `country`                        | `varchar` | NOT NULL    |         |             |
+| `phone`                          | `varchar` | NOT NULL    |         |             |
 
 #### Definition
 
@@ -722,17 +727,17 @@ where "suppliers"."id" = $1
 
 ![products and the tables it relates to](tables/products.svg)
 
-| Column            | Type              | Constraints                                 | Default | Description |
-| ----------------- | ----------------- | ------------------------------------------- | ------- | ----------- |
-| `id`              | `serial`          | PK NOT NULL                                 |         |             |
-| `name`            | `text`            | NOT NULL                                    |         |             |
-| `quantityPerUnit` | `varchar`         | NOT NULL                                    |         |             |
-| `unitPrice`       | `doublePrecision` | NOT NULL                                    |         |             |
-| `unitsInStock`    | `integer`         | NOT NULL                                    |         |             |
-| `unitsOnOrder`    | `integer`         | NOT NULL                                    |         |             |
-| `reorderLevel`    | `integer`         | NOT NULL                                    |         |             |
-| `discontinued`    | `integer`         | NOT NULL                                    |         |             |
-| `supplierId`      | `serial`          | NOT NULL → [suppliers.id](#table-suppliers) |         |             |
+| Column                                  | Type              | Constraints                                 | Default | Description |
+| --------------------------------------- | ----------------- | ------------------------------------------- | ------- | ----------- |
+| `id`                                    | `serial`          | PK NOT NULL                                 |         |             |
+| `name`                                  | `text`            | NOT NULL                                    |         |             |
+| `quantityPerUnit` (`quantity_per_unit`) | `varchar`         | NOT NULL                                    |         |             |
+| `unitPrice` (`unit_price`)              | `doublePrecision` | NOT NULL                                    |         |             |
+| `unitsInStock` (`units_in_stock`)       | `integer`         | NOT NULL                                    |         |             |
+| `unitsOnOrder` (`units_on_order`)       | `integer`         | NOT NULL                                    |         |             |
+| `reorderLevel` (`reorder_level`)        | `integer`         | NOT NULL                                    |         |             |
+| `discontinued`                          | `integer`         | NOT NULL                                    |         |             |
+| `supplierId` (`supplier_id`)            | `serial`          | NOT NULL → [suppliers.id](#table-suppliers) |         |             |
 
 #### Definition
 
@@ -871,13 +876,13 @@ Table `order_details`.
 
 ![details and the tables it relates to](tables/details.svg)
 
-| Column      | Type              | Constraints                               | Default | Description |
-| ----------- | ----------------- | ----------------------------------------- | ------- | ----------- |
-| `unitPrice` | `doublePrecision` | NOT NULL                                  |         |             |
-| `quantity`  | `integer`         | NOT NULL                                  |         |             |
-| `discount`  | `doublePrecision` | NOT NULL                                  |         |             |
-| `orderId`   | `integer`         | NOT NULL → [orders.id](#table-orders)     |         |             |
-| `productId` | `integer`         | NOT NULL → [products.id](#table-products) |         |             |
+| Column                     | Type              | Constraints                               | Default | Description |
+| -------------------------- | ----------------- | ----------------------------------------- | ------- | ----------- |
+| `unitPrice` (`unit_price`) | `doublePrecision` | NOT NULL                                  |         |             |
+| `quantity`                 | `integer`         | NOT NULL                                  |         |             |
+| `discount`                 | `doublePrecision` | NOT NULL                                  |         |             |
+| `orderId` (`order_id`)     | `integer`         | NOT NULL → [orders.id](#table-orders)     |         |             |
+| `productId` (`product_id`) | `integer`         | NOT NULL → [products.id](#table-products) |         |             |
 
 #### Definition
 

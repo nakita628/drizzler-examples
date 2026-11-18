@@ -3,9 +3,9 @@ erDiagram
     user ||--o{ better_auth_account : "(id) - (userId)"
     user ||--o{ better_auth_session : "(id) - (userId)"
     user ||--o{ infinitunes_passkey : "(id) - (userId)"
-    user ||--o{ playlist : "(id) - (userId)"
-    user ||--o| favorite : "(id) - (userId)"
-    user ||--o{ recently_played : "(id) - (userId)"
+    user ||--o{ infinitunes_playlist : "(id) - (userId)"
+    user ||--o| infinitunes_favorite : "(id) - (userId)"
+    user ||--o{ infinitunes_recently_played : "(id) - (userId)"
     user {
         uuid id PK
         text email
@@ -70,7 +70,7 @@ erDiagram
         timestamp createdAt
         timestamp updatedAt
     }
-    playlist {
+    infinitunes_playlist {
         uuid id PK
         text name
         text description
@@ -78,7 +78,7 @@ erDiagram
         text songs
         timestamp createdAt
     }
-    favorite {
+    infinitunes_favorite {
         uuid id PK
         uuid userId FK
         text songs
@@ -87,7 +87,7 @@ erDiagram
         text artists
         text podcasts
     }
-    recently_played {
+    infinitunes_recently_played {
         uuid id PK
         uuid userId FK
         text itemId

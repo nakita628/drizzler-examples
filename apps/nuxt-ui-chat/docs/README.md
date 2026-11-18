@@ -67,7 +67,7 @@ CREATE UNIQUE INDEX `users_provider_id_idx` ON `users` (`provider`,`provider_id`
 
 ### users
 
-![users](tables/users.svg)
+![users and the tables it relates to](tables/users.svg)
 
 | Column                       | Type      | Constraints | Default         | Description |
 | ---------------------------- | --------- | ----------- | --------------- | ----------- |
@@ -100,6 +100,10 @@ CREATE UNIQUE INDEX `users_provider_id_idx` ON `users` (`provider`,`provider_id`
 #### Indexes
 
 - UNIQUE `provider`, `providerId`
+
+#### Referenced by
+
+- `id` → [chats.userId](#table-chats) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -203,13 +207,13 @@ where "users"."id" = ?
 
 ![chats and the tables it relates to](tables/chats.svg)
 
-| Column                     | Type      | Constraints | Default               | Description |
-| -------------------------- | --------- | ----------- | --------------------- | ----------- |
-| `id`                       | `text`    | PK NOT NULL | `.$defaultFn()`       |             |
-| `title`                    | `text`    | NULL        |                       |             |
-| `userId` (`user_id`)       | `text`    | NOT NULL    |                       |             |
-| `visibility`               | `text`    | NOT NULL    | `.default('private')` |             |
-| `createdAt` (`created_at`) | `integer` | NOT NULL    | `.$defaultFn()`       |             |
+| Column                     | Type      | Constraints                         | Default               | Description |
+| -------------------------- | --------- | ----------------------------------- | --------------------- | ----------- |
+| `id`                       | `text`    | PK NOT NULL                         | `.$defaultFn()`       |             |
+| `title`                    | `text`    | NULL                                |                       |             |
+| `userId` (`user_id`)       | `text`    | NOT NULL → [users.id](#table-users) |                       |             |
+| `visibility`               | `text`    | NOT NULL                            | `.default('private')` |             |
+| `createdAt` (`created_at`) | `integer` | NOT NULL                            | `.$defaultFn()`       |             |
 
 #### Definition
 
@@ -228,6 +232,10 @@ CREATE INDEX `chats_user_id_idx` ON `chats` (`user_id`);
 #### Indexes
 
 - INDEX `userId`
+
+#### References
+
+- `userId` → [users.id](#table-users) (many to one, defineRelations, no foreign key)
 
 #### Referenced by
 

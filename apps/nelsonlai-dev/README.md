@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#57](https://github.com/nakita628/drizzler/issues/57): the indexes on `.desc()` columns and the gin index on `to_tsvector(...)` are missing from the DBML, and the ones on `(post_id, created_at DESC)` and `(parent_id, created_at DESC)` lose `created_at`.
+None.

@@ -3,6 +3,9 @@ erDiagram
     user ||--o{ session : "(id) - (user_id)"
     user ||--o{ account : "(id) - (user_id)"
     link ||--o{ email_subscriber : "(id) - (link_id)"
+    user ||..o{ link : "(id) - (user_id)"
+    link ||..o{ link_view : "(id) - (link_id)"
+    link ||..o{ link_click : "(id) - (link_id)"
     user {
         text id PK
         text name
@@ -68,7 +71,7 @@ erDiagram
         boolean is_public
         timestamptz created_at
         timestamptz updated_at
-        text user_id
+        text user_id FK
     }
     link_view {
         uuid id PK
@@ -78,7 +81,7 @@ erDiagram
         varchar country
         timestamptz created_at
         timestamptz updated_at
-        uuid link_id
+        uuid link_id FK
     }
     link_click {
         uuid id PK
@@ -88,7 +91,7 @@ erDiagram
         text user_agent
         text referrer
         timestamptz created_at
-        uuid link_id
+        uuid link_id FK
     }
     email_subscriber {
         uuid id PK

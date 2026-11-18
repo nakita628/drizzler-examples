@@ -99,6 +99,9 @@ erDiagram
     teams ||--o{ insights : "(id) - (team_id)"
     insights ||--o{ insight_user_status : "(id) - (insight_id)"
     users ||--o{ insight_user_status : "(id) - (user_id)"
+    transaction_categories ||..o{ transactions : "(team_id) - (team_id)"
+    "auth.users" ||..o| users : "(id) - (id)"
+    transaction_categories |o..o{ transaction_enrichments : "(team_id) - (team_id)"
     document_tag_embeddings {
         text slug PK
         vector embedding

@@ -181,6 +181,7 @@ CREATE TABLE "user" (
 
 - `id` → [session.userId](#table-session) (one to many, on delete cascade)
 - `id` → [account.userId](#table-account) (one to many, on delete cascade)
+- `id` → [link.userId](#table-link) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -675,23 +676,23 @@ where "verification"."id" = $1
 
 ![link and the tables it relates to](tables/link.svg)
 
-| Column                           | Type        | Constraints     | Default               | Description |
-| -------------------------------- | ----------- | --------------- | --------------------- | ----------- |
-| `id`                             | `uuid`      | PK NOT NULL     | `.defaultRandom()`    |             |
-| `link`                           | `text`      | UNIQUE NOT NULL |                       |             |
-| `image`                          | `text`      | NULL            |                       |             |
-| `name`                           | `text`      | NOT NULL        |                       |             |
-| `bio`                            | `text`      | NULL            |                       |             |
-| `bento`                          | `json`      | NOT NULL        | `.default([])`        |             |
-| `customDomain` (`custom_domain`) | `text`      | UNIQUE NULL     |                       |             |
-| `theme`                          | `text`      | NOT NULL        | `.default('default')` |             |
-| `accentColor` (`accent_color`)   | `text`      | NULL            |                       |             |
-| `darkMode` (`dark_mode`)         | `boolean`   | NOT NULL        | `.default(false)`     |             |
-| `customFooter` (`custom_footer`) | `text`      | NULL            |                       |             |
-| `isPublic` (`is_public`)         | `boolean`   | NOT NULL        | `.default(true)`      |             |
-| `createdAt` (`created_at`)       | `timestamp` | NULL            | `.defaultNow()`       |             |
-| `updatedAt` (`updated_at`)       | `timestamp` | NULL            | `.defaultNow()`       |             |
-| `userId` (`user_id`)             | `text`      | NOT NULL        |                       |             |
+| Column                           | Type        | Constraints                       | Default               | Description |
+| -------------------------------- | ----------- | --------------------------------- | --------------------- | ----------- |
+| `id`                             | `uuid`      | PK NOT NULL                       | `.defaultRandom()`    |             |
+| `link`                           | `text`      | UNIQUE NOT NULL                   |                       |             |
+| `image`                          | `text`      | NULL                              |                       |             |
+| `name`                           | `text`      | NOT NULL                          |                       |             |
+| `bio`                            | `text`      | NULL                              |                       |             |
+| `bento`                          | `json`      | NOT NULL                          | `.default([])`        |             |
+| `customDomain` (`custom_domain`) | `text`      | UNIQUE NULL                       |                       |             |
+| `theme`                          | `text`      | NOT NULL                          | `.default('default')` |             |
+| `accentColor` (`accent_color`)   | `text`      | NULL                              |                       |             |
+| `darkMode` (`dark_mode`)         | `boolean`   | NOT NULL                          | `.default(false)`     |             |
+| `customFooter` (`custom_footer`) | `text`      | NULL                              |                       |             |
+| `isPublic` (`is_public`)         | `boolean`   | NOT NULL                          | `.default(true)`      |             |
+| `createdAt` (`created_at`)       | `timestamp` | NULL                              | `.defaultNow()`       |             |
+| `updatedAt` (`updated_at`)       | `timestamp` | NULL                              | `.defaultNow()`       |             |
+| `userId` (`user_id`)             | `text`      | NOT NULL → [user.id](#table-user) |                       |             |
 
 #### Definition
 
@@ -715,9 +716,15 @@ CREATE TABLE "link" (
 );
 ```
 
+#### References
+
+- `userId` → [user.id](#table-user) (many to one, defineRelations, no foreign key)
+
 #### Referenced by
 
 - `id` → [emailSubscriber.linkId](#table-emailSubscriber) (one to many, on delete cascade)
+- `id` → [linkView.linkId](#table-linkView) (one to many, defineRelations)
+- `id` → [linkClick.linkId](#table-linkClick) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -814,18 +821,18 @@ where "link"."id" = $1
 
 Table `link_view`.
 
-![linkView](tables/linkView.svg)
+![linkView and the tables it relates to](tables/linkView.svg)
 
-| Column                     | Type        | Constraints | Default            | Description |
-| -------------------------- | ----------- | ----------- | ------------------ | ----------- |
-| `id`                       | `uuid`      | PK NOT NULL | `.defaultRandom()` |             |
-| `ip`                       | `text`      | NOT NULL    |                    |             |
-| `userAgent` (`user_agent`) | `text`      | NOT NULL    |                    |             |
-| `referrer`                 | `text`      | NULL        |                    |             |
-| `country`                  | `varchar`   | NULL        |                    |             |
-| `createdAt` (`created_at`) | `timestamp` | NULL        | `.defaultNow()`    |             |
-| `updatedAt` (`updated_at`) | `timestamp` | NULL        | `.defaultNow()`    |             |
-| `linkId` (`link_id`)       | `uuid`      | NOT NULL    |                    |             |
+| Column                     | Type        | Constraints                       | Default            | Description |
+| -------------------------- | ----------- | --------------------------------- | ------------------ | ----------- |
+| `id`                       | `uuid`      | PK NOT NULL                       | `.defaultRandom()` |             |
+| `ip`                       | `text`      | NOT NULL                          |                    |             |
+| `userAgent` (`user_agent`) | `text`      | NOT NULL                          |                    |             |
+| `referrer`                 | `text`      | NULL                              |                    |             |
+| `country`                  | `varchar`   | NULL                              |                    |             |
+| `createdAt` (`created_at`) | `timestamp` | NULL                              | `.defaultNow()`    |             |
+| `updatedAt` (`updated_at`) | `timestamp` | NULL                              | `.defaultNow()`    |             |
+| `linkId` (`link_id`)       | `uuid`      | NOT NULL → [link.id](#table-link) |                    |             |
 
 #### Definition
 
@@ -841,6 +848,10 @@ CREATE TABLE "link_view" (
 	"link_id" uuid NOT NULL
 );
 ```
+
+#### References
+
+- `linkId` → [link.id](#table-link) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -943,18 +954,18 @@ where "link_view"."id" = $1
 
 Table `link_click`.
 
-![linkClick](tables/linkClick.svg)
+![linkClick and the tables it relates to](tables/linkClick.svg)
 
-| Column                     | Type        | Constraints | Default            | Description |
-| -------------------------- | ----------- | ----------- | ------------------ | ----------- |
-| `id`                       | `uuid`      | PK NOT NULL | `.defaultRandom()` |             |
-| `bentoId` (`bento_id`)     | `text`      | NOT NULL    |                    |             |
-| `href`                     | `text`      | NOT NULL    |                    |             |
-| `ip`                       | `text`      | NOT NULL    |                    |             |
-| `userAgent` (`user_agent`) | `text`      | NOT NULL    |                    |             |
-| `referrer`                 | `text`      | NULL        |                    |             |
-| `createdAt` (`created_at`) | `timestamp` | NULL        | `.defaultNow()`    |             |
-| `linkId` (`link_id`)       | `uuid`      | NOT NULL    |                    |             |
+| Column                     | Type        | Constraints                       | Default            | Description |
+| -------------------------- | ----------- | --------------------------------- | ------------------ | ----------- |
+| `id`                       | `uuid`      | PK NOT NULL                       | `.defaultRandom()` |             |
+| `bentoId` (`bento_id`)     | `text`      | NOT NULL                          |                    |             |
+| `href`                     | `text`      | NOT NULL                          |                    |             |
+| `ip`                       | `text`      | NOT NULL                          |                    |             |
+| `userAgent` (`user_agent`) | `text`      | NOT NULL                          |                    |             |
+| `referrer`                 | `text`      | NULL                              |                    |             |
+| `createdAt` (`created_at`) | `timestamp` | NULL                              | `.defaultNow()`    |             |
+| `linkId` (`link_id`)       | `uuid`      | NOT NULL → [link.id](#table-link) |                    |             |
 
 #### Definition
 
@@ -970,6 +981,10 @@ CREATE TABLE "link_click" (
 	"link_id" uuid NOT NULL
 );
 ```
+
+#### References
+
+- `linkId` → [link.id](#table-link) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>

@@ -392,6 +392,12 @@ Table series_list {
   custom_cover text
   added_at text
   last_updated text
+  indexes {
+    (user_id, media_id) [unique]
+    (media_id)
+    (user_id, media_id)
+    (media_id, user_id)
+  }
 }
 
 Table series_list_seasons {
@@ -399,24 +405,39 @@ Table series_list_seasons {
   season integer [not null]
   redo integer [not null]
   list_id integer [not null]
+  indexes {
+    (list_id, season) [pk]
+  }
 }
 
 Table series_genre {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_series_genre_media_name']
+    (name, media_id) [name: 'ix_series_genre_name_media']
+  }
 }
 
 Table series_actors {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_series_actors_media_name']
+    (name, media_id) [name: 'ix_series_actors_name_media']
+  }
 }
 
 Table series_network {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_series_network_media_name']
+    (name, media_id) [name: 'ix_series_network_name_media']
+  }
 }
 
 Table series_episodes_per_season {
@@ -424,6 +445,9 @@ Table series_episodes_per_season {
   media_id integer [not null]
   season integer [not null]
   episodes integer [not null]
+  indexes {
+    (media_id, season) [unique, name: 'ux_series_episodes_per_season_media_season']
+  }
 }
 
 Table series_tags {
@@ -431,6 +455,10 @@ Table series_tags {
   user_id integer [not null]
   media_id integer [not null]
   tag_id integer [not null]
+  indexes {
+    (user_id, media_id, tag_id) [unique]
+    (user_id, tag_id, media_id)
+  }
 }
 
 Table anime {
@@ -477,6 +505,12 @@ Table anime_list {
   custom_cover text
   added_at text
   last_updated text
+  indexes {
+    (user_id, media_id) [unique]
+    (media_id)
+    (user_id, media_id)
+    (media_id, user_id)
+  }
 }
 
 Table anime_list_seasons {
@@ -484,24 +518,39 @@ Table anime_list_seasons {
   season integer [not null]
   redo integer [not null]
   list_id integer [not null]
+  indexes {
+    (list_id, season) [pk]
+  }
 }
 
 Table anime_genre {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_anime_genre_media_name']
+    (name, media_id) [name: 'ix_anime_genre_name_media']
+  }
 }
 
 Table anime_actors {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_anime_actors_media_name']
+    (name, media_id) [name: 'ix_anime_actors_name_media']
+  }
 }
 
 Table anime_network {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_anime_network_media_name']
+    (name, media_id) [name: 'ix_anime_network_name_media']
+  }
 }
 
 Table anime_episodes_per_season {
@@ -509,6 +558,9 @@ Table anime_episodes_per_season {
   media_id integer [not null]
   season integer [not null]
   episodes integer [not null]
+  indexes {
+    (media_id, season) [unique, name: 'ux_anime_episodes_per_season_media_season']
+  }
 }
 
 Table anime_tags {
@@ -516,6 +568,10 @@ Table anime_tags {
   user_id integer [not null]
   media_id integer [not null]
   tag_id integer [not null]
+  indexes {
+    (user_id, media_id, tag_id) [unique]
+    (user_id, tag_id, media_id)
+  }
 }
 
 Table movies {
@@ -558,18 +614,32 @@ Table movies_list {
   custom_cover text
   added_at text
   last_updated text
+  indexes {
+    (user_id, media_id) [unique]
+    (media_id)
+    (user_id, media_id)
+    (media_id, user_id)
+  }
 }
 
 Table movies_genre {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_movies_genre_media_name']
+    (name, media_id) [name: 'ix_movies_genre_name_media']
+  }
 }
 
 Table movies_actors {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_movies_actors_media_name']
+    (name, media_id) [name: 'ix_movies_actors_name_media']
+  }
 }
 
 Table movies_tags {
@@ -577,6 +647,10 @@ Table movies_tags {
   user_id integer [not null]
   media_id integer [not null]
   tag_id integer [not null]
+  indexes {
+    (user_id, media_id, tag_id) [unique]
+    (user_id, tag_id, media_id)
+  }
 }
 
 Table games {
@@ -618,18 +692,32 @@ Table games_list {
   custom_cover text
   added_at text
   last_updated text
+  indexes {
+    (user_id, media_id) [unique]
+    (media_id)
+    (user_id, media_id)
+    (media_id, user_id)
+  }
 }
 
 Table games_genre {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_games_genre_media_name']
+    (name, media_id) [name: 'ix_games_genre_name_media']
+  }
 }
 
 Table games_platforms {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_games_platforms_media_name']
+    (name, media_id) [name: 'ix_games_platforms_name_media']
+  }
 }
 
 Table games_companies {
@@ -649,6 +737,10 @@ Table games_tags {
   user_id integer [not null]
   media_id integer [not null]
   tag_id integer [not null]
+  indexes {
+    (user_id, media_id, tag_id) [unique]
+    (user_id, tag_id, media_id)
+  }
 }
 
 Table books {
@@ -681,18 +773,32 @@ Table books_list {
   custom_cover text
   added_at text
   last_updated text
+  indexes {
+    (user_id, media_id) [unique]
+    (media_id)
+    (user_id, media_id)
+    (media_id, user_id)
+  }
 }
 
 Table books_genre {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_books_genre_media_name']
+    (name, media_id) [name: 'ix_books_genre_name_media']
+  }
 }
 
 Table books_authors {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_books_authors_media_name']
+    (name, media_id) [name: 'ix_books_authors_name_media']
+  }
 }
 
 Table books_tags {
@@ -700,6 +806,10 @@ Table books_tags {
   user_id integer [not null]
   media_id integer [not null]
   tag_id integer [not null]
+  indexes {
+    (user_id, media_id, tag_id) [unique]
+    (user_id, tag_id, media_id)
+  }
 }
 
 Table manga {
@@ -739,18 +849,32 @@ Table manga_list {
   custom_cover text
   added_at text
   last_updated text
+  indexes {
+    (user_id, media_id) [unique]
+    (media_id)
+    (user_id, media_id)
+    (media_id, user_id)
+  }
 }
 
 Table manga_genre {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_manga_genre_media_name']
+    (name, media_id) [name: 'ix_manga_genre_name_media']
+  }
 }
 
 Table manga_authors {
   id integer [pk, not null]
   media_id integer [not null]
   name text [not null]
+  indexes {
+    (media_id, name) [unique, name: 'ux_manga_authors_media_name']
+    (name, media_id) [name: 'ix_manga_authors_name_media']
+  }
 }
 
 Table manga_tags {
@@ -758,6 +882,10 @@ Table manga_tags {
   user_id integer [not null]
   media_id integer [not null]
   tag_id integer [not null]
+  indexes {
+    (user_id, media_id, tag_id) [unique]
+    (user_id, tag_id, media_id)
+  }
 }
 
 Table daily_mediadle {
@@ -917,7 +1045,7 @@ Table media_notifications {
 }
 
 Table task_history {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   task_id text [not null]
   user_id integer
   status text [not null]
@@ -941,7 +1069,7 @@ Table year_recap_release {
 }
 
 Table inactive_account_deletion {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   deleted_at text
   user_id integer [not null]
   username text [not null]
@@ -965,7 +1093,7 @@ Table inactive_account_deletion {
 }
 
 Table media_refresh_log {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   media_type text [not null]
   api_id text [not null]
@@ -978,7 +1106,7 @@ Table media_refresh_log {
 }
 
 Table api_call_rollup {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   provider text [not null]
   bucket_start_ms integer [not null]
   bucket_start text [not null]
@@ -995,7 +1123,7 @@ Table api_call_rollup {
 }
 
 Table feature_requests {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   title text [not null]
   admin_comment text
   description text [not null]
@@ -1009,7 +1137,7 @@ Table feature_requests {
 }
 
 Table feature_votes {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   feature_id integer [not null]
   created_at text [not null]
@@ -1020,7 +1148,7 @@ Table feature_votes {
 }
 
 Table collections {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   owner_id integer [not null]
   profile_position integer
   title text [not null]
@@ -1040,7 +1168,7 @@ Table collections {
 }
 
 Table collection_items {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   collection_id integer [not null]
   annotation text
   media_id integer [not null]
@@ -1055,7 +1183,7 @@ Table collection_items {
 }
 
 Table collection_likes {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   collection_id integer [not null]
   created_at text [not null]
@@ -1066,7 +1194,7 @@ Table collection_likes {
 }
 
 Table import_jobs {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   error text
   source text [not null]
@@ -1090,7 +1218,7 @@ Table import_jobs {
 }
 
 Table import_items {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   job_id integer [not null]
   name text
   release_date text
@@ -1111,7 +1239,7 @@ Table import_items {
 }
 
 Table smart_views {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   profile_position integer
   spec text [not null]
@@ -1125,7 +1253,7 @@ Table smart_views {
 }
 
 Table media_tags {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   media_type text [not null]
   name text [not null]
@@ -1182,37 +1310,99 @@ Ref profile_custom_user_id_user_id_fk: profile_custom.user_id > user.id [delete:
 
 Ref series_list_user_id_user_id_fk: series_list.user_id > user.id [delete: cascade]
 
+Ref series_list_media_id_series_id_fk: series_list.media_id > series.id
+
+Ref series_list_seasons_list_id_series_list_id_fk: series_list_seasons.list_id > series_list.id [delete: cascade]
+
+Ref series_genre_media_id_series_id_fk: series_genre.media_id > series.id [delete: cascade]
+
+Ref series_actors_media_id_series_id_fk: series_actors.media_id > series.id [delete: cascade]
+
+Ref series_network_media_id_series_id_fk: series_network.media_id > series.id [delete: cascade]
+
+Ref series_episodes_per_season_media_id_series_id_fk: series_episodes_per_season.media_id > series.id [delete: cascade]
+
 Ref series_tags_user_id_user_id_fk: series_tags.user_id > user.id [delete: cascade]
+
+Ref series_tags_media_id_series_id_fk: series_tags.media_id > series.id [delete: cascade]
 
 Ref series_tags_tag_id_media_tags_id_fk: series_tags.tag_id > media_tags.id [delete: cascade]
 
 Ref anime_list_user_id_user_id_fk: anime_list.user_id > user.id [delete: cascade]
 
+Ref anime_list_media_id_anime_id_fk: anime_list.media_id > anime.id
+
+Ref anime_list_seasons_list_id_anime_list_id_fk: anime_list_seasons.list_id > anime_list.id [delete: cascade]
+
+Ref anime_genre_media_id_anime_id_fk: anime_genre.media_id > anime.id [delete: cascade]
+
+Ref anime_actors_media_id_anime_id_fk: anime_actors.media_id > anime.id [delete: cascade]
+
+Ref anime_network_media_id_anime_id_fk: anime_network.media_id > anime.id [delete: cascade]
+
+Ref anime_episodes_per_season_media_id_anime_id_fk: anime_episodes_per_season.media_id > anime.id [delete: cascade]
+
 Ref anime_tags_user_id_user_id_fk: anime_tags.user_id > user.id [delete: cascade]
+
+Ref anime_tags_media_id_anime_id_fk: anime_tags.media_id > anime.id [delete: cascade]
 
 Ref anime_tags_tag_id_media_tags_id_fk: anime_tags.tag_id > media_tags.id [delete: cascade]
 
 Ref movies_list_user_id_user_id_fk: movies_list.user_id > user.id [delete: cascade]
 
+Ref movies_list_media_id_movies_id_fk: movies_list.media_id > movies.id
+
+Ref movies_genre_media_id_movies_id_fk: movies_genre.media_id > movies.id [delete: cascade]
+
+Ref movies_actors_media_id_movies_id_fk: movies_actors.media_id > movies.id [delete: cascade]
+
 Ref movies_tags_user_id_user_id_fk: movies_tags.user_id > user.id [delete: cascade]
+
+Ref movies_tags_media_id_movies_id_fk: movies_tags.media_id > movies.id [delete: cascade]
 
 Ref movies_tags_tag_id_media_tags_id_fk: movies_tags.tag_id > media_tags.id [delete: cascade]
 
 Ref games_list_user_id_user_id_fk: games_list.user_id > user.id [delete: cascade]
 
+Ref games_list_media_id_games_id_fk: games_list.media_id > games.id
+
+Ref games_genre_media_id_games_id_fk: games_genre.media_id > games.id [delete: cascade]
+
+Ref games_platforms_media_id_games_id_fk: games_platforms.media_id > games.id [delete: cascade]
+
+Ref games_companies_media_id_games_id_fk: games_companies.media_id > games.id [delete: cascade]
+
 Ref games_tags_user_id_user_id_fk: games_tags.user_id > user.id [delete: cascade]
+
+Ref games_tags_media_id_games_id_fk: games_tags.media_id > games.id [delete: cascade]
 
 Ref games_tags_tag_id_media_tags_id_fk: games_tags.tag_id > media_tags.id [delete: cascade]
 
 Ref books_list_user_id_user_id_fk: books_list.user_id > user.id [delete: cascade]
 
+Ref books_list_media_id_books_id_fk: books_list.media_id > books.id
+
+Ref books_genre_media_id_books_id_fk: books_genre.media_id > books.id [delete: cascade]
+
+Ref books_authors_media_id_books_id_fk: books_authors.media_id > books.id [delete: cascade]
+
 Ref books_tags_user_id_user_id_fk: books_tags.user_id > user.id [delete: cascade]
+
+Ref books_tags_media_id_books_id_fk: books_tags.media_id > books.id [delete: cascade]
 
 Ref books_tags_tag_id_media_tags_id_fk: books_tags.tag_id > media_tags.id [delete: cascade]
 
 Ref manga_list_user_id_user_id_fk: manga_list.user_id > user.id [delete: cascade]
 
+Ref manga_list_media_id_manga_id_fk: manga_list.media_id > manga.id
+
+Ref manga_genre_media_id_manga_id_fk: manga_genre.media_id > manga.id [delete: cascade]
+
+Ref manga_authors_media_id_manga_id_fk: manga_authors.media_id > manga.id [delete: cascade]
+
 Ref manga_tags_user_id_user_id_fk: manga_tags.user_id > user.id [delete: cascade]
+
+Ref manga_tags_media_id_manga_id_fk: manga_tags.media_id > manga.id [delete: cascade]
 
 Ref manga_tags_tag_id_media_tags_id_fk: manga_tags.tag_id > media_tags.id [delete: cascade]
 

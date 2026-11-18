@@ -1,4 +1,4 @@
-Table workspaces {
+Table lipi_workspaces {
   id uuid [pk, not null]
   title text [not null]
   icon_id text [not null]
@@ -10,7 +10,7 @@ Table workspaces {
   created_at timestamptz [not null]
 }
 
-Table folders {
+Table lipi_folders {
   id uuid [pk, not null]
   title text [not null]
   icon_id text [not null]
@@ -21,7 +21,7 @@ Table folders {
   created_at timestamptz [not null]
 }
 
-Table files {
+Table lipi_files {
   id uuid [pk, not null]
   title text [not null]
   icon_id text [not null]
@@ -33,19 +33,19 @@ Table files {
   created_at timestamptz [not null]
 }
 
-Table accounts {
+Table lipi_accounts {
   user_id uuid [not null]
   billing_address jsonb
   updated_at timestamptz
   payment_method jsonb
 }
 
-Table customers {
+Table lipi_customers {
   id uuid [pk, not null]
   stripe_customer_id text
 }
 
-Table prices {
+Table lipi_prices {
   id text [pk, not null]
   product_id text
   active boolean
@@ -59,7 +59,7 @@ Table prices {
   metadata jsonb
 }
 
-Table products {
+Table lipi_products {
   id text [pk, not null]
   active boolean
   name text
@@ -68,7 +68,7 @@ Table products {
   metadata jsonb
 }
 
-Table subscriptions {
+Table lipi_subscriptions {
   id text [pk, not null]
   user_id uuid [not null]
   status subscription_status
@@ -86,7 +86,7 @@ Table subscriptions {
   trial_end timestamptz
 }
 
-Table collaborators {
+Table lipi_collaborators {
   id uuid [pk, not null]
   workspace_id uuid [not null]
   created_at timestamptz [not null]
@@ -129,20 +129,20 @@ Table verificationToken {
   }
 }
 
-Ref folders_workspace_id_workspaces_id_fk: folders.workspace_id > workspaces.id [delete: cascade]
+Ref lipi_folders_workspace_id_lipi_workspaces_id_fk: lipi_folders.workspace_id > lipi_workspaces.id [delete: cascade]
 
-Ref files_workspace_id_workspaces_id_fk: files.workspace_id > workspaces.id [delete: cascade]
+Ref lipi_files_workspace_id_lipi_workspaces_id_fk: lipi_files.workspace_id > lipi_workspaces.id [delete: cascade]
 
-Ref files_folder_id_folders_id_fk: files.folder_id > folders.id [delete: cascade]
+Ref lipi_files_folder_id_lipi_folders_id_fk: lipi_files.folder_id > lipi_folders.id [delete: cascade]
 
-Ref accounts_user_id_user_id_fk: accounts.user_id > user.id
+Ref lipi_accounts_user_id_user_id_fk: lipi_accounts.user_id > user.id
 
-Ref prices_product_id_products_id_fk: prices.product_id > products.id
+Ref lipi_prices_product_id_lipi_products_id_fk: lipi_prices.product_id > lipi_products.id
 
-Ref subscriptions_price_id_prices_id_fk: subscriptions.price_id > prices.id
+Ref lipi_subscriptions_price_id_lipi_prices_id_fk: lipi_subscriptions.price_id > lipi_prices.id
 
-Ref collaborators_workspace_id_workspaces_id_fk: collaborators.workspace_id > workspaces.id [delete: cascade]
+Ref lipi_collaborators_workspace_id_lipi_workspaces_id_fk: lipi_collaborators.workspace_id > lipi_workspaces.id [delete: cascade]
 
-Ref collaborators_user_id_user_id_fk: collaborators.user_id > user.id [delete: cascade]
+Ref lipi_collaborators_user_id_user_id_fk: lipi_collaborators.user_id > user.id [delete: cascade]
 
 Ref account_userId_user_id_fk: account.userId > user.id [delete: cascade]

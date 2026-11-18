@@ -4490,7 +4490,7 @@ where "api_tokens"."id" = ?
 
 ### series
 
-![series](tables/series.svg)
+![series and the tables it relates to](tables/series.svg)
 
 | Column                                     | Type      | Constraints     | Default                                | Description |
 | ------------------------------------------ | --------- | --------------- | -------------------------------------- | ----------- |
@@ -4551,6 +4551,15 @@ CREATE TABLE `series` (
 	`last_api_update` text
 );
 ```
+
+#### Referenced by
+
+- `id` → [seriesList.mediaId](#table-seriesList) (one to many)
+- `id` → [seriesGenre.mediaId](#table-seriesGenre) (one to many, on delete cascade)
+- `id` → [seriesActors.mediaId](#table-seriesActors) (one to many, on delete cascade)
+- `id` → [seriesNetwork.mediaId](#table-seriesNetwork) (one to many, on delete cascade)
+- `id` → [seriesEpisodesPerSeason.mediaId](#table-seriesEpisodesPerSeason) (one to many, on delete cascade)
+- `id` → [seriesTags.mediaId](#table-seriesTags) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4657,23 +4666,23 @@ Table `series_list`.
 
 ![seriesList and the tables it relates to](tables/seriesList.svg)
 
-| Column                                                          | Type      | Constraints                       | Default                                | Description |
-| --------------------------------------------------------------- | --------- | --------------------------------- | -------------------------------------- | ----------- |
-| `currentSeason` (`current_season`)                              | `integer` | NOT NULL                          |                                        |             |
-| `currentEpisode` (`current_episode`)                            | `integer` | NOT NULL                          |                                        |             |
-| `redo`                                                          | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `total`                                                         | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `id`                                                            | `integer` | PK NOT NULL                       |                                        |             |
-| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user) |                                        |             |
-| `mediaId` (`media_id`)                                          | `integer` | NOT NULL                          |                                        |             |
-| `status`                                                        | `text`    | NOT NULL                          |                                        |             |
-| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                          | `.default(true)`                       |             |
-| `favorite`                                                      | `integer` | NOT NULL                          | `.default(false)`                      |             |
-| `comment`                                                       | `text`    | NULL                              |                                        |             |
-| `rating`                                                        | `real`    | NULL                              |                                        |             |
-| `customCover` (`custom_cover`)                                  | `text`    | NULL                              |                                        |             |
-| `addedAt` (`added_at`)                                          | `text`    | NULL                              | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
-| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                              |                                        |             |
+| Column                                                          | Type      | Constraints                           | Default                                | Description |
+| --------------------------------------------------------------- | --------- | ------------------------------------- | -------------------------------------- | ----------- |
+| `currentSeason` (`current_season`)                              | `integer` | NOT NULL                              |                                        |             |
+| `currentEpisode` (`current_episode`)                            | `integer` | NOT NULL                              |                                        |             |
+| `redo`                                                          | `integer` | NOT NULL                              | `.default(0)`                          |             |
+| `total`                                                         | `integer` | NOT NULL                              | `.default(0)`                          |             |
+| `id`                                                            | `integer` | PK NOT NULL                           |                                        |             |
+| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user)     |                                        |             |
+| `mediaId` (`media_id`)                                          | `integer` | NOT NULL → [series.id](#table-series) |                                        |             |
+| `status`                                                        | `text`    | NOT NULL                              |                                        |             |
+| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                              | `.default(true)`                       |             |
+| `favorite`                                                      | `integer` | NOT NULL                              | `.default(false)`                      |             |
+| `comment`                                                       | `text`    | NULL                                  |                                        |             |
+| `rating`                                                        | `real`    | NULL                                  |                                        |             |
+| `customCover` (`custom_cover`)                                  | `text`    | NULL                                  |                                        |             |
+| `addedAt` (`added_at`)                                          | `text`    | NULL                                  | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
+| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                                  |                                        |             |
 
 #### Definition
 
@@ -4710,9 +4719,21 @@ CREATE INDEX `ix_series_list_user_media_rated` ON `series_list` (`user_id`,`medi
 CREATE INDEX `ix_series_list_media_user_rated` ON `series_list` (`media_id`,`user_id`) WHERE "series_list"."rating" IS NOT NULL;
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`
+- INDEX `mediaId`
+- INDEX `userId`, `mediaId`
+- INDEX `mediaId`, `userId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [series.id](#table-series) (many to one)
+
+#### Referenced by
+
+- `id` → [seriesListSeasons.listId](#table-seriesListSeasons) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4816,14 +4837,14 @@ where "series_list"."id" = ?
 
 Table `series_list_seasons`.
 
-![seriesListSeasons](tables/seriesListSeasons.svg)
+![seriesListSeasons and the tables it relates to](tables/seriesListSeasons.svg)
 
-| Column               | Type      | Constraints | Default       | Description |
-| -------------------- | --------- | ----------- | ------------- | ----------- |
-| `rating`             | `real`    | NULL        |               |             |
-| `season`             | `integer` | NOT NULL    |               |             |
-| `redo`               | `integer` | NOT NULL    | `.default(0)` |             |
-| `listId` (`list_id`) | `integer` | NOT NULL    |               |             |
+| Column               | Type      | Constraints                                      | Default       | Description |
+| -------------------- | --------- | ------------------------------------------------ | ------------- | ----------- |
+| `rating`             | `real`    | NULL                                             |               |             |
+| `season`             | `integer` | PK NOT NULL                                      |               |             |
+| `redo`               | `integer` | NOT NULL                                         | `.default(0)` |             |
+| `listId` (`list_id`) | `integer` | PK NOT NULL → [seriesList.id](#table-seriesList) |               |             |
 
 #### Definition
 
@@ -4840,6 +4861,14 @@ CREATE TABLE `series_list_seasons` (
 	CONSTRAINT "series_list_seasons_rating_check" CHECK("rating" IS NULL OR ("rating" >= 0 AND "rating" <= 10))
 );
 ```
+
+#### Indexes
+
+- PRIMARY KEY `listId`, `season`
+
+#### References
+
+- `listId` → [seriesList.id](#table-seriesList) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4877,6 +4906,20 @@ select "d0"."rating" as "rating", "d0"."season" as "season", "d0"."redo" as "red
 from "series_list_seasons" as "d0"
 ```
 
+**Find by primary key**: One row of seriesListSeasons, through the relational query API.
+
+```ts
+db.query.seriesListSeasons.findFirst({ where: { season: 1, listId: 1 } });
+```
+
+```sql
+select "d0"."rating" as "rating", "d0"."season" as "season", "d0"."redo" as "redo", "d0"."list_id" as "listId"
+from "series_list_seasons" as "d0"
+where (("d0"."season" = ?) and ("d0"."list_id" = ?))
+limit ?
+-- params: [1,1,1]
+```
+
 **Insert**: Adds a row to seriesListSeasons, giving the columns that have no default.
 
 ```ts
@@ -4889,6 +4932,35 @@ values (null, ?, ?, ?)
 -- params: [1,0,1]
 ```
 
+**Update**: Changes a row of seriesListSeasons, found by its primary key.
+
+```ts
+db.update(seriesListSeasons)
+  .set({ rating: 1 })
+  .where(and(eq(seriesListSeasons.season, 1), eq(seriesListSeasons.listId, 1)));
+```
+
+```sql
+update "series_list_seasons"
+set "rating" = ?
+where (("series_list_seasons"."season" = ?) and ("series_list_seasons"."list_id" = ?))
+-- params: [1,1,1]
+```
+
+**Delete**: Deletes a row of seriesListSeasons, found by its primary key.
+
+```ts
+db.delete(seriesListSeasons).where(
+  and(eq(seriesListSeasons.season, 1), eq(seriesListSeasons.listId, 1)),
+);
+```
+
+```sql
+delete from "series_list_seasons"
+where (("series_list_seasons"."season" = ?) and ("series_list_seasons"."list_id" = ?))
+-- params: [1,1]
+```
+
 </details>
 
 <a id="table-seriesGenre"></a>
@@ -4897,13 +4969,13 @@ values (null, ?, ?, ?)
 
 Table `series_genre`.
 
-![seriesGenre](tables/seriesGenre.svg)
+![seriesGenre and the tables it relates to](tables/seriesGenre.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                           | Default | Description |
+| ---------------------- | --------- | ------------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                           |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [series.id](#table-series) |         |             |
+| `name`                 | `text`    | NOT NULL                              |         |             |
 
 #### Definition
 
@@ -4919,6 +4991,15 @@ CREATE UNIQUE INDEX `ux_series_genre_media_name` ON `series_genre` (`media_id`,`
 
 CREATE INDEX `ix_series_genre_name_media` ON `series_genre` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [series.id](#table-series) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5015,13 +5096,13 @@ where "series_genre"."id" = ?
 
 Table `series_actors`.
 
-![seriesActors](tables/seriesActors.svg)
+![seriesActors and the tables it relates to](tables/seriesActors.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                           | Default | Description |
+| ---------------------- | --------- | ------------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                           |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [series.id](#table-series) |         |             |
+| `name`                 | `text`    | NOT NULL                              |         |             |
 
 #### Definition
 
@@ -5037,6 +5118,15 @@ CREATE UNIQUE INDEX `ux_series_actors_media_name` ON `series_actors` (`media_id`
 
 CREATE INDEX `ix_series_actors_name_media` ON `series_actors` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [series.id](#table-series) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5133,13 +5223,13 @@ where "series_actors"."id" = ?
 
 Table `series_network`.
 
-![seriesNetwork](tables/seriesNetwork.svg)
+![seriesNetwork and the tables it relates to](tables/seriesNetwork.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                           | Default | Description |
+| ---------------------- | --------- | ------------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                           |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [series.id](#table-series) |         |             |
+| `name`                 | `text`    | NOT NULL                              |         |             |
 
 #### Definition
 
@@ -5155,6 +5245,15 @@ CREATE UNIQUE INDEX `ux_series_network_media_name` ON `series_network` (`media_i
 
 CREATE INDEX `ix_series_network_name_media` ON `series_network` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [series.id](#table-series) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5251,14 +5350,14 @@ where "series_network"."id" = ?
 
 Table `series_episodes_per_season`.
 
-![seriesEpisodesPerSeason](tables/seriesEpisodesPerSeason.svg)
+![seriesEpisodesPerSeason and the tables it relates to](tables/seriesEpisodesPerSeason.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `season`               | `integer` | NOT NULL    |         |             |
-| `episodes`             | `integer` | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                           | Default | Description |
+| ---------------------- | --------- | ------------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                           |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [series.id](#table-series) |         |             |
+| `season`               | `integer` | NOT NULL                              |         |             |
+| `episodes`             | `integer` | NOT NULL                              |         |             |
 
 #### Definition
 
@@ -5273,6 +5372,14 @@ CREATE TABLE `series_episodes_per_season` (
 
 CREATE UNIQUE INDEX `ux_series_episodes_per_season_media_season` ON `series_episodes_per_season` (`media_id`,`season`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `season`
+
+#### References
+
+- `mediaId` → [series.id](#table-series) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5375,7 +5482,7 @@ Table `series_tags`.
 | ---------------------- | --------- | ------------------------------------------- | ------- | ----------- |
 | `id`                   | `integer` | PK NOT NULL                                 |         |             |
 | `userId` (`user_id`)   | `integer` | NOT NULL → [user.id](#table-user)           |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL                                    |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [series.id](#table-series)       |         |             |
 | `tagId` (`tag_id`)     | `integer` | NOT NULL → [mediaTags.id](#table-mediaTags) |         |             |
 
 #### Definition
@@ -5396,9 +5503,15 @@ CREATE UNIQUE INDEX `ux_series_tags_user_media_tag` ON `series_tags` (`user_id`,
 CREATE INDEX `ix_series_tags_user_tag_media` ON `series_tags` (`user_id`,`tag_id`,`media_id`);
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`, `tagId`
+- INDEX `userId`, `tagId`, `mediaId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [series.id](#table-series) (many to one, on delete cascade)
 - `tagId` → [mediaTags.id](#table-mediaTags) (many to one, on delete cascade)
 
 <details>
@@ -5494,7 +5607,7 @@ where "series_tags"."id" = ?
 
 ### anime
 
-![anime](tables/anime.svg)
+![anime and the tables it relates to](tables/anime.svg)
 
 | Column                                     | Type      | Constraints     | Default                                | Description |
 | ------------------------------------------ | --------- | --------------- | -------------------------------------- | ----------- |
@@ -5555,6 +5668,15 @@ CREATE TABLE `anime` (
 	`last_api_update` text
 );
 ```
+
+#### Referenced by
+
+- `id` → [animeList.mediaId](#table-animeList) (one to many)
+- `id` → [animeGenre.mediaId](#table-animeGenre) (one to many, on delete cascade)
+- `id` → [animeActors.mediaId](#table-animeActors) (one to many, on delete cascade)
+- `id` → [animeNetwork.mediaId](#table-animeNetwork) (one to many, on delete cascade)
+- `id` → [animeEpisodesPerSeason.mediaId](#table-animeEpisodesPerSeason) (one to many, on delete cascade)
+- `id` → [animeTags.mediaId](#table-animeTags) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5661,23 +5783,23 @@ Table `anime_list`.
 
 ![animeList and the tables it relates to](tables/animeList.svg)
 
-| Column                                                          | Type      | Constraints                       | Default                                | Description |
-| --------------------------------------------------------------- | --------- | --------------------------------- | -------------------------------------- | ----------- |
-| `currentSeason` (`current_season`)                              | `integer` | NOT NULL                          |                                        |             |
-| `currentEpisode` (`current_episode`)                            | `integer` | NOT NULL                          |                                        |             |
-| `redo`                                                          | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `total`                                                         | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `id`                                                            | `integer` | PK NOT NULL                       |                                        |             |
-| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user) |                                        |             |
-| `mediaId` (`media_id`)                                          | `integer` | NOT NULL                          |                                        |             |
-| `status`                                                        | `text`    | NOT NULL                          |                                        |             |
-| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                          | `.default(true)`                       |             |
-| `favorite`                                                      | `integer` | NOT NULL                          | `.default(false)`                      |             |
-| `comment`                                                       | `text`    | NULL                              |                                        |             |
-| `rating`                                                        | `real`    | NULL                              |                                        |             |
-| `customCover` (`custom_cover`)                                  | `text`    | NULL                              |                                        |             |
-| `addedAt` (`added_at`)                                          | `text`    | NULL                              | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
-| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                              |                                        |             |
+| Column                                                          | Type      | Constraints                         | Default                                | Description |
+| --------------------------------------------------------------- | --------- | ----------------------------------- | -------------------------------------- | ----------- |
+| `currentSeason` (`current_season`)                              | `integer` | NOT NULL                            |                                        |             |
+| `currentEpisode` (`current_episode`)                            | `integer` | NOT NULL                            |                                        |             |
+| `redo`                                                          | `integer` | NOT NULL                            | `.default(0)`                          |             |
+| `total`                                                         | `integer` | NOT NULL                            | `.default(0)`                          |             |
+| `id`                                                            | `integer` | PK NOT NULL                         |                                        |             |
+| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user)   |                                        |             |
+| `mediaId` (`media_id`)                                          | `integer` | NOT NULL → [anime.id](#table-anime) |                                        |             |
+| `status`                                                        | `text`    | NOT NULL                            |                                        |             |
+| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                            | `.default(true)`                       |             |
+| `favorite`                                                      | `integer` | NOT NULL                            | `.default(false)`                      |             |
+| `comment`                                                       | `text`    | NULL                                |                                        |             |
+| `rating`                                                        | `real`    | NULL                                |                                        |             |
+| `customCover` (`custom_cover`)                                  | `text`    | NULL                                |                                        |             |
+| `addedAt` (`added_at`)                                          | `text`    | NULL                                | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
+| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                                |                                        |             |
 
 #### Definition
 
@@ -5714,9 +5836,21 @@ CREATE INDEX `ix_anime_list_user_media_rated` ON `anime_list` (`user_id`,`media_
 CREATE INDEX `ix_anime_list_media_user_rated` ON `anime_list` (`media_id`,`user_id`) WHERE "anime_list"."rating" IS NOT NULL;
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`
+- INDEX `mediaId`
+- INDEX `userId`, `mediaId`
+- INDEX `mediaId`, `userId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [anime.id](#table-anime) (many to one)
+
+#### Referenced by
+
+- `id` → [animeListSeasons.listId](#table-animeListSeasons) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5820,14 +5954,14 @@ where "anime_list"."id" = ?
 
 Table `anime_list_seasons`.
 
-![animeListSeasons](tables/animeListSeasons.svg)
+![animeListSeasons and the tables it relates to](tables/animeListSeasons.svg)
 
-| Column               | Type      | Constraints | Default       | Description |
-| -------------------- | --------- | ----------- | ------------- | ----------- |
-| `rating`             | `real`    | NULL        |               |             |
-| `season`             | `integer` | NOT NULL    |               |             |
-| `redo`               | `integer` | NOT NULL    | `.default(0)` |             |
-| `listId` (`list_id`) | `integer` | NOT NULL    |               |             |
+| Column               | Type      | Constraints                                    | Default       | Description |
+| -------------------- | --------- | ---------------------------------------------- | ------------- | ----------- |
+| `rating`             | `real`    | NULL                                           |               |             |
+| `season`             | `integer` | PK NOT NULL                                    |               |             |
+| `redo`               | `integer` | NOT NULL                                       | `.default(0)` |             |
+| `listId` (`list_id`) | `integer` | PK NOT NULL → [animeList.id](#table-animeList) |               |             |
 
 #### Definition
 
@@ -5844,6 +5978,14 @@ CREATE TABLE `anime_list_seasons` (
 	CONSTRAINT "anime_list_seasons_rating_check" CHECK("rating" IS NULL OR ("rating" >= 0 AND "rating" <= 10))
 );
 ```
+
+#### Indexes
+
+- PRIMARY KEY `listId`, `season`
+
+#### References
+
+- `listId` → [animeList.id](#table-animeList) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -5881,6 +6023,20 @@ select "d0"."rating" as "rating", "d0"."season" as "season", "d0"."redo" as "red
 from "anime_list_seasons" as "d0"
 ```
 
+**Find by primary key**: One row of animeListSeasons, through the relational query API.
+
+```ts
+db.query.animeListSeasons.findFirst({ where: { season: 1, listId: 1 } });
+```
+
+```sql
+select "d0"."rating" as "rating", "d0"."season" as "season", "d0"."redo" as "redo", "d0"."list_id" as "listId"
+from "anime_list_seasons" as "d0"
+where (("d0"."season" = ?) and ("d0"."list_id" = ?))
+limit ?
+-- params: [1,1,1]
+```
+
 **Insert**: Adds a row to animeListSeasons, giving the columns that have no default.
 
 ```ts
@@ -5893,6 +6049,35 @@ values (null, ?, ?, ?)
 -- params: [1,0,1]
 ```
 
+**Update**: Changes a row of animeListSeasons, found by its primary key.
+
+```ts
+db.update(animeListSeasons)
+  .set({ rating: 1 })
+  .where(and(eq(animeListSeasons.season, 1), eq(animeListSeasons.listId, 1)));
+```
+
+```sql
+update "anime_list_seasons"
+set "rating" = ?
+where (("anime_list_seasons"."season" = ?) and ("anime_list_seasons"."list_id" = ?))
+-- params: [1,1,1]
+```
+
+**Delete**: Deletes a row of animeListSeasons, found by its primary key.
+
+```ts
+db.delete(animeListSeasons).where(
+  and(eq(animeListSeasons.season, 1), eq(animeListSeasons.listId, 1)),
+);
+```
+
+```sql
+delete from "anime_list_seasons"
+where (("anime_list_seasons"."season" = ?) and ("anime_list_seasons"."list_id" = ?))
+-- params: [1,1]
+```
+
 </details>
 
 <a id="table-animeGenre"></a>
@@ -5901,13 +6086,13 @@ values (null, ?, ?, ?)
 
 Table `anime_genre`.
 
-![animeGenre](tables/animeGenre.svg)
+![animeGenre and the tables it relates to](tables/animeGenre.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [anime.id](#table-anime) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -5923,6 +6108,15 @@ CREATE UNIQUE INDEX `ux_anime_genre_media_name` ON `anime_genre` (`media_id`,`na
 
 CREATE INDEX `ix_anime_genre_name_media` ON `anime_genre` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [anime.id](#table-anime) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6019,13 +6213,13 @@ where "anime_genre"."id" = ?
 
 Table `anime_actors`.
 
-![animeActors](tables/animeActors.svg)
+![animeActors and the tables it relates to](tables/animeActors.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [anime.id](#table-anime) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -6041,6 +6235,15 @@ CREATE UNIQUE INDEX `ux_anime_actors_media_name` ON `anime_actors` (`media_id`,`
 
 CREATE INDEX `ix_anime_actors_name_media` ON `anime_actors` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [anime.id](#table-anime) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6137,13 +6340,13 @@ where "anime_actors"."id" = ?
 
 Table `anime_network`.
 
-![animeNetwork](tables/animeNetwork.svg)
+![animeNetwork and the tables it relates to](tables/animeNetwork.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [anime.id](#table-anime) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -6159,6 +6362,15 @@ CREATE UNIQUE INDEX `ux_anime_network_media_name` ON `anime_network` (`media_id`
 
 CREATE INDEX `ix_anime_network_name_media` ON `anime_network` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [anime.id](#table-anime) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6255,14 +6467,14 @@ where "anime_network"."id" = ?
 
 Table `anime_episodes_per_season`.
 
-![animeEpisodesPerSeason](tables/animeEpisodesPerSeason.svg)
+![animeEpisodesPerSeason and the tables it relates to](tables/animeEpisodesPerSeason.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `season`               | `integer` | NOT NULL    |         |             |
-| `episodes`             | `integer` | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [anime.id](#table-anime) |         |             |
+| `season`               | `integer` | NOT NULL                            |         |             |
+| `episodes`             | `integer` | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -6277,6 +6489,14 @@ CREATE TABLE `anime_episodes_per_season` (
 
 CREATE UNIQUE INDEX `ux_anime_episodes_per_season_media_season` ON `anime_episodes_per_season` (`media_id`,`season`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `season`
+
+#### References
+
+- `mediaId` → [anime.id](#table-anime) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6379,7 +6599,7 @@ Table `anime_tags`.
 | ---------------------- | --------- | ------------------------------------------- | ------- | ----------- |
 | `id`                   | `integer` | PK NOT NULL                                 |         |             |
 | `userId` (`user_id`)   | `integer` | NOT NULL → [user.id](#table-user)           |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL                                    |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [anime.id](#table-anime)         |         |             |
 | `tagId` (`tag_id`)     | `integer` | NOT NULL → [mediaTags.id](#table-mediaTags) |         |             |
 
 #### Definition
@@ -6400,9 +6620,15 @@ CREATE UNIQUE INDEX `ux_anime_tags_user_media_tag` ON `anime_tags` (`user_id`,`m
 CREATE INDEX `ix_anime_tags_user_tag_media` ON `anime_tags` (`user_id`,`tag_id`,`media_id`);
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`, `tagId`
+- INDEX `userId`, `tagId`, `mediaId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [anime.id](#table-anime) (many to one, on delete cascade)
 - `tagId` → [mediaTags.id](#table-mediaTags) (many to one, on delete cascade)
 
 <details>
@@ -6498,7 +6724,7 @@ where "anime_tags"."id" = ?
 
 ### movies
 
-![movies](tables/movies.svg)
+![movies and the tables it relates to](tables/movies.svg)
 
 | Column                                   | Type      | Constraints     | Default                                | Description |
 | ---------------------------------------- | --------- | --------------- | -------------------------------------- | ----------- |
@@ -6555,6 +6781,13 @@ CREATE TABLE `movies` (
 	`last_api_update` text
 );
 ```
+
+#### Referenced by
+
+- `id` → [moviesList.mediaId](#table-moviesList) (one to many)
+- `id` → [moviesGenre.mediaId](#table-moviesGenre) (one to many, on delete cascade)
+- `id` → [moviesActors.mediaId](#table-moviesActors) (one to many, on delete cascade)
+- `id` → [moviesTags.mediaId](#table-moviesTags) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6653,21 +6886,21 @@ Table `movies_list`.
 
 ![moviesList and the tables it relates to](tables/moviesList.svg)
 
-| Column                                                          | Type      | Constraints                       | Default                                | Description |
-| --------------------------------------------------------------- | --------- | --------------------------------- | -------------------------------------- | ----------- |
-| `redo`                                                          | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `total`                                                         | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `id`                                                            | `integer` | PK NOT NULL                       |                                        |             |
-| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user) |                                        |             |
-| `mediaId` (`media_id`)                                          | `integer` | NOT NULL                          |                                        |             |
-| `status`                                                        | `text`    | NOT NULL                          |                                        |             |
-| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                          | `.default(true)`                       |             |
-| `favorite`                                                      | `integer` | NOT NULL                          | `.default(false)`                      |             |
-| `comment`                                                       | `text`    | NULL                              |                                        |             |
-| `rating`                                                        | `real`    | NULL                              |                                        |             |
-| `customCover` (`custom_cover`)                                  | `text`    | NULL                              |                                        |             |
-| `addedAt` (`added_at`)                                          | `text`    | NULL                              | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
-| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                              |                                        |             |
+| Column                                                          | Type      | Constraints                           | Default                                | Description |
+| --------------------------------------------------------------- | --------- | ------------------------------------- | -------------------------------------- | ----------- |
+| `redo`                                                          | `integer` | NOT NULL                              | `.default(0)`                          |             |
+| `total`                                                         | `integer` | NOT NULL                              | `.default(0)`                          |             |
+| `id`                                                            | `integer` | PK NOT NULL                           |                                        |             |
+| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user)     |                                        |             |
+| `mediaId` (`media_id`)                                          | `integer` | NOT NULL → [movies.id](#table-movies) |                                        |             |
+| `status`                                                        | `text`    | NOT NULL                              |                                        |             |
+| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                              | `.default(true)`                       |             |
+| `favorite`                                                      | `integer` | NOT NULL                              | `.default(false)`                      |             |
+| `comment`                                                       | `text`    | NULL                                  |                                        |             |
+| `rating`                                                        | `real`    | NULL                                  |                                        |             |
+| `customCover` (`custom_cover`)                                  | `text`    | NULL                                  |                                        |             |
+| `addedAt` (`added_at`)                                          | `text`    | NULL                                  | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
+| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                                  |                                        |             |
 
 #### Definition
 
@@ -6701,9 +6934,17 @@ CREATE INDEX `ix_movies_list_user_media_rated` ON `movies_list` (`user_id`,`medi
 CREATE INDEX `ix_movies_list_media_user_rated` ON `movies_list` (`media_id`,`user_id`) WHERE "movies_list"."rating" IS NOT NULL;
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`
+- INDEX `mediaId`
+- INDEX `userId`, `mediaId`
+- INDEX `mediaId`, `userId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [movies.id](#table-movies) (many to one)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6800,13 +7041,13 @@ where "movies_list"."id" = ?
 
 Table `movies_genre`.
 
-![moviesGenre](tables/moviesGenre.svg)
+![moviesGenre and the tables it relates to](tables/moviesGenre.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                           | Default | Description |
+| ---------------------- | --------- | ------------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                           |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [movies.id](#table-movies) |         |             |
+| `name`                 | `text`    | NOT NULL                              |         |             |
 
 #### Definition
 
@@ -6822,6 +7063,15 @@ CREATE UNIQUE INDEX `ux_movies_genre_media_name` ON `movies_genre` (`media_id`,`
 
 CREATE INDEX `ix_movies_genre_name_media` ON `movies_genre` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [movies.id](#table-movies) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -6918,13 +7168,13 @@ where "movies_genre"."id" = ?
 
 Table `movies_actors`.
 
-![moviesActors](tables/moviesActors.svg)
+![moviesActors and the tables it relates to](tables/moviesActors.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                           | Default | Description |
+| ---------------------- | --------- | ------------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                           |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [movies.id](#table-movies) |         |             |
+| `name`                 | `text`    | NOT NULL                              |         |             |
 
 #### Definition
 
@@ -6940,6 +7190,15 @@ CREATE UNIQUE INDEX `ux_movies_actors_media_name` ON `movies_actors` (`media_id`
 
 CREATE INDEX `ix_movies_actors_name_media` ON `movies_actors` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [movies.id](#table-movies) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7042,7 +7301,7 @@ Table `movies_tags`.
 | ---------------------- | --------- | ------------------------------------------- | ------- | ----------- |
 | `id`                   | `integer` | PK NOT NULL                                 |         |             |
 | `userId` (`user_id`)   | `integer` | NOT NULL → [user.id](#table-user)           |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL                                    |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [movies.id](#table-movies)       |         |             |
 | `tagId` (`tag_id`)     | `integer` | NOT NULL → [mediaTags.id](#table-mediaTags) |         |             |
 
 #### Definition
@@ -7063,9 +7322,15 @@ CREATE UNIQUE INDEX `ux_movies_tags_user_media_tag` ON `movies_tags` (`user_id`,
 CREATE INDEX `ix_movies_tags_user_tag_media` ON `movies_tags` (`user_id`,`tag_id`,`media_id`);
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`, `tagId`
+- INDEX `userId`, `tagId`, `mediaId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [movies.id](#table-movies) (many to one, on delete cascade)
 - `tagId` → [mediaTags.id](#table-mediaTags) (many to one, on delete cascade)
 
 <details>
@@ -7161,7 +7426,7 @@ where "movies_tags"."id" = ?
 
 ### games
 
-![games](tables/games.svg)
+![games and the tables it relates to](tables/games.svg)
 
 | Column                                               | Type      | Constraints     | Default                                | Description |
 | ---------------------------------------------------- | --------- | --------------- | -------------------------------------- | ----------- |
@@ -7216,6 +7481,14 @@ CREATE TABLE `games` (
 	`last_api_update` text
 );
 ```
+
+#### Referenced by
+
+- `id` → [gamesList.mediaId](#table-gamesList) (one to many)
+- `id` → [gamesGenre.mediaId](#table-gamesGenre) (one to many, on delete cascade)
+- `id` → [gamesPlatforms.mediaId](#table-gamesPlatforms) (one to many, on delete cascade)
+- `id` → [gamesCompanies.mediaId](#table-gamesCompanies) (one to many, on delete cascade)
+- `id` → [gamesTags.mediaId](#table-gamesTags) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7314,21 +7587,21 @@ Table `games_list`.
 
 ![gamesList and the tables it relates to](tables/gamesList.svg)
 
-| Column                                                          | Type      | Constraints                       | Default                                | Description |
-| --------------------------------------------------------------- | --------- | --------------------------------- | -------------------------------------- | ----------- |
-| `playtime`                                                      | `integer` | NULL                              | `.default(0)`                          |             |
-| `platform`                                                      | `text`    | NULL                              |                                        |             |
-| `id`                                                            | `integer` | PK NOT NULL                       |                                        |             |
-| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user) |                                        |             |
-| `mediaId` (`media_id`)                                          | `integer` | NOT NULL                          |                                        |             |
-| `status`                                                        | `text`    | NOT NULL                          |                                        |             |
-| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                          | `.default(true)`                       |             |
-| `favorite`                                                      | `integer` | NOT NULL                          | `.default(false)`                      |             |
-| `comment`                                                       | `text`    | NULL                              |                                        |             |
-| `rating`                                                        | `real`    | NULL                              |                                        |             |
-| `customCover` (`custom_cover`)                                  | `text`    | NULL                              |                                        |             |
-| `addedAt` (`added_at`)                                          | `text`    | NULL                              | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
-| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                              |                                        |             |
+| Column                                                          | Type      | Constraints                         | Default                                | Description |
+| --------------------------------------------------------------- | --------- | ----------------------------------- | -------------------------------------- | ----------- |
+| `playtime`                                                      | `integer` | NULL                                | `.default(0)`                          |             |
+| `platform`                                                      | `text`    | NULL                                |                                        |             |
+| `id`                                                            | `integer` | PK NOT NULL                         |                                        |             |
+| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user)   |                                        |             |
+| `mediaId` (`media_id`)                                          | `integer` | NOT NULL → [games.id](#table-games) |                                        |             |
+| `status`                                                        | `text`    | NOT NULL                            |                                        |             |
+| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                            | `.default(true)`                       |             |
+| `favorite`                                                      | `integer` | NOT NULL                            | `.default(false)`                      |             |
+| `comment`                                                       | `text`    | NULL                                |                                        |             |
+| `rating`                                                        | `real`    | NULL                                |                                        |             |
+| `customCover` (`custom_cover`)                                  | `text`    | NULL                                |                                        |             |
+| `addedAt` (`added_at`)                                          | `text`    | NULL                                | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
+| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                                |                                        |             |
 
 #### Definition
 
@@ -7362,9 +7635,17 @@ CREATE INDEX `ix_games_list_user_media_rated` ON `games_list` (`user_id`,`media_
 CREATE INDEX `ix_games_list_media_user_rated` ON `games_list` (`media_id`,`user_id`) WHERE "games_list"."rating" IS NOT NULL;
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`
+- INDEX `mediaId`
+- INDEX `userId`, `mediaId`
+- INDEX `mediaId`, `userId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [games.id](#table-games) (many to one)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7461,13 +7742,13 @@ where "games_list"."id" = ?
 
 Table `games_genre`.
 
-![gamesGenre](tables/gamesGenre.svg)
+![gamesGenre and the tables it relates to](tables/gamesGenre.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [games.id](#table-games) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -7483,6 +7764,15 @@ CREATE UNIQUE INDEX `ux_games_genre_media_name` ON `games_genre` (`media_id`,`na
 
 CREATE INDEX `ix_games_genre_name_media` ON `games_genre` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [games.id](#table-games) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7579,13 +7869,13 @@ where "games_genre"."id" = ?
 
 Table `games_platforms`.
 
-![gamesPlatforms](tables/gamesPlatforms.svg)
+![gamesPlatforms and the tables it relates to](tables/gamesPlatforms.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [games.id](#table-games) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -7601,6 +7891,15 @@ CREATE UNIQUE INDEX `ux_games_platforms_media_name` ON `games_platforms` (`media
 
 CREATE INDEX `ix_games_platforms_name_media` ON `games_platforms` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [games.id](#table-games) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7697,15 +7996,15 @@ where "games_platforms"."id" = ?
 
 Table `games_companies`.
 
-![gamesCompanies](tables/gamesCompanies.svg)
+![gamesCompanies and the tables it relates to](tables/gamesCompanies.svg)
 
-| Column                 | Type      | Constraints | Default           | Description |
-| ---------------------- | --------- | ----------- | ----------------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |                   |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |                   |             |
-| `name`                 | `text`    | NOT NULL    |                   |             |
-| `publisher`            | `integer` | NOT NULL    | `.default(false)` |             |
-| `developer`            | `integer` | NOT NULL    | `.default(false)` |             |
+| Column                 | Type      | Constraints                         | Default           | Description |
+| ---------------------- | --------- | ----------------------------------- | ----------------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |                   |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [games.id](#table-games) |                   |             |
+| `name`                 | `text`    | NOT NULL                            |                   |             |
+| `publisher`            | `integer` | NOT NULL                            | `.default(false)` |             |
+| `developer`            | `integer` | NOT NULL                            | `.default(false)` |             |
 
 #### Definition
 
@@ -7728,6 +8027,10 @@ CREATE INDEX `ix_games_companies_name_media` ON `games_companies` (`name`,`media
 
 - UNIQUE `mediaId`, `name`, `publisher`, `developer`
 - INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [games.id](#table-games) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -7830,7 +8133,7 @@ Table `games_tags`.
 | ---------------------- | --------- | ------------------------------------------- | ------- | ----------- |
 | `id`                   | `integer` | PK NOT NULL                                 |         |             |
 | `userId` (`user_id`)   | `integer` | NOT NULL → [user.id](#table-user)           |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL                                    |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [games.id](#table-games)         |         |             |
 | `tagId` (`tag_id`)     | `integer` | NOT NULL → [mediaTags.id](#table-mediaTags) |         |             |
 
 #### Definition
@@ -7851,9 +8154,15 @@ CREATE UNIQUE INDEX `ux_games_tags_user_media_tag` ON `games_tags` (`user_id`,`m
 CREATE INDEX `ix_games_tags_user_tag_media` ON `games_tags` (`user_id`,`tag_id`,`media_id`);
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`, `tagId`
+- INDEX `userId`, `tagId`, `mediaId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [games.id](#table-games) (many to one, on delete cascade)
 - `tagId` → [mediaTags.id](#table-mediaTags) (many to one, on delete cascade)
 
 <details>
@@ -7949,7 +8258,7 @@ where "games_tags"."id" = ?
 
 ### books
 
-![books](tables/books.svg)
+![books and the tables it relates to](tables/books.svg)
 
 | Column                              | Type      | Constraints     | Default                                | Description |
 | ----------------------------------- | --------- | --------------- | -------------------------------------- | ----------- |
@@ -7984,6 +8293,13 @@ CREATE TABLE `books` (
 	`last_api_update` text
 );
 ```
+
+#### Referenced by
+
+- `id` → [booksList.mediaId](#table-booksList) (one to many)
+- `id` → [booksGenre.mediaId](#table-booksGenre) (one to many, on delete cascade)
+- `id` → [booksAuthors.mediaId](#table-booksAuthors) (one to many, on delete cascade)
+- `id` → [booksTags.mediaId](#table-booksTags) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8088,22 +8404,22 @@ Table `books_list`.
 
 ![booksList and the tables it relates to](tables/booksList.svg)
 
-| Column                                                          | Type      | Constraints                       | Default                                | Description |
-| --------------------------------------------------------------- | --------- | --------------------------------- | -------------------------------------- | ----------- |
-| `actualPage` (`actual_page`)                                    | `integer` | NULL                              |                                        |             |
-| `redo`                                                          | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `total`                                                         | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `id`                                                            | `integer` | PK NOT NULL                       |                                        |             |
-| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user) |                                        |             |
-| `mediaId` (`media_id`)                                          | `integer` | NOT NULL                          |                                        |             |
-| `status`                                                        | `text`    | NOT NULL                          |                                        |             |
-| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                          | `.default(true)`                       |             |
-| `favorite`                                                      | `integer` | NOT NULL                          | `.default(false)`                      |             |
-| `comment`                                                       | `text`    | NULL                              |                                        |             |
-| `rating`                                                        | `real`    | NULL                              |                                        |             |
-| `customCover` (`custom_cover`)                                  | `text`    | NULL                              |                                        |             |
-| `addedAt` (`added_at`)                                          | `text`    | NULL                              | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
-| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                              |                                        |             |
+| Column                                                          | Type      | Constraints                         | Default                                | Description |
+| --------------------------------------------------------------- | --------- | ----------------------------------- | -------------------------------------- | ----------- |
+| `actualPage` (`actual_page`)                                    | `integer` | NULL                                |                                        |             |
+| `redo`                                                          | `integer` | NOT NULL                            | `.default(0)`                          |             |
+| `total`                                                         | `integer` | NOT NULL                            | `.default(0)`                          |             |
+| `id`                                                            | `integer` | PK NOT NULL                         |                                        |             |
+| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user)   |                                        |             |
+| `mediaId` (`media_id`)                                          | `integer` | NOT NULL → [books.id](#table-books) |                                        |             |
+| `status`                                                        | `text`    | NOT NULL                            |                                        |             |
+| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                            | `.default(true)`                       |             |
+| `favorite`                                                      | `integer` | NOT NULL                            | `.default(false)`                      |             |
+| `comment`                                                       | `text`    | NULL                                |                                        |             |
+| `rating`                                                        | `real`    | NULL                                |                                        |             |
+| `customCover` (`custom_cover`)                                  | `text`    | NULL                                |                                        |             |
+| `addedAt` (`added_at`)                                          | `text`    | NULL                                | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
+| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                                |                                        |             |
 
 #### Definition
 
@@ -8138,9 +8454,17 @@ CREATE INDEX `ix_books_list_user_media_rated` ON `books_list` (`user_id`,`media_
 CREATE INDEX `ix_books_list_media_user_rated` ON `books_list` (`media_id`,`user_id`) WHERE "books_list"."rating" IS NOT NULL;
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`
+- INDEX `mediaId`
+- INDEX `userId`, `mediaId`
+- INDEX `mediaId`, `userId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [books.id](#table-books) (many to one)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8237,13 +8561,13 @@ where "books_list"."id" = ?
 
 Table `books_genre`.
 
-![booksGenre](tables/booksGenre.svg)
+![booksGenre and the tables it relates to](tables/booksGenre.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [books.id](#table-books) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -8259,6 +8583,15 @@ CREATE UNIQUE INDEX `ux_books_genre_media_name` ON `books_genre` (`media_id`,`na
 
 CREATE INDEX `ix_books_genre_name_media` ON `books_genre` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [books.id](#table-books) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8355,13 +8688,13 @@ where "books_genre"."id" = ?
 
 Table `books_authors`.
 
-![booksAuthors](tables/booksAuthors.svg)
+![booksAuthors and the tables it relates to](tables/booksAuthors.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [books.id](#table-books) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -8377,6 +8710,15 @@ CREATE UNIQUE INDEX `ux_books_authors_media_name` ON `books_authors` (`media_id`
 
 CREATE INDEX `ix_books_authors_name_media` ON `books_authors` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [books.id](#table-books) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8479,7 +8821,7 @@ Table `books_tags`.
 | ---------------------- | --------- | ------------------------------------------- | ------- | ----------- |
 | `id`                   | `integer` | PK NOT NULL                                 |         |             |
 | `userId` (`user_id`)   | `integer` | NOT NULL → [user.id](#table-user)           |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL                                    |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [books.id](#table-books)         |         |             |
 | `tagId` (`tag_id`)     | `integer` | NOT NULL → [mediaTags.id](#table-mediaTags) |         |             |
 
 #### Definition
@@ -8500,9 +8842,15 @@ CREATE UNIQUE INDEX `ux_books_tags_user_media_tag` ON `books_tags` (`user_id`,`m
 CREATE INDEX `ix_books_tags_user_tag_media` ON `books_tags` (`user_id`,`tag_id`,`media_id`);
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`, `tagId`
+- INDEX `userId`, `tagId`, `mediaId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [books.id](#table-books) (many to one, on delete cascade)
 - `tagId` → [mediaTags.id](#table-mediaTags) (many to one, on delete cascade)
 
 <details>
@@ -8598,7 +8946,7 @@ where "books_tags"."id" = ?
 
 ### manga
 
-![manga](tables/manga.svg)
+![manga and the tables it relates to](tables/manga.svg)
 
 | Column                              | Type      | Constraints     | Default                                | Description |
 | ----------------------------------- | --------- | --------------- | -------------------------------------- | ----------- |
@@ -8647,6 +8995,13 @@ CREATE TABLE `manga` (
 	`last_api_update` text
 );
 ```
+
+#### Referenced by
+
+- `id` → [mangaList.mediaId](#table-mangaList) (one to many)
+- `id` → [mangaGenre.mediaId](#table-mangaGenre) (one to many, on delete cascade)
+- `id` → [mangaAuthors.mediaId](#table-mangaAuthors) (one to many, on delete cascade)
+- `id` → [mangaTags.mediaId](#table-mangaTags) (one to many, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8745,22 +9100,22 @@ Table `manga_list`.
 
 ![mangaList and the tables it relates to](tables/mangaList.svg)
 
-| Column                                                          | Type      | Constraints                       | Default                                | Description |
-| --------------------------------------------------------------- | --------- | --------------------------------- | -------------------------------------- | ----------- |
-| `currentChapter` (`current_chapter`)                            | `integer` | NOT NULL                          |                                        |             |
-| `redo`                                                          | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `total`                                                         | `integer` | NOT NULL                          | `.default(0)`                          |             |
-| `id`                                                            | `integer` | PK NOT NULL                       |                                        |             |
-| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user) |                                        |             |
-| `mediaId` (`media_id`)                                          | `integer` | NOT NULL                          |                                        |             |
-| `status`                                                        | `text`    | NOT NULL                          |                                        |             |
-| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                          | `.default(true)`                       |             |
-| `favorite`                                                      | `integer` | NOT NULL                          | `.default(false)`                      |             |
-| `comment`                                                       | `text`    | NULL                              |                                        |             |
-| `rating`                                                        | `real`    | NULL                              |                                        |             |
-| `customCover` (`custom_cover`)                                  | `text`    | NULL                              |                                        |             |
-| `addedAt` (`added_at`)                                          | `text`    | NULL                              | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
-| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                              |                                        |             |
+| Column                                                          | Type      | Constraints                         | Default                                | Description |
+| --------------------------------------------------------------- | --------- | ----------------------------------- | -------------------------------------- | ----------- |
+| `currentChapter` (`current_chapter`)                            | `integer` | NOT NULL                            |                                        |             |
+| `redo`                                                          | `integer` | NOT NULL                            | `.default(0)`                          |             |
+| `total`                                                         | `integer` | NOT NULL                            | `.default(0)`                          |             |
+| `id`                                                            | `integer` | PK NOT NULL                         |                                        |             |
+| `userId` (`user_id`)                                            | `integer` | NOT NULL → [user.id](#table-user)   |                                        |             |
+| `mediaId` (`media_id`)                                          | `integer` | NOT NULL → [manga.id](#table-manga) |                                        |             |
+| `status`                                                        | `text`    | NOT NULL                            |                                        |             |
+| `releaseNotificationsEnabled` (`release_notifications_enabled`) | `integer` | NOT NULL                            | `.default(true)`                       |             |
+| `favorite`                                                      | `integer` | NOT NULL                            | `.default(false)`                      |             |
+| `comment`                                                       | `text`    | NULL                                |                                        |             |
+| `rating`                                                        | `real`    | NULL                                |                                        |             |
+| `customCover` (`custom_cover`)                                  | `text`    | NULL                                |                                        |             |
+| `addedAt` (`added_at`)                                          | `text`    | NULL                                | ``.default(sql`(CURRENT_TIMESTAMP)`)`` |             |
+| `lastUpdated` (`last_updated`)                                  | `text`    | NULL                                |                                        |             |
 
 #### Definition
 
@@ -8795,9 +9150,17 @@ CREATE INDEX `ix_manga_list_user_media_rated` ON `manga_list` (`user_id`,`media_
 CREATE INDEX `ix_manga_list_media_user_rated` ON `manga_list` (`media_id`,`user_id`) WHERE "manga_list"."rating" IS NOT NULL;
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`
+- INDEX `mediaId`
+- INDEX `userId`, `mediaId`
+- INDEX `mediaId`, `userId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [manga.id](#table-manga) (many to one)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -8894,13 +9257,13 @@ where "manga_list"."id" = ?
 
 Table `manga_genre`.
 
-![mangaGenre](tables/mangaGenre.svg)
+![mangaGenre and the tables it relates to](tables/mangaGenre.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [manga.id](#table-manga) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -8916,6 +9279,15 @@ CREATE UNIQUE INDEX `ux_manga_genre_media_name` ON `manga_genre` (`media_id`,`na
 
 CREATE INDEX `ix_manga_genre_name_media` ON `manga_genre` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [manga.id](#table-manga) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -9012,13 +9384,13 @@ where "manga_genre"."id" = ?
 
 Table `manga_authors`.
 
-![mangaAuthors](tables/mangaAuthors.svg)
+![mangaAuthors and the tables it relates to](tables/mangaAuthors.svg)
 
-| Column                 | Type      | Constraints | Default | Description |
-| ---------------------- | --------- | ----------- | ------- | ----------- |
-| `id`                   | `integer` | PK NOT NULL |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL    |         |             |
-| `name`                 | `text`    | NOT NULL    |         |             |
+| Column                 | Type      | Constraints                         | Default | Description |
+| ---------------------- | --------- | ----------------------------------- | ------- | ----------- |
+| `id`                   | `integer` | PK NOT NULL                         |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [manga.id](#table-manga) |         |             |
+| `name`                 | `text`    | NOT NULL                            |         |             |
 
 #### Definition
 
@@ -9034,6 +9406,15 @@ CREATE UNIQUE INDEX `ux_manga_authors_media_name` ON `manga_authors` (`media_id`
 
 CREATE INDEX `ix_manga_authors_name_media` ON `manga_authors` (`name`,`media_id`);
 ```
+
+#### Indexes
+
+- UNIQUE `mediaId`, `name`
+- INDEX `name`, `mediaId`
+
+#### References
+
+- `mediaId` → [manga.id](#table-manga) (many to one, on delete cascade)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -9136,7 +9517,7 @@ Table `manga_tags`.
 | ---------------------- | --------- | ------------------------------------------- | ------- | ----------- |
 | `id`                   | `integer` | PK NOT NULL                                 |         |             |
 | `userId` (`user_id`)   | `integer` | NOT NULL → [user.id](#table-user)           |         |             |
-| `mediaId` (`media_id`) | `integer` | NOT NULL                                    |         |             |
+| `mediaId` (`media_id`) | `integer` | NOT NULL → [manga.id](#table-manga)         |         |             |
 | `tagId` (`tag_id`)     | `integer` | NOT NULL → [mediaTags.id](#table-mediaTags) |         |             |
 
 #### Definition
@@ -9157,9 +9538,15 @@ CREATE UNIQUE INDEX `ux_manga_tags_user_media_tag` ON `manga_tags` (`user_id`,`m
 CREATE INDEX `ix_manga_tags_user_tag_media` ON `manga_tags` (`user_id`,`tag_id`,`media_id`);
 ```
 
+#### Indexes
+
+- UNIQUE `userId`, `mediaId`, `tagId`
+- INDEX `userId`, `tagId`, `mediaId`
+
 #### References
 
 - `userId` → [user.id](#table-user) (many to one, on delete cascade)
+- `mediaId` → [manga.id](#table-manga) (many to one, on delete cascade)
 - `tagId` → [mediaTags.id](#table-mediaTags) (many to one, on delete cascade)
 
 <details>

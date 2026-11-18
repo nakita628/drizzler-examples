@@ -66,8 +66,9 @@ Table comments {
   indexes {
     (post_id) [name: 'comments_post_id_idx']
     (user_id) [name: 'comments_user_id_idx']
-    (post_id) [name: 'comments_post_id_created_at_desc_idx']
-    (parent_id) [name: 'comments_parent_id_created_at_desc_idx']
+    (post_id, created_at) [name: 'comments_post_id_created_at_desc_idx']
+    (parent_id, created_at) [name: 'comments_parent_id_created_at_desc_idx']
+    `to_tsvector('english', body)` [type: gin, name: 'comments_body_tsvector_idx']
   }
 }
 
@@ -88,6 +89,7 @@ Table messages {
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
   indexes {
+    (created_at) [name: 'messages_created_at_desc_idx']
     (user_id) [name: 'messages_user_id_idx']
   }
 }
@@ -97,6 +99,9 @@ Table posts {
   slug text [pk, not null]
   likes integer [not null]
   views integer [not null]
+  indexes {
+    (created_at) [name: 'posts_created_at_desc_idx']
+  }
 }
 
 Table post_likes {

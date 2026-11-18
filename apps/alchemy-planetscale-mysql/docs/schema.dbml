@@ -1,12 +1,12 @@
 Table users {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   email varchar [not null, unique]
   name varchar [not null]
   created_at timestamp [not null]
 }
 
 Table posts {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   user_id integer [not null]
   title varchar [not null]
   body varchar [not null]

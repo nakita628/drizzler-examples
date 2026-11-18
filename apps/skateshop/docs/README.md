@@ -1406,6 +1406,7 @@ ALTER TABLE "stocks" ADD CONSTRAINT "stocks_product_variant_id_product_variants_
 #### References
 
 - `productVariantId` → [productVariants.id](#table-productVariants) (many to one, on delete cascade)
+- `productVariantId` → [productVariantValues.productVariantId](#table-productVariantValues) (many to one, on delete cascade, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -2237,6 +2238,7 @@ ALTER TABLE "product_variants" ADD CONSTRAINT "product_variants_variant_id_varia
 
 - `id` → [stocks.productVariantId](#table-stocks) (one to many, on delete cascade)
 - `id` → [productVariantValues.productVariantId](#table-productVariantValues) (one to many, on delete cascade)
+- `productId` → [productVariantValues.productVariantId](#table-productVariantValues) (one to many, on delete cascade, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -2376,6 +2378,11 @@ ALTER TABLE "product_variant_values" ADD CONSTRAINT "product_variant_values_stoc
 
 - `productVariantId` → [productVariants.id](#table-productVariants) (many to one, on delete cascade)
 - `stockId` → [stocks.id](#table-stocks) (many to one, on delete cascade)
+- `productVariantId` → [productVariants.productId](#table-productVariants) (many to one, on delete cascade, defineRelations, no foreign key)
+
+#### Referenced by
+
+- `productVariantId` → [stocks.productVariantId](#table-stocks) (one to many, on delete cascade, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>

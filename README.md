@@ -9,37 +9,37 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | App | Source | Dialect | Known issues |
 | --- | --- | --- | --- |
 | [northwind](apps/northwind) | drizzle-team/drizzle-northwind-benchmarks-pg | PostgreSQL | — |
-| [drizzle-benchmarks-pg](apps/drizzle-benchmarks-pg) | drizzle-team/drizzle-benchmarks | PostgreSQL | [#50](https://github.com/nakita628/drizzler/issues/50) |
-| [drizzle-benchmarks-sqlite](apps/drizzle-benchmarks-sqlite) | drizzle-team/drizzle-benchmarks | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [drizzle-benchmarks-pg](apps/drizzle-benchmarks-pg) | drizzle-team/drizzle-benchmarks | PostgreSQL | — |
+| [drizzle-benchmarks-sqlite](apps/drizzle-benchmarks-sqlite) | drizzle-team/drizzle-benchmarks | SQLite | — |
 | [realworld](apps/realworld) | bedstack/elysia-drizzle-realworld-example | PostgreSQL | — |
-| [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
-| [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
-| [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
-| [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [create-t3-app](apps/create-t3-app) | t3-oss/create-t3-app (NextAuth) | PostgreSQL | — |
+| [create-t3-app-sqlite](apps/create-t3-app-sqlite) | t3-oss/create-t3-app (NextAuth) | SQLite | — |
+| [create-t3-app-mysql](apps/create-t3-app-mysql) | t3-oss/create-t3-app (NextAuth) | MySQL | — |
+| [create-t3-app-better-auth](apps/create-t3-app-better-auth) | t3-oss/create-t3-app (Better Auth) | PostgreSQL | — |
 | [react-starter-kit](apps/react-starter-kit) | kriasoft/react-starter-kit | PostgreSQL | — |
 | [authjs-drizzle-sqlite](apps/authjs-drizzle-sqlite) | nextauthjs/next-auth (Drizzle adapter) | SQLite | — |
 | [authjs-drizzle-pg](apps/authjs-drizzle-pg) | nextauthjs/next-auth (Drizzle adapter) | PostgreSQL | — |
 | [authjs-drizzle-mysql](apps/authjs-drizzle-mysql) | nextauthjs/next-auth (Drizzle adapter) | MySQL | — |
 | [vercel-ai-chatbot](apps/vercel-ai-chatbot) | vercel/ai-chatbot | PostgreSQL | — |
 | [saas-starter](apps/saas-starter) | nextjs/saas-starter | PostgreSQL | — |
-| [midday](apps/midday) | midday-ai/midday | PostgreSQL | [#57](https://github.com/nakita628/drizzler/issues/57) |
+| [midday](apps/midday) | midday-ai/midday | PostgreSQL | — |
 | [kan](apps/kan) | kanbn/kan | PostgreSQL | — |
-| [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | — |
-| [dyad](apps/dyad) | dyad-sh/dyad | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | [#60](https://github.com/nakita628/drizzler/issues/60) |
+| [dyad](apps/dyad) | dyad-sh/dyad | SQLite | — |
 | [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
-| [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
-| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | [#51](https://github.com/nakita628/drizzler/issues/51), [#57](https://github.com/nakita628/drizzler/issues/57) |
-| [morphic](apps/morphic) | miurla/morphic | PostgreSQL | [#57](https://github.com/nakita628/drizzler/issues/57) |
-| [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | [#48](https://github.com/nakita628/drizzler/issues/48) |
+| [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | [#60](https://github.com/nakita628/drizzler/issues/60), [#62](https://github.com/nakita628/drizzler/issues/62) |
+| [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | — |
+| [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
+| [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | — |
 | [papra](apps/papra) | papra-hq/papra | SQLite | — |
-| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | — |
-| [cap](apps/cap) | CapSoftware/Cap | MySQL | — |
+| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | [#60](https://github.com/nakita628/drizzler/issues/60) |
+| [cap](apps/cap) | CapSoftware/Cap | MySQL | [#60](https://github.com/nakita628/drizzler/issues/60) |
 | [pages-cms](apps/pages-cms) | pages-cms/pages-cms | PostgreSQL | — |
-| [turborepo-elysia](apps/turborepo-elysia) | vercel/turborepo (with-nextjs-elysia) | PostgreSQL | [#49](https://github.com/nakita628/drizzler/issues/49) |
+| [turborepo-elysia](apps/turborepo-elysia) | vercel/turborepo (with-nextjs-elysia) | PostgreSQL | — |
 | [sigle](apps/sigle) | sigle/sigle | PostgreSQL | — |
 | [create-t3-turbo](apps/create-t3-turbo) | t3-oss/create-t3-turbo | PostgreSQL | — |
-| [alchemy-d1](apps/alchemy-d1) | alchemy-run/alchemy (cloudflare-d1-drizzle) | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
-| [alchemy-planetscale-mysql](apps/alchemy-planetscale-mysql) | alchemy-run/alchemy (cloudflare-planetscale-mysql-drizzle) | MySQL | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [alchemy-d1](apps/alchemy-d1) | alchemy-run/alchemy (cloudflare-d1-drizzle) | SQLite | — |
+| [alchemy-planetscale-mysql](apps/alchemy-planetscale-mysql) | alchemy-run/alchemy (cloudflare-planetscale-mysql-drizzle) | MySQL | — |
 | [alchemy-dsql](apps/alchemy-dsql) | alchemy-run/alchemy (aws-dsql-drizzle) | PostgreSQL | — |
 | [justship](apps/justship) | ocluf/justship | SQLite | — |
 | [cove](apps/cove) | mugnavo/cove | PostgreSQL | — |
@@ -48,26 +48,26 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [canva-clone](apps/canva-clone) | Davronov-Alimardon/canva-clone | PostgreSQL | — |
 | [refref](apps/refref) | amicalhq/refref | PostgreSQL | — |
 | [openbio](apps/openbio) | vanxh/openbio | PostgreSQL | — |
-| [infinitunes](apps/infinitunes) | rajput-hemant/infinitunes | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52), [#57](https://github.com/nakita628/drizzler/issues/57) |
-| [lipi](apps/lipi) | rajput-hemant/lipi | PostgreSQL | [#52](https://github.com/nakita628/drizzler/issues/52) |
+| [infinitunes](apps/infinitunes) | rajput-hemant/infinitunes | PostgreSQL | — |
+| [lipi](apps/lipi) | rajput-hemant/lipi | PostgreSQL | — |
 | [rdt-li](apps/rdt-li) | nrjdalal/rdt-li | PostgreSQL | — |
-| [devterms](apps/devterms) | aelew/devterms | SQLite | [#53](https://github.com/nakita628/drizzler/issues/53) |
-| [mylists](apps/mylists) | vincedelmas/MyLists | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51), [#54](https://github.com/nakita628/drizzler/issues/54), [#55](https://github.com/nakita628/drizzler/issues/55) |
+| [devterms](apps/devterms) | aelew/devterms | SQLite | — |
+| [mylists](apps/mylists) | vincedelmas/MyLists | SQLite | [#61](https://github.com/nakita628/drizzler/issues/61) |
 | [survev](apps/survev) | survev/survev | PostgreSQL | — |
-| [openstatus](apps/openstatus) | openstatusHQ/openstatus | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
-| [hyprnote](apps/hyprnote) | fastrepl/hyprnote | SQLite | [#56](https://github.com/nakita628/drizzler/issues/56) |
+| [openstatus](apps/openstatus) | openstatusHQ/openstatus | SQLite | — |
+| [hyprnote](apps/hyprnote) | fastrepl/hyprnote | SQLite | — |
 | [skateshop](apps/skateshop) | sadmann7/skateshop | PostgreSQL | — |
 | [relivator](apps/relivator) | reliverse/relivator | PostgreSQL | — |
 | [next-saas-stripe-starter](apps/next-saas-stripe-starter) | mickasmt/next-saas-stripe-starter | PostgreSQL | — |
-| [nelsonlai-dev](apps/nelsonlai-dev) | nelsonlaidev/nelsonlai.dev | PostgreSQL | [#57](https://github.com/nakita628/drizzler/issues/57) |
+| [nelsonlai-dev](apps/nelsonlai-dev) | nelsonlaidev/nelsonlai.dev | PostgreSQL | — |
 | [nuxt-ui-chat](apps/nuxt-ui-chat) | nuxt-ui-templates/chat | SQLite | — |
 | [onestopshop](apps/onestopshop) | jackblatch/OneStopShop | MySQL | — |
 | [noodle](apps/noodle) | noodle-run/noodle | PostgreSQL | — |
 | [orbitkit](apps/orbitkit) | ixahmedxi/orbitkit | PostgreSQL | — |
 | [zws](apps/zws) | zws-im/zws | PostgreSQL | — |
 | [ai-fullstack-saas](apps/ai-fullstack-saas) | alan345/AI-Fullstack-SaaS-Boilerplate | PostgreSQL | — |
-| [deft](apps/deft) | Maneek21/Deft | PostgreSQL | [#58](https://github.com/nakita628/drizzler/issues/58) |
-| [cut-it](apps/cut-it) | mehrabmp/cut-it | SQLite | — |
+| [deft](apps/deft) | Maneek21/Deft | PostgreSQL | — |
+| [cut-it](apps/cut-it) | mehrabmp/cut-it | SQLite | [#60](https://github.com/nakita628/drizzler/issues/60) |
 | [flarestarter](apps/flarestarter) | FlareStarter/flarestarter | SQLite | — |
 | [better-auth-cloudflare](apps/better-auth-cloudflare) | zpg6/better-auth-cloudflare (Hono example) | SQLite | — |
 

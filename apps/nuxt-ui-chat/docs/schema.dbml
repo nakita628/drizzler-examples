@@ -48,3 +48,5 @@ Ref messages_chat_id_chats_id_fk: messages.chat_id > chats.id [delete: cascade]
 Ref votes_chat_id_chats_id_fk: votes.chat_id > chats.id [delete: cascade]
 
 Ref votes_message_id_messages_id_fk: votes.message_id > messages.id [delete: cascade]
+
+Ref chats_user_id_users_id: chats.user_id > users.id

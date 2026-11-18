@@ -71,6 +71,8 @@ erDiagram
     workspace_roles |o--o{ workspace_members : "(id) - (roleId)"
     workspace |o--o{ workspace_slug_checks : "(id) - (workspaceId)"
     user |o--o{ workspace_slug_checks : "(id) - (createdBy)"
+    user ||..o{ workspace_members : "(id) - (createdBy)"
+    workspace_members ||..o{ workspace_member_permissions : "(id) - (workspaceMemberId)"
     session {
         bigserial id PK
         timestamp expiresAt
@@ -341,7 +343,7 @@ erDiagram
     }
     workspace_member_permissions {
         bigserial id PK
-        bigint workspaceMemberId
+        bigint workspaceMemberId FK
         varchar permission
         boolean granted
         timestamp createdAt
@@ -429,7 +431,7 @@ erDiagram
         varchar email
         uuid userId FK
         bigint workspaceId FK
-        uuid createdBy
+        uuid createdBy FK
         timestamp createdAt
         timestamp updatedAt
         timestamp deletedAt

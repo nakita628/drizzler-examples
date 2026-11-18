@@ -1,5 +1,5 @@
 Table project1_post {
-  id bigint [pk, not null]
+  id bigint [pk, increment, not null]
   name varchar
   createdById varchar [not null]
   createdAt timestamp [not null]

@@ -126,17 +126,17 @@ ALTER TABLE "infinitunes_recently_played" ADD CONSTRAINT "infinitunes_recently_p
 
 ## Contents
 
-| Table                                                     | Name in the database       | Description                                                   |
-| --------------------------------------------------------- | -------------------------- | ------------------------------------------------------------- |
-| [users](#table-users)                                     | `user`                     |                                                               |
-| [betterAuthAccounts](#table-betterAuthAccounts)           | `better_auth_account`      |                                                               |
-| [betterAuthSessions](#table-betterAuthSessions)           | `better_auth_session`      |                                                               |
-| [betterAuthVerifications](#table-betterAuthVerifications) | `better_auth_verification` |                                                               |
-| [betterAuthRateLimits](#table-betterAuthRateLimits)       | `infinitunes_rate_limit`   |                                                               |
-| [infinitunesPasskeys](#table-infinitunesPasskeys)         | `infinitunes_passkey`      |                                                               |
-| [myPlaylists](#table-myPlaylists)                         | `playlist`                 |                                                               |
-| [favorites](#table-favorites)                             | `favorite`                 |                                                               |
-| [recentlyPlayed](#table-recentlyPlayed)                   | `recently_played`          | One row per user and played item; replaying bumps `playedAt`. |
+| Table                                                     | Name in the database          | Description                                                   |
+| --------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------- |
+| [users](#table-users)                                     | `user`                        |                                                               |
+| [betterAuthAccounts](#table-betterAuthAccounts)           | `better_auth_account`         |                                                               |
+| [betterAuthSessions](#table-betterAuthSessions)           | `better_auth_session`         |                                                               |
+| [betterAuthVerifications](#table-betterAuthVerifications) | `better_auth_verification`    |                                                               |
+| [betterAuthRateLimits](#table-betterAuthRateLimits)       | `infinitunes_rate_limit`      |                                                               |
+| [infinitunesPasskeys](#table-infinitunesPasskeys)         | `infinitunes_passkey`         |                                                               |
+| [myPlaylists](#table-myPlaylists)                         | `infinitunes_playlist`        |                                                               |
+| [favorites](#table-favorites)                             | `infinitunes_favorite`        |                                                               |
+| [recentlyPlayed](#table-recentlyPlayed)                   | `infinitunes_recently_played` | One row per user and played item; replaying bumps `playedAt`. |
 
 ## Tables
 
@@ -964,7 +964,7 @@ where "infinitunes_passkey"."id" = $1
 
 ### myPlaylists
 
-Table `playlist`.
+Table `infinitunes_playlist`.
 
 ![myPlaylists and the tables it relates to](tables/myPlaylists.svg)
 
@@ -976,6 +976,21 @@ Table `playlist`.
 | `userId`      | `uuid`      | NOT NULL → [users.id](#table-users) |                    |             |
 | `songs`       | `text[]`    | NOT NULL                            | `.default([])`     |             |
 | `createdAt`   | `timestamp` | NOT NULL                            | `.defaultNow()`    |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "infinitunes_playlist" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"name" text NOT NULL,
+	"description" text,
+	"userId" uuid NOT NULL,
+	"songs" text[] DEFAULT '{}'::text[] NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL
+);
+
+ALTER TABLE "infinitunes_playlist" ADD CONSTRAINT "infinitunes_playlist_userId_user_id_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE;
+```
 
 #### References
 
@@ -1076,7 +1091,7 @@ where "infinitunes_playlist"."id" = $1
 
 ### favorites
 
-Table `favorite`.
+Table `infinitunes_favorite`.
 
 ![favorites and the tables it relates to](tables/favorites.svg)
 
@@ -1089,6 +1104,22 @@ Table `favorite`.
 | `playlists` | `text[]` | NOT NULL                                   | `.default([])`     |             |
 | `artists`   | `text[]` | NOT NULL                                   | `.default([])`     |             |
 | `podcasts`  | `text[]` | NOT NULL                                   | `.default([])`     |             |
+
+#### Definition
+
+```sql
+CREATE TABLE "infinitunes_favorite" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"userId" uuid NOT NULL UNIQUE,
+	"songs" text[] DEFAULT '{}'::text[] NOT NULL,
+	"albums" text[] DEFAULT '{}'::text[] NOT NULL,
+	"playlists" text[] DEFAULT '{}'::text[] NOT NULL,
+	"artists" text[] DEFAULT '{}'::text[] NOT NULL,
+	"podcasts" text[] DEFAULT '{}'::text[] NOT NULL
+);
+
+ALTER TABLE "infinitunes_favorite" ADD CONSTRAINT "infinitunes_favorite_userId_user_id_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE;
+```
 
 #### References
 
@@ -1189,7 +1220,7 @@ where "infinitunes_favorite"."id" = $1
 
 ### recentlyPlayed
 
-Table `recently_played`. One row per user and played item; replaying bumps `playedAt`.
+Table `infinitunes_recently_played`. One row per user and played item; replaying bumps `playedAt`.
 
 ![recentlyPlayed and the tables it relates to](tables/recentlyPlayed.svg)
 
@@ -1201,10 +1232,28 @@ Table `recently_played`. One row per user and played item; replaying bumps `play
 | `itemType` | `text`      | NOT NULL                            |                    |             |
 | `playedAt` | `timestamp` | NOT NULL                            | `.defaultNow()`    |             |
 
+#### Definition
+
+```sql
+CREATE TABLE "infinitunes_recently_played" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	"userId" uuid NOT NULL,
+	"itemId" text NOT NULL,
+	"itemType" text NOT NULL,
+	"playedAt" timestamp DEFAULT now() NOT NULL
+);
+
+CREATE UNIQUE INDEX "infinitunes_recently_played_user_item_unique" ON "infinitunes_recently_played" ("userId","itemType","itemId");
+
+CREATE INDEX "infinitunes_recently_played_user_played_at_idx" ON "infinitunes_recently_played" ("userId","playedAt" DESC NULLS LAST);
+
+ALTER TABLE "infinitunes_recently_played" ADD CONSTRAINT "infinitunes_recently_played_userId_user_id_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE;
+```
+
 #### Indexes
 
 - UNIQUE `userId`, `itemType`, `itemId`
-- INDEX `userId`
+- INDEX `userId`, `playedAt`
 
 #### References
 

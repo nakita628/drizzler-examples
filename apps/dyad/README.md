@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#51](https://github.com/nakita628/drizzler/issues/51): the DBML does not mark the 15 `autoIncrement: true` keys as `increment`.
+None.

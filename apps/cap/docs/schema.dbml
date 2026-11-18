@@ -1077,3 +1077,85 @@ Ref developer_delivery_daily_appId_developer_apps_id_fk: developer_delivery_dail
 Ref developer_webhook_endpoints_appId_developer_apps_id_fk: developer_webhook_endpoints.appId > developer_apps.id
 
 Ref developer_video_imports_appId_developer_apps_id_fk: developer_video_imports.appId > developer_apps.id
+
+Ref notifications_orgId_organizations_id: notifications.orgId > organizations.id
+
+Ref notifications_recipientId_users_id: notifications.recipientId > users.id
+
+Ref comments_authorId_users_id: comments.authorId > users.id
+
+Ref comments_videoId_videos_id: comments.videoId > videos.id
+
+Ref comments_parentCommentId_comments_id: comments.parentCommentId > comments.id
+
+Ref messenger_conversations_userId_users_id: messenger_conversations.userId > users.id
+
+Ref messenger_messages_userId_users_id: messenger_messages.userId > users.id
+
+Ref messenger_support_emails_userId_users_id: messenger_support_emails.userId > users.id
+
+Ref accounts_userId_users_id: accounts.userId > users.id
+
+Ref s3_buckets_ownerId_users_id: s3_buckets.ownerId > users.id
+
+Ref s3_buckets_organizationId_organizations_id: s3_buckets.organizationId > organizations.id
+
+Ref storage_integrations_ownerId_users_id: storage_integrations.ownerId > users.id
+
+Ref storage_integrations_organizationId_organizations_id: storage_integrations.organizationId > organizations.id
+
+Ref storage_objects_videoId_videos_id: storage_objects.videoId > videos.id
+
+Ref organizations_ownerId_users_id: organizations.ownerId > users.id
+
+Ref sessions_userId_users_id: sessions.userId > users.id
+
+Ref organization_members_userId_users_id: organization_members.userId > users.id
+
+Ref organization_members_organizationId_organizations_id: organization_members.organizationId > organizations.id
+
+Ref integration_installations_organizationId_organizations_id: integration_installations.organizationId > organizations.id
+
+Ref integration_installations_installedByUserId_users_id: integration_installations.installedByUserId > users.id
+
+Ref organization_invites_organizationId_organizations_id: organization_invites.organizationId > organizations.id
+
+Ref organization_invites_invitedByUserId_users_id: organization_invites.invitedByUserId > users.id
+
+Ref videos_ownerId_users_id: videos.ownerId > users.id
+
+Ref videos_id_video_edits_videoId: videos.id - video_edits.videoId
+
+Ref videos_folderId_folders_id: videos.folderId > folders.id
+
+Ref shared_videos_videoId_videos_id: shared_videos.videoId > videos.id
+
+Ref shared_videos_organizationId_organizations_id: shared_videos.organizationId > organizations.id
+
+Ref shared_videos_sharedByUserId_users_id: shared_videos.sharedByUserId > users.id
+
+Ref spaces_organizationId_organizations_id: spaces.organizationId > organizations.id
+
+Ref spaces_createdById_users_id: spaces.createdById > users.id
+
+Ref space_members_spaceId_spaces_id: space_members.spaceId > spaces.id
+
+Ref space_members_userId_users_id: space_members.userId > users.id
+
+Ref space_videos_spaceId_spaces_id: space_videos.spaceId > spaces.id
+
+Ref space_videos_videoId_videos_id: space_videos.videoId > videos.id
+
+Ref space_videos_addedById_users_id: space_videos.addedById > users.id
+
+Ref folders_organizationId_organizations_id: folders.organizationId > organizations.id
+
+Ref folders_createdById_users_id: folders.createdById > users.id
+
+Ref folders_parentId_folders_id: folders.parentId > folders.id
+
+Ref developer_apps_ownerId_users_id: developer_apps.ownerId > users.id
+
+Ref developer_apps_id_developer_credit_accounts_appId: developer_apps.id - developer_credit_accounts.appId
+
+Ref developer_credit_accounts_ownerId_users_id: developer_credit_accounts.ownerId > users.id

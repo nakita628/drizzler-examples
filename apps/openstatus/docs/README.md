@@ -1319,6 +1319,7 @@ CREATE TABLE `workspace` (
 - `id` → [oauthGrant.workspaceId](#table-oauthGrant) (one to many, on delete cascade)
 - `id` → [incident.workspaceId](#table-incident) (one to many)
 - `id` → [slackUser.workspaceId](#table-slackUser) (one to many, on delete cascade)
+- `id` → [invitation.workspaceId](#table-invitation) (one to many, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -4116,18 +4117,18 @@ where (("monitor_status"."monitor_id" = ?) and ("monitor_status"."region" = ?))
 
 ### invitation
 
-![invitation](tables/invitation.svg)
+![invitation and the tables it relates to](tables/invitation.svg)
 
-| Column                         | Type      | Constraints | Default                                    | Description |
-| ------------------------------ | --------- | ----------- | ------------------------------------------ | ----------- |
-| `id`                           | `integer` | PK NOT NULL |                                            |             |
-| `email`                        | `text`    | NOT NULL    |                                            |             |
-| `role`                         | `text`    | NOT NULL    | `.default("member")`                       |             |
-| `workspaceId` (`workspace_id`) | `integer` | NOT NULL    |                                            |             |
-| `token`                        | `text`    | NOT NULL    |                                            |             |
-| `expiresAt` (`expires_at`)     | `integer` | NOT NULL    |                                            |             |
-| `createdAt` (`created_at`)     | `integer` | NULL        | ``.default(sql`(strftime('%s', 'now'))`)`` |             |
-| `acceptedAt` (`accepted_at`)   | `integer` | NULL        |                                            |             |
+| Column                         | Type      | Constraints                                 | Default                                    | Description |
+| ------------------------------ | --------- | ------------------------------------------- | ------------------------------------------ | ----------- |
+| `id`                           | `integer` | PK NOT NULL                                 |                                            |             |
+| `email`                        | `text`    | NOT NULL                                    |                                            |             |
+| `role`                         | `text`    | NOT NULL                                    | `.default("member")`                       |             |
+| `workspaceId` (`workspace_id`) | `integer` | NOT NULL → [workspace.id](#table-workspace) |                                            |             |
+| `token`                        | `text`    | NOT NULL                                    |                                            |             |
+| `expiresAt` (`expires_at`)     | `integer` | NOT NULL                                    |                                            |             |
+| `createdAt` (`created_at`)     | `integer` | NULL                                        | ``.default(sql`(strftime('%s', 'now'))`)`` |             |
+| `acceptedAt` (`accepted_at`)   | `integer` | NULL                                        |                                            |             |
 
 #### Definition
 
@@ -4149,6 +4150,10 @@ CREATE INDEX `invitation_workspace_id_idx` ON `invitation` (`workspace_id`);
 #### Indexes
 
 - INDEX `workspaceId`
+
+#### References
+
+- `workspaceId` → [workspace.id](#table-workspace) (many to one, defineRelations, no foreign key)
 
 <details>
 <summary>Queries and their SQL</summary>

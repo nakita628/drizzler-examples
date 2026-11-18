@@ -64,21 +64,24 @@ Table `sys_user`.
 
 ![userTable and the tables it relates to](tables/userTable.svg)
 
-| Column                             | Type        | Constraints     | Default           | Description |
-| ---------------------------------- | ----------- | --------------- | ----------------- | ----------- |
-| `name`                             | `text`      | NOT NULL        |                   |             |
-| `email`                            | `text`      | UNIQUE NOT NULL |                   |             |
-| `emailVerified` (`email_verified`) | `boolean`   | NULL            | `.default(false)` |             |
-| `image`                            | `text`      | NULL            |                   |             |
-| `role`                             | `varchar`   | NULL            |                   |             |
-| `banned`                           | `boolean`   | NULL            | `.default(false)` |             |
-| `banReason` (`ban_reason`)         | `text`      | NULL            |                   |             |
-| `banExpires` (`ban_expire_at`)     | `timestamp` | NULL            |                   |             |
-| `phone`                            | `text`      | NULL            |                   |             |
-| `whatsapp`                         | `varchar`   | NULL            |                   |             |
-| `position`                         | `varchar`   | NULL            |                   |             |
-| `isActive` (`is_active`)           | `boolean`   | NULL            | `.default(true)`  |             |
-| `isSuperAdmin` (`is_super_admin`)  | `boolean`   | NULL            | `.default(false)` |             |
+| Column                             | Type        | Constraints     | Default                              | Description |
+| ---------------------------------- | ----------- | --------------- | ------------------------------------ | ----------- |
+| `id`                               | `uuid`      | PK NOT NULL     | ``.default(sql`gen_random_uuid()`)`` |             |
+| `createdAt` (`created_at`)         | `timestamp` | NOT NULL        | `.defaultNow()`                      |             |
+| `updatedAt` (`updated_at`)         | `timestamp` | NOT NULL        | `.defaultNow()` `.$onUpdate()`       |             |
+| `name`                             | `text`      | NOT NULL        |                                      |             |
+| `email`                            | `text`      | UNIQUE NOT NULL |                                      |             |
+| `emailVerified` (`email_verified`) | `boolean`   | NULL            | `.default(false)`                    |             |
+| `image`                            | `text`      | NULL            |                                      |             |
+| `role`                             | `varchar`   | NULL            |                                      |             |
+| `banned`                           | `boolean`   | NULL            | `.default(false)`                    |             |
+| `banReason` (`ban_reason`)         | `text`      | NULL            |                                      |             |
+| `banExpires` (`ban_expire_at`)     | `timestamp` | NULL            |                                      |             |
+| `phone`                            | `text`      | NULL            |                                      |             |
+| `whatsapp`                         | `varchar`   | NULL            |                                      |             |
+| `position`                         | `varchar`   | NULL            |                                      |             |
+| `isActive` (`is_active`)           | `boolean`   | NULL            | `.default(true)`                     |             |
+| `isSuperAdmin` (`is_super_admin`)  | `boolean`   | NULL            | `.default(false)`                    |             |
 
 #### Definition
 
@@ -144,6 +147,20 @@ from "sys_user" as "d0"
 left join lateral(select coalesce(json_agg(row_to_json("t".*)), '[]') as "r" from (select "d1"."id" as "id", "d1"."name" as "name", "d1"."description" as "description", "d1"."type" as "type", "d1"."priority" as "priority" from "sys_role" as "d1" inner join "sys_user_role" as "tr0" on "tr0"."role_id" = "d1"."id" where "d0"."id" = "tr0"."user_id") as "t") as "roles" on true
 ```
 
+**Find by primary key**: One row of userTable, through the relational query API.
+
+```ts
+db.query.userTable.findFirst({ where: { id: "00000000-0000-0000-0000-000000000000" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."created_at" as "createdAt", "d0"."updated_at" as "updatedAt", "d0"."name" as "name", "d0"."email" as "email", "d0"."email_verified" as "emailVerified", "d0"."image" as "image", "d0"."role" as "role", "d0"."banned" as "banned", "d0"."ban_reason" as "banReason", "d0"."ban_expire_at" as "banExpires", "d0"."phone" as "phone", "d0"."whatsapp" as "whatsapp", "d0"."position" as "position", "d0"."is_active" as "isActive", "d0"."is_super_admin" as "isSuperAdmin"
+from "sys_user" as "d0"
+where "d0"."id" = $1
+limit $2
+-- params: ["00000000-0000-0000-0000-000000000000",1]
+```
+
 **Insert**: Adds a row to userTable, giving the columns that have no default.
 
 ```ts
@@ -156,6 +173,33 @@ values (default, default, default, $1, $2, default, default, default, default, d
 -- params: ["name","email"]
 ```
 
+**Update**: Changes a row of userTable, found by its primary key.
+
+```ts
+db.update(userTable)
+  .set({ createdAt: new Date("2026-01-01T00:00:00.000Z") })
+  .where(eq(userTable.id, "00000000-0000-0000-0000-000000000000"));
+```
+
+```sql
+update "sys_user"
+set "created_at" = $1, "updated_at" = $2
+where "sys_user"."id" = $3
+-- params: ["2026-01-01T00:00:00.000Z","2026-01-01T00:00:00.000Z","00000000-0000-0000-0000-000000000000"]
+```
+
+**Delete**: Deletes a row of userTable, found by its primary key.
+
+```ts
+db.delete(userTable).where(eq(userTable.id, "00000000-0000-0000-0000-000000000000"));
+```
+
+```sql
+delete from "sys_user"
+where "sys_user"."id" = $1
+-- params: ["00000000-0000-0000-0000-000000000000"]
+```
+
 </details>
 
 <a id="table-roleTable"></a>
@@ -166,12 +210,13 @@ Table `sys_role`.
 
 ![roleTable and the tables it relates to](tables/roleTable.svg)
 
-| Column        | Type      | Constraints | Default              | Description |
-| ------------- | --------- | ----------- | -------------------- | ----------- |
-| `name`        | `text`    | NOT NULL    |                      |             |
-| `description` | `text`    | NULL        |                      |             |
-| `type`        | `varchar` | NOT NULL    | `.default("custom")` |             |
-| `priority`    | `integer` | NOT NULL    | `.default(0)`        |             |
+| Column        | Type      | Constraints | Default                              | Description |
+| ------------- | --------- | ----------- | ------------------------------------ | ----------- |
+| `id`          | `uuid`    | PK NOT NULL | ``.default(sql`gen_random_uuid()`)`` |             |
+| `name`        | `text`    | NOT NULL    |                                      |             |
+| `description` | `text`    | NULL        |                                      |             |
+| `type`        | `varchar` | NOT NULL    | `.default("custom")`                 |             |
+| `priority`    | `integer` | NOT NULL    | `.default(0)`                        |             |
 
 #### Definition
 
@@ -225,6 +270,20 @@ select "d0"."id" as "id", "d0"."name" as "name", "d0"."description" as "descript
 from "sys_role" as "d0"
 ```
 
+**Find by primary key**: One row of roleTable, through the relational query API.
+
+```ts
+db.query.roleTable.findFirst({ where: { id: "00000000-0000-0000-0000-000000000000" } });
+```
+
+```sql
+select "d0"."id" as "id", "d0"."name" as "name", "d0"."description" as "description", "d0"."type" as "type", "d0"."priority" as "priority"
+from "sys_role" as "d0"
+where "d0"."id" = $1
+limit $2
+-- params: ["00000000-0000-0000-0000-000000000000",1]
+```
+
 **Insert**: Adds a row to roleTable, giving the columns that have no default.
 
 ```ts
@@ -235,6 +294,33 @@ db.insert(roleTable).values({ name: "name" });
 insert into "sys_role" ("id", "name", "description", "type", "priority")
 values (default, $1, default, default, default)
 -- params: ["name"]
+```
+
+**Update**: Changes a row of roleTable, found by its primary key.
+
+```ts
+db.update(roleTable)
+  .set({ name: "name" })
+  .where(eq(roleTable.id, "00000000-0000-0000-0000-000000000000"));
+```
+
+```sql
+update "sys_role"
+set "name" = $1
+where "sys_role"."id" = $2
+-- params: ["name","00000000-0000-0000-0000-000000000000"]
+```
+
+**Delete**: Deletes a row of roleTable, found by its primary key.
+
+```ts
+db.delete(roleTable).where(eq(roleTable.id, "00000000-0000-0000-0000-000000000000"));
+```
+
+```sql
+delete from "sys_role"
+where "sys_role"."id" = $1
+-- params: ["00000000-0000-0000-0000-000000000000"]
 ```
 
 </details>

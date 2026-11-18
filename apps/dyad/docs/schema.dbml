@@ -1,5 +1,5 @@
 Table prompts {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   title text [not null]
   description text
   content text [not null]
@@ -12,7 +12,7 @@ Table prompts {
 }
 
 Table app_collections {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   name text [not null]
   created_at integer [not null]
   updated_at integer [not null]
@@ -22,7 +22,7 @@ Table app_collections {
 }
 
 Table apps {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   name text [not null]
   path text [not null]
   created_at integer [not null]
@@ -78,7 +78,7 @@ Table test_branch_cleanup {
 }
 
 Table chats {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   app_id integer [not null]
   title text
   execution_backend text [not null]
@@ -96,7 +96,7 @@ Table chats {
 }
 
 Table messages {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   chat_id integer [not null]
   role text [not null]
   content text [not null]
@@ -181,7 +181,7 @@ Table agent_threads {
 }
 
 Table agent_messages {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   thread_id text [not null]
   sequence integer [not null]
   message_id text [not null]
@@ -196,7 +196,7 @@ Table agent_messages {
 }
 
 Table agent_activities {
-  id integer [pk, not null, note: 'Local row identifier for the activity snapshot.']
+  id integer [pk, increment, not null, note: 'Local row identifier for the activity snapshot.']
   thread_id text [not null, note: 'Sub-agent thread that owns this activity.']
   sequence integer [not null, note: 'Stable first-seen order within the thread.']
   tool_call_id text [not null, note: 'AI SDK call identifier used to update this activity.']
@@ -215,7 +215,7 @@ Table agent_activities {
 }
 
 Table versions {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   app_id integer [not null]
   commit_hash text [not null]
   neon_db_timestamp text
@@ -229,7 +229,7 @@ Table versions {
 }
 
 Table security_fix_chats {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   app_id integer [not null]
   review_chat_id integer [not null]
   finding_key text [not null, note: 'Hash of the normalized finding(s) the fix chat was created for']
@@ -243,7 +243,7 @@ Table security_fix_chats {
 }
 
 Table coolify_app_connections {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   app_id integer [not null]
   server_uuid text [not null, note: 'Where the deployment goes. Coolify addresses a resource by all three: the machine, the grouping, and the lane within it — an app can have a production and a staging copy in one project on one server. The Coolify instance is deliberately not here. Its only handle is the URL, which changes without the instance changing (http to https once a certificate lands, an IP becoming a domain), so keying on it would make every app look moved. These are UUIDs, so they do not collide across instances anyway.']
   project_uuid text [not null]
@@ -259,7 +259,7 @@ Table coolify_app_connections {
 }
 
 Table cloudflare_app_connections {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   app_id integer [not null]
   root_directory text [not null, note: 'Path from the repository root, "" for the root itself.']
   account_id text [not null]
@@ -285,7 +285,7 @@ Table language_model_providers {
 }
 
 Table language_models {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   display_name text [not null]
   api_name text [not null]
   builtin_provider_id text
@@ -298,7 +298,7 @@ Table language_models {
 }
 
 Table mcp_servers {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   name text [not null]
   transport text [not null]
   command text
@@ -325,7 +325,7 @@ Table mcp_servers {
 }
 
 Table mcp_tool_consents {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   server_id integer [not null]
   tool_name text [not null]
   consent text [not null]
@@ -351,7 +351,7 @@ Table chat_search_meta {
 }
 
 Table custom_themes {
-  id integer [pk, not null]
+  id integer [pk, increment, not null]
   name text [not null]
   description text
   prompt text [not null]

@@ -395,8 +395,8 @@ erDiagram
     email_outbox ||--o{ email_outbox_events : "(org_id, owner_user_id, account_id, outbox_id) - (org_id, owner_user_id, account_id, outbox_id)"
     email_accounts ||--o{ email_templates : "(org_id, owner_user_id, account_id) - (org_id, owner_user_id, account_id)"
     email_accounts ||--o| email_signatures : "(org_id, owner_user_id, account_id) - (org_id, owner_user_id, account_id)"
-    email_messages |o--o{ email_imap_aliases : "(org_id, owner_user_id, account_id, logical_message_id) - (org_id, owner_user_id, account_id, logical_message_id)"
-    email_messages |o--o| email_imap_move_reservations : "(org_id, owner_user_id, account_id, logical_message_id) - (org_id, owner_user_id, account_id, logical_message_id)"
+    email_messages ||--o{ email_imap_aliases : "(org_id, owner_user_id, account_id, logical_message_id) - (org_id, owner_user_id, account_id, logical_message_id)"
+    email_messages ||--o| email_imap_move_reservations : "(org_id, owner_user_id, account_id, logical_message_id) - (org_id, owner_user_id, account_id, logical_message_id)"
     email_operations ||--o{ email_imap_move_reservations : "(org_id, owner_user_id, account_id, operation_id) - (org_id, owner_user_id, account_id, operation_id)"
     email_accounts ||--o{ email_timers : "(org_id, owner_user_id, account_id) - (org_id, owner_user_id, account_id)"
     email_accounts ||--o{ email_presentation_cache : "(org_id, owner_user_id, account_id) - (org_id, owner_user_id, account_id)"
@@ -419,7 +419,7 @@ erDiagram
     email_accounts ||--o{ email_knowledge_threads : "(org_id, owner_user_id, account_id) - (org_id, owner_user_id, account_id)"
     orgs ||--o{ app_integration_capture_policies : "(id) - (org_id)"
     users ||--o{ app_integration_capture_policies : "(id) - (owner_user_id)"
-    app_installations |o--o{ app_integration_capture_policies : "(org_id, id) - (org_id, installation_id)"
+    app_installations ||--o{ app_integration_capture_policies : "(org_id, id) - (org_id, installation_id)"
     app_integration_capture_policies ||--o{ app_integration_capture_claims : "(org_id, id) - (org_id, policy_id)"
     wiki_pages ||--o{ app_integration_capture_threads : "(id) - (page_id)"
     app_integration_capture_claims ||--o| app_integration_capture_sources : "(org_id, id) - (org_id, claim_id)"
@@ -3555,6 +3555,7 @@ erDiagram
         text org_id PK, FK
         text owner_user_id PK, FK
         text account_id PK, FK
+        text logical_message_id FK
         text locator_key PK
         integer revision
         jsonb evidence_envelope
@@ -3564,6 +3565,7 @@ erDiagram
         text org_id PK, FK
         text owner_user_id PK, FK
         text account_id PK, FK
+        text logical_message_id PK, FK
         text operation_id FK
         text source_digest
         jsonb reservation_envelope
@@ -3852,7 +3854,9 @@ erDiagram
         text id PK
         text org_id FK
         text owner_user_id FK
-        text account_id
+        text installation_id FK
+        text account_ref
+        text store_key
         integer revision
         boolean enabled
         jsonb input
@@ -3869,7 +3873,9 @@ erDiagram
         text id PK
         text org_id FK
         text owner_user_id
-        text account_id
+        text installation_id
+        text account_ref
+        text store_key
         text policy_id FK
         integer policy_revision
         text thread_key
@@ -3885,7 +3891,9 @@ erDiagram
         text id PK
         text org_id
         text owner_user_id
-        text account_id
+        text installation_id
+        text account_ref
+        text store_key
         text thread_key
         text destination_key
         text page_id FK
@@ -3898,7 +3906,9 @@ erDiagram
         text id PK
         text org_id FK
         text owner_user_id
-        text account_id
+        text installation_id
+        text account_ref
+        text store_key
         text claim_id FK
         text page_id FK
         jsonb target

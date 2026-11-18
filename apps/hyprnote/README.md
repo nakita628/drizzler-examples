@@ -9,7 +9,7 @@ The local SQLite schema of Hyprnote, an open-source AI notepad for meetings: ses
 ## Changes from upstream
 
 - `schema.ts` is copied as it is.
-- `drizzle.config.ts` drops the database path; like upstream's, it has no `schema`, so `generate` passes `src/schema.ts` to drizzler.
+- `drizzle.config.ts` drops the database path; like upstream's, it has no `schema`, so `generate` passes `src/schema.ts` to drizzler (without it, drizzler stops with `No schema to read`).
 
 ## Generate
 
@@ -26,4 +26,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#56](https://github.com/nakita628/drizzler/issues/56): without the schema on the command line, drizzler prints its help and exits 0, because `drizzle.config.ts` has no `schema`.
+None.
