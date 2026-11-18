@@ -65,6 +65,11 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [noodle](apps/noodle) | noodle-run/noodle | PostgreSQL | — |
 | [orbitkit](apps/orbitkit) | ixahmedxi/orbitkit | PostgreSQL | — |
 | [zws](apps/zws) | zws-im/zws | PostgreSQL | — |
+| [ai-fullstack-saas](apps/ai-fullstack-saas) | alan345/AI-Fullstack-SaaS-Boilerplate | PostgreSQL | — |
+| [deft](apps/deft) | Maneek21/Deft | PostgreSQL | [#58](https://github.com/nakita628/drizzler/issues/58) |
+| [cut-it](apps/cut-it) | mehrabmp/cut-it | SQLite | — |
+| [flarestarter](apps/flarestarter) | FlareStarter/flarestarter | SQLite | — |
+| [better-auth-cloudflare](apps/better-auth-cloudflare) | zpg6/better-auth-cloudflare (Hono example) | SQLite | — |
 
 ## Output
 
