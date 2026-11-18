@@ -64,6 +64,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [onestopshop](apps/onestopshop) | jackblatch/OneStopShop | MySQL | — |
 | [noodle](apps/noodle) | noodle-run/noodle | PostgreSQL | — |
 | [orbitkit](apps/orbitkit) | ixahmedxi/orbitkit | PostgreSQL | — |
+| [zws](apps/zws) | zws-im/zws | PostgreSQL | — |
 
 ## Output
 
