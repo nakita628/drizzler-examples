@@ -55,6 +55,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [mylists](apps/mylists) | vincedelmas/MyLists | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51), [#54](https://github.com/nakita628/drizzler/issues/54), [#55](https://github.com/nakita628/drizzler/issues/55) |
 | [survev](apps/survev) | survev/survev | PostgreSQL | — |
 | [openstatus](apps/openstatus) | openstatusHQ/openstatus | SQLite | [#51](https://github.com/nakita628/drizzler/issues/51) |
+| [hyprnote](apps/hyprnote) | fastrepl/hyprnote | SQLite | [#56](https://github.com/nakita628/drizzler/issues/56) |
 
 ## Output
 
