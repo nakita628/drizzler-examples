@@ -513,7 +513,7 @@ db.insert(user).values({ name: "name", email: "email", emailVerified: true });
 ```sql
 insert into "user" ("id", "created_at", "updated_at", "name", "email", "email_verified", "image", "role", "banned", "ban_reason", "ban_expires")
 values ($1, default, default, $2, $3, $4, default, default, default, default, default)
--- params: ["usr_ss3habnq9z6t4by0ualqj7oy","name","email",true]
+-- params: ["usr_njp6z9meub2mh3bue1aynkim","name","email",true]
 ```
 
 **Update**: Changes a row of user, found by its primary key.
@@ -650,7 +650,7 @@ db.insert(session).values({
 ```sql
 insert into "session" ("id", "created_at", "updated_at", "expires_at", "token", "ip_address", "user_agent", "user_id", "active_organization_id", "impersonated_by")
 values ($1, default, default, $2, $3, default, default, $4, default, default)
--- params: ["ses_ro1h44ah4c02d66m8ohe7xr0","2026-01-01T00:00:00.000Z","token","userId"]
+-- params: ["ses_njeoq9tdxl93ui1396qeij7d","2026-01-01T00:00:00.000Z","token","userId"]
 ```
 
 **Update**: Changes a row of session, found by its primary key.
@@ -789,7 +789,7 @@ db.insert(account).values({ accountId: "accountId", providerId: "providerId", us
 ```sql
 insert into "account" ("id", "created_at", "updated_at", "account_id", "provider_id", "user_id", "access_token", "refresh_token", "id_token", "access_token_expires_at", "refresh_token_expires_at", "scope", "password")
 values ($1, default, default, $2, $3, $4, default, default, default, default, default, default, default)
--- params: ["acc_nmz4m5bv2lv6h3bw1n7nyctf","accountId","providerId","userId"]
+-- params: ["acc_npr0hn01a39wiryyl5bvoco0","accountId","providerId","userId"]
 ```
 
 **Update**: Changes a row of account, found by its primary key.
@@ -912,7 +912,7 @@ db.insert(verification).values({
 ```sql
 insert into "verification" ("id", "created_at", "updated_at", "identifier", "value", "expires_at")
 values ($1, default, default, $2, $3, $4)
--- params: ["ver_w50q30noy0l7g9wfhf21ysgj","identifier","value","2026-01-01T00:00:00.000Z"]
+-- params: ["ver_nqecp0patuctgm8ov6kr53xj","identifier","value","2026-01-01T00:00:00.000Z"]
 ```
 
 **Update**: Changes a row of verification, found by its primary key.
@@ -1039,7 +1039,7 @@ db.insert(org).values({ name: "name" });
 ```sql
 insert into "org" ("id", "created_at", "updated_at", "name", "slug", "logo", "metadata")
 values ($1, default, default, $2, default, default, default)
--- params: ["org_kok43ase23fakygb9kod48ke","name"]
+-- params: ["org_n7d8w0wq5do3l52zrwv1m3lw","name"]
 ```
 
 **Update**: Changes a row of org, found by its primary key.
@@ -1169,7 +1169,7 @@ db.insert(orgUser).values({ orgId: "orgId", userId: "userId", role: "role" });
 ```sql
 insert into "org_user" ("id", "created_at", "updated_at", "org_id", "user_id", "role")
 values ($1, default, default, $2, $3, $4)
--- params: ["ou_rudssa2l8oblywdkl2cw9jqq","orgId","userId","role"]
+-- params: ["ou_n3ngxpx3c96u7s43tjmlm9a1","orgId","userId","role"]
 ```
 
 **Update**: Changes a row of orgUser, found by its primary key.
@@ -1321,7 +1321,7 @@ db.insert(product).values({ name: "name" });
 ```sql
 insert into "product" ("id", "created_at", "updated_at", "org_id", "name", "slug", "logo", "url", "metadata", "app_type", "use_case", "payment_provider", "onboarding_completed", "onboarding_step")
 values ($1, default, default, default, $2, default, default, default, default, default, default, default, default, default)
--- params: ["prd_s7afqxqydj3stzf3q229g345","name"]
+-- params: ["prd_nbtf1a6eihf7jzmkus97vt9f","name"]
 ```
 
 **Update**: Changes a row of product, found by its primary key.
@@ -1451,7 +1451,7 @@ db.insert(productUser).values({ productId: "productId", userId: "userId", role: 
 ```sql
 insert into "product_user" ("id", "created_at", "updated_at", "product_id", "user_id", "role")
 values ($1, default, default, $2, $3, $4)
--- params: ["pu_bpeyvht348388orgide2mvim","productId","userId","role"]
+-- params: ["pu_nw2itu74y50il57nzjkjrdzq","productId","userId","role"]
 ```
 
 **Update**: Changes a row of productUser, found by its primary key.
@@ -1595,7 +1595,7 @@ db.insert(invitation).values({
 ```sql
 insert into "invitation" ("id", "created_at", "updated_at", "organization_id", "product_id", "email", "role", "status", "expires_at", "inviter_id")
 values ($1, default, default, default, default, $2, default, $3, $4, $5)
--- params: ["inv_jbqnnbevbwa7y6zc4uqvq3d9","email","status","2026-01-01T00:00:00.000Z","inviterId"]
+-- params: ["inv_ntaqyj1wfh5f81k79wjyghwp","email","status","2026-01-01T00:00:00.000Z","inviterId"]
 ```
 
 **Update**: Changes a row of invitation, found by its primary key.
@@ -1750,7 +1750,7 @@ db.insert(apikey).values({ key: "key", userId: "userId" });
 ```sql
 insert into "apikey" ("id", "created_at", "updated_at", "name", "start", "prefix", "key", "user_id", "refill_interval", "refill_amount", "last_refill_at", "enabled", "rate_limit_enabled", "rate_limit_time_window", "rate_limit_max", "request_count", "remaining", "last_request", "expires_at", "permissions", "metadata")
 values ($1, default, default, default, default, default, $2, $3, default, default, default, default, default, default, default, default, default, default, default, default, default)
--- params: ["key_ii1ycfdnnxu32fndha61yhvt","key","userId"]
+-- params: ["key_nbdj164hbnua7vrulbcvz0pe","key","userId"]
 ```
 
 **Update**: Changes a row of apikey, found by its primary key.
@@ -1896,7 +1896,7 @@ db.insert(program).values({
 ```sql
 insert into "program" ("id", "created_at", "updated_at", "product_id", "program_template_id", "name", "status", "start_date", "end_date", "config")
 values ($1, default, default, $2, $3, $4, $5, default, default, default)
--- params: ["prg_gza0m6u8xoywlyl5av02mfb5","productId","programTemplateId","name","status"]
+-- params: ["prg_nmqpsoqc7y8kx33duk69bjth","productId","programTemplateId","name","status"]
 ```
 
 **Update**: Changes a row of program, found by its primary key.
@@ -2026,7 +2026,7 @@ db.insert(programUser).values({ programId: "programId", userId: "userId", role: 
 ```sql
 insert into "program_user" ("id", "created_at", "updated_at", "program_id", "user_id", "role")
 values ($1, default, default, $2, $3, $4)
--- params: ["pru_su22huz333ffyx4idxads4x7","programId","userId","role"]
+-- params: ["pru_njoatfxs8jsd7978busp10j4","programId","userId","role"]
 ```
 
 **Update**: Changes a row of programUser, found by its primary key.
@@ -2153,7 +2153,7 @@ db.insert(eventDefinition).values({ name: "name", type: "type" });
 ```sql
 insert into "event_definition" ("id", "created_at", "updated_at", "name", "type", "description", "config")
 values ($1, default, default, $2, $3, default, default)
--- params: ["evd_mbaxzbxw2jat3iov3cpdro09","name","type"]
+-- params: ["evd_nsr4iqmxzqrr22koldpf3v7i","name","type"]
 ```
 
 **Update**: Changes a row of eventDefinition, found by its primary key.
@@ -2292,7 +2292,7 @@ db.insert(participant).values({ productId: "productId" });
 ```sql
 insert into "participant" ("id", "created_at", "updated_at", "name", "email", "product_id", "external_id")
 values ($1, default, default, default, default, $2, default)
--- params: ["prt_dm80p3m4xotfjih5f9fbv5ca","productId"]
+-- params: ["prt_nzgw63lrpmz896bpyyox473g","productId"]
 ```
 
 **Update**: Changes a row of participant, found by its primary key.
@@ -2443,7 +2443,7 @@ db.insert(rewardRule).values({ programId: "programId", name: "name", type: "type
 ```sql
 insert into "reward_rule" ("id", "created_at", "updated_at", "program_id", "name", "description", "type", "config", "priority", "is_active")
 values ($1, default, default, $2, $3, default, $4, $5, default, default)
--- params: ["rwr_jrsai245jhi4184s5kz6wvke","programId","name","type",{}]
+-- params: ["rwr_nh5qkfioyyosxtnl1a8d6ckh","programId","name","type",{}]
 ```
 
 **Update**: Changes a row of rewardRule, found by its primary key.
@@ -2617,7 +2617,7 @@ db.insert(reward).values({
 ```sql
 insert into "reward" ("id", "created_at", "updated_at", "participant_id", "program_id", "reward_rule_id", "event_id", "reward_type", "amount", "currency", "status", "disbursed_at", "metadata")
 values ($1, default, default, $2, $3, default, default, $4, default, default, $5, default, default)
--- params: ["rwd_y2tv5fljxinpkahzhyk3j4na","participantId","programId","rewardType","status"]
+-- params: ["rwd_nqgth1wqk97w853obgmhtgwf","participantId","programId","rewardType","status"]
 ```
 
 **Update**: Changes a row of reward, found by its primary key.
@@ -2748,7 +2748,7 @@ db.insert(productSecrets).values({
 ```sql
 insert into "product_secret" ("id", "created_at", "updated_at", "product_id", "client_id", "client_secret")
 values ($1, default, default, $2, $3, $4)
--- params: ["psec_gjj29eeryjgw984bnh6rnqh0","productId","clientId","clientSecret"]
+-- params: ["psec_nivaepnlmxi26a8t1haq95hx","productId","clientId","clientSecret"]
 ```
 
 **Update**: Changes a row of productSecrets, found by its primary key.
@@ -2905,7 +2905,7 @@ db.insert(refcode).values({
 ```sql
 insert into "refcode" ("id", "created_at", "updated_at", "code", "participant_id", "program_id", "product_id")
 values ($1, default, default, $2, $3, $4, $5)
--- params: ["rc_nbtbdfkxau0bix6dpd6qtkn7","code","participantId","programId","productId"]
+-- params: ["rc_nkolejm3bfwvr2w8icwme1h5","code","participantId","programId","productId"]
 ```
 
 **Update**: Changes a row of refcode, found by its primary key.
@@ -3048,7 +3048,7 @@ db.insert(reflink).values({ slug: "slug", refcodeId: "refcodeId", productId: "pr
 ```sql
 insert into "reflink" ("id", "created_at", "updated_at", "slug", "refcode_id", "product_id")
 values ($1, default, default, $2, $3, $4)
--- params: ["rl_mqympgg3xi930ljbe8mvt94p","slug","refcodeId","productId"]
+-- params: ["rl_nngoyw6lv3vks7022lnrehte","slug","refcodeId","productId"]
 ```
 
 **Update**: Changes a row of reflink, found by its primary key.
@@ -3179,7 +3179,7 @@ db.insert(referral).values({ referrerId: "referrerId", externalId: "externalId" 
 ```sql
 insert into "referral" ("id", "created_at", "updated_at", "referrer_id", "external_id", "email", "name")
 values ($1, default, default, $2, $3, default, default)
--- params: ["ref_isq3y9g1cxrfhv3009fihyy5","referrerId","externalId"]
+-- params: ["ref_n7gpwda76pjxhdprwuhfxij0","referrerId","externalId"]
 ```
 
 **Update**: Changes a row of referral, found by its primary key.
@@ -3354,7 +3354,7 @@ db.insert(event).values({ productId: "productId", eventDefinitionId: "eventDefin
 ```sql
 insert into "event" ("id", "created_at", "updated_at", "product_id", "program_id", "participant_id", "referral_id", "event_definition_id", "status", "metadata")
 values ($1, default, default, $2, default, default, default, $3, default, default)
--- params: ["evt_sa4rbe18hycxr2v3qv5ykmvt","productId","eventDefinitionId"]
+-- params: ["evt_nz0b3ywd4y4810oyz5pxygy1","productId","eventDefinitionId"]
 ```
 
 **Update**: Changes a row of event, found by its primary key.

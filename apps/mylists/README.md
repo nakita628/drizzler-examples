@@ -29,4 +29,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#61](https://github.com/nakita628/drizzler/issues/61): the indexes of the `*_list` tables, named from `MediaType.BOOKS` and the like, have no names in the DBML.
+None.

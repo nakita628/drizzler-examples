@@ -529,7 +529,6 @@ ALTER TABLE "canvas" ADD CONSTRAINT "canvas_project_id_projects_id_fkey" FOREIGN
 
 - `id` → [frames.canvasId](#table-frames) (one to many, on delete cascade, on update cascade)
 - `id` → [userCanvases.canvasId](#table-userCanvases) (one to many, on delete cascade, on update cascade)
-- `projectId` → [projects.id](#table-projects) (one to one, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>
@@ -2341,20 +2340,20 @@ where "project_invitations"."id" = $1
 
 ![projects and the tables it relates to](tables/projects.svg)
 
-| Column                                           | Type        | Constraints                                         | Default            | Description   |
-| ------------------------------------------------ | ----------- | --------------------------------------------------- | ------------------ | ------------- |
-| `id`                                             | `uuid`      | PK NOT NULL → [canvases.projectId](#table-canvases) | `.defaultRandom()` |               |
-| `name`                                           | `varchar`   | NOT NULL                                            |                    | metadata      |
-| `description`                                    | `text`      | NULL                                                |                    |               |
-| `tags`                                           | `varchar[]` | NULL                                                | `.default([])`     |               |
-| `createdAt` (`created_at`)                       | `timestamp` | NOT NULL                                            | `.defaultNow()`    |               |
-| `updatedAt` (`updated_at`)                       | `timestamp` | NOT NULL                                            | `.defaultNow()`    |               |
-| `previewImgUrl` (`preview_img_url`)              | `varchar`   | NULL                                                |                    | preview image |
-| `previewImgPath` (`preview_img_path`)            | `varchar`   | NULL                                                |                    |               |
-| `previewImgBucket` (`preview_img_bucket`)        | `varchar`   | NULL                                                |                    |               |
-| `updatedPreviewImgAt` (`updated_preview_img_at`) | `timestamp` | NULL                                                |                    |               |
-| `sandboxId` (`sandbox_id`)                       | `varchar`   | NULL                                                |                    | deprecated    |
-| `sandboxUrl` (`sandbox_url`)                     | `varchar`   | NULL                                                |                    |               |
+| Column                                           | Type        | Constraints | Default            | Description   |
+| ------------------------------------------------ | ----------- | ----------- | ------------------ | ------------- |
+| `id`                                             | `uuid`      | PK NOT NULL | `.defaultRandom()` |               |
+| `name`                                           | `varchar`   | NOT NULL    |                    | metadata      |
+| `description`                                    | `text`      | NULL        |                    |               |
+| `tags`                                           | `varchar[]` | NULL        | `.default([])`     |               |
+| `createdAt` (`created_at`)                       | `timestamp` | NOT NULL    | `.defaultNow()`    |               |
+| `updatedAt` (`updated_at`)                       | `timestamp` | NOT NULL    | `.defaultNow()`    |               |
+| `previewImgUrl` (`preview_img_url`)              | `varchar`   | NULL        |                    | preview image |
+| `previewImgPath` (`preview_img_path`)            | `varchar`   | NULL        |                    |               |
+| `previewImgBucket` (`preview_img_bucket`)        | `varchar`   | NULL        |                    |               |
+| `updatedPreviewImgAt` (`updated_preview_img_at`) | `timestamp` | NULL        |                    |               |
+| `sandboxId` (`sandbox_id`)                       | `varchar`   | NULL        |                    | deprecated    |
+| `sandboxUrl` (`sandbox_url`)                     | `varchar`   | NULL        |                    |               |
 
 #### Definition
 
@@ -2376,11 +2375,6 @@ CREATE TABLE "projects" (
 
 ALTER TABLE "projects" ENABLE ROW LEVEL SECURITY;
 ```
-
-#### References
-
-- `id` → [canvases.projectId](#table-canvases) (one to one, defineRelations, no foreign key)
-- `id` → [projectSettings.projectId](#table-projectSettings) (one to one, defineRelations, no foreign key)
 
 #### Referenced by
 
@@ -2520,10 +2514,6 @@ ALTER TABLE "project_settings" ADD CONSTRAINT "project_settings_project_id_proje
 #### References
 
 - `projectId` → [projects.id](#table-projects) (one to one, on delete cascade, on update cascade)
-
-#### Referenced by
-
-- `projectId` → [projects.id](#table-projects) (one to one, defineRelations)
 
 <details>
 <summary>Queries and their SQL</summary>

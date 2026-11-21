@@ -24,16 +24,16 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [saas-starter](apps/saas-starter) | nextjs/saas-starter | PostgreSQL | — |
 | [midday](apps/midday) | midday-ai/midday | PostgreSQL | — |
 | [kan](apps/kan) | kanbn/kan | PostgreSQL | — |
-| [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | [#60](https://github.com/nakita628/drizzler/issues/60) |
+| [karakeep](apps/karakeep) | karakeep-app/karakeep | SQLite | — |
 | [dyad](apps/dyad) | dyad-sh/dyad | SQLite | — |
 | [zero](apps/zero) | Mail-0/Zero | PostgreSQL | — |
-| [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | [#60](https://github.com/nakita628/drizzler/issues/60), [#62](https://github.com/nakita628/drizzler/issues/62) |
+| [dokploy](apps/dokploy) | Dokploy/dokploy | PostgreSQL | — |
 | [sim-studio](apps/sim-studio) | simstudioai/sim | PostgreSQL | — |
 | [morphic](apps/morphic) | miurla/morphic | PostgreSQL | — |
 | [scira](apps/scira) | zaidmukaddam/scira | PostgreSQL | — |
 | [papra](apps/papra) | papra-hq/papra | SQLite | — |
-| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | [#60](https://github.com/nakita628/drizzler/issues/60) |
-| [cap](apps/cap) | CapSoftware/Cap | MySQL | [#60](https://github.com/nakita628/drizzler/issues/60) |
+| [onlook](apps/onlook) | onlook-dev/onlook | PostgreSQL | — |
+| [cap](apps/cap) | CapSoftware/Cap | MySQL | — |
 | [pages-cms](apps/pages-cms) | pages-cms/pages-cms | PostgreSQL | — |
 | [turborepo-elysia](apps/turborepo-elysia) | vercel/turborepo (with-nextjs-elysia) | PostgreSQL | — |
 | [sigle](apps/sigle) | sigle/sigle | PostgreSQL | — |
@@ -52,7 +52,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [lipi](apps/lipi) | rajput-hemant/lipi | PostgreSQL | — |
 | [rdt-li](apps/rdt-li) | nrjdalal/rdt-li | PostgreSQL | — |
 | [devterms](apps/devterms) | aelew/devterms | SQLite | — |
-| [mylists](apps/mylists) | vincedelmas/MyLists | SQLite | [#61](https://github.com/nakita628/drizzler/issues/61) |
+| [mylists](apps/mylists) | vincedelmas/MyLists | SQLite | — |
 | [survev](apps/survev) | survev/survev | PostgreSQL | — |
 | [openstatus](apps/openstatus) | openstatusHQ/openstatus | SQLite | — |
 | [hyprnote](apps/hyprnote) | fastrepl/hyprnote | SQLite | — |
@@ -67,7 +67,7 @@ Each app holds one upstream schema with as few changes as possible, plus the doc
 | [zws](apps/zws) | zws-im/zws | PostgreSQL | — |
 | [ai-fullstack-saas](apps/ai-fullstack-saas) | alan345/AI-Fullstack-SaaS-Boilerplate | PostgreSQL | — |
 | [deft](apps/deft) | Maneek21/Deft | PostgreSQL | — |
-| [cut-it](apps/cut-it) | mehrabmp/cut-it | SQLite | [#60](https://github.com/nakita628/drizzler/issues/60) |
+| [cut-it](apps/cut-it) | mehrabmp/cut-it | SQLite | — |
 | [flarestarter](apps/flarestarter) | FlareStarter/flarestarter | SQLite | — |
 | [better-auth-cloudflare](apps/better-auth-cloudflare) | zpg6/better-auth-cloudflare (Hono example) | SQLite | — |
 

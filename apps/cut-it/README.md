@@ -27,4 +27,4 @@ The output is written to [`docs/`](docs/):
 
 ## Known issues
 
-- [nakita628/drizzler#60](https://github.com/nakita628/drizzler/issues/60): `users.userLink`, a v1 `one()` declared from the referenced side, is written as a second ref next to the `userLink.userId` foreign key, so `pnpm check:dbml` fails with `References with same endpoints exist`.
+None.
